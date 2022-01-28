@@ -13,7 +13,7 @@ app.use("/", require("body-parser").json());
 if (database.provider !== "sqlite")
     database.connect("root", "asd");
 else 
-    database.connect();
+    await database.connect();
 
     
 //Bind api calls

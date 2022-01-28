@@ -13,6 +13,7 @@ exports.connect = function(user, password, host = "localhost", db = "hackkosice"
     });
 
     connection.connect(function(err) {
+        
         if (err) {
             return console.error("Unable to connect to the database " + db + "! Are you sure it exists? MySQL error: " + err.message);
         }

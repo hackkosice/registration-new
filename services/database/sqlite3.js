@@ -3,7 +3,9 @@ const fs            = require("fs");
 
 exports.provider = "sqlite";
 
-exports.connect = function(debug = false) {
+exports.connect = async function(debug = false) {
 
     const db = new sqlite_db("sqlite.db", {verbose: debug ? console.log : null});
+
+    
 }
