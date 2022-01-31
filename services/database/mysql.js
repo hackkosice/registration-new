@@ -1,23 +1,59 @@
 const mysql         = require("mysql");
 const fs            = require("fs");
 
-exports.provider = "MySQL";
 
-exports.connect = function(user, password, host = "localhost", db = "hackkosice") {
 
-    const connection = mysql.createConnection({
-        host: host,
-        user: user,
-        password: password,
-        database: db
-    });
+module.exports = class MySQL_db {
+    
+    provider = "MySQL";
 
-    connection.connect(function(err) {
+    constructor(user, password, host = "localhost", db = "hackkosice") {
+
+        const connection = mysql.createConnection({
+            host: host,
+            user: user,
+            password: password,
+            database: db
+        });
+
+        connection.connect(function(err) {
+            if (err) 
+                return console.log("Unable to connect to the database " + db + "! Are you sure it exists? MySQL error: " + err.message);
         
-        if (err) {
-            return console.error("Unable to connect to the database " + db + "! Are you sure it exists? MySQL error: " + err.message);
-        }
-      
-        console.log("Successfully connected to the database " + db + "!");
-    });
+            console.log("Successfully connected to the database " + db + "!");
+            this.#connection = connection;
+        });
 }
+
+    disconnect = function() {
+        this.#connection.end();
+    }
+
+    begin_transaction = function() {
+        
+    }
+    
+    exec_transaction = function(transaction) {
+
+    }
+
+    roll_transaction = function(transaction) {
+
+    }
+
+    query = function(command, args = []) {
+        return new Promise((resolve, reject) => {
+            if (this.#connection == null) 
+                return reject("Connection is null!");
+
+            this.#connection.query(command, args, (err, result) => {
+                if (err)
+                    return reject("MySQL Query failed! Error: " + err);    
+                resolve(result);
+            });
+        });
+    }
+
+
+    #connection = null;
+};
