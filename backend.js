@@ -1,8 +1,8 @@
 //Import libs
 const http          = require('http');
 const express 		= require('express');
-const socket        = require('./services/network/socket.js');
-const database      = require('./services/database/mysql.js'); //swap provider when needed 
+//const socket        = require('./services/network/socket.js');
+const database      = require('./services/database/sqlite3.js'); //swap provider when needed 
 
 
 
