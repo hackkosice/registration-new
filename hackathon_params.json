@@ -1,0 +1,20 @@
+{
+    "general": {
+        "applications_open":"",
+        "applications_close":"",
+        "hackathon_codename": "hk22"
+    },
+
+    "form": [
+        {
+            "progress": "int"
+        },
+        {
+            "mymlh_id": "int"
+        }, 
+        {
+
+        }
+    ],
+    "asd":"das"
+}

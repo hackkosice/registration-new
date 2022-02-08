@@ -42,7 +42,6 @@ module.exports = class MySQL_db {
                 return reject("SQLite error: " + err);
             }
         });
-
     }
 
 

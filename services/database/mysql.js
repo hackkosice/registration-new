@@ -23,22 +23,10 @@ module.exports = class MySQL_db {
             console.log("Successfully connected to the database " + db + "!");
             this.#connection = connection;
         });
-}
+    }
 
     disconnect = function() {
         this.#connection.end();
-    }
-
-    begin_transaction = function() {
-        
-    }
-    
-    exec_transaction = function(transaction) {
-
-    }
-
-    roll_transaction = function(transaction) {
-
     }
 
     query = function(command, args = []) {

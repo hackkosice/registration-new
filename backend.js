@@ -37,8 +37,8 @@ const database      = require('./services/database/sqlite3.js'); //swap provider
         db_connection = new database(); //sqlite connects to a file, no username and password needed
 
     //Start MLH api
-    var mlh_auth = new mymlh(process.env.MLH_APP_ID, process.env.MLH_APP_SECRET);
-    
+    var mlh_auth = new mymlh(process.env.MLH_APP_ID, process.env.MLH_APP_SECRET);    
+
     //Bind api calls
     app.use("/oauth", async (req, res) => { mlh_auth.auth_callback(req, res) });  //Node has a hella weird callback system
 
