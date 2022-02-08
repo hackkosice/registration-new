@@ -7,6 +7,7 @@ module.exports = class Mailer {
 
     constructor(transporterOptions) {
         this.#transporter = mail.createTransport(transporterOptions);
+        this.#address = transporterOptions.auth.user;
     }
 
     //email: one of the html templates from email/static/
@@ -15,7 +16,7 @@ module.exports = class Mailer {
         const body = await ejs.renderFile(path.join("email/static/", email), recipient);
 
         const mail = {
-            from: "Hack Kosice testmail@zoho.com",
+            from: "Hack Kosice " + this.#address,
             to: recipient.to,
             subject: subject,
             html: body
@@ -25,7 +26,6 @@ module.exports = class Mailer {
             if (err) 
                 return console.log(err);
         });
-
     }
 
     //If there is a way to do it more fancily...
@@ -36,4 +36,5 @@ module.exports = class Mailer {
     }
 
     #transporter = null;
+    #address = "";
 }

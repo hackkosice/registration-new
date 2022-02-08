@@ -1,10 +1,10 @@
 //Import libs
 const http          = require('http');
 const express 		= require('express');
-//const dotenv        = require('dotenv');
-//const socket        = require('./services/network/socket.js');
+const dotenv        = require('dotenv');
+const mymlh         = require('./services/auth/mymlh.js');
 const mail          = require('./services/email/email.js');
-const database      = require('./services/database/sqlite3.js'); //swap provider when needed 
+const database      = require('./services/database/sqlite3.js'); //swap provider when needed
 
 
 
@@ -19,12 +19,12 @@ const database      = require('./services/database/sqlite3.js'); //swap provider
 
     // SMTP connection
     var mail_connection = new mail({
-        host: 'smtp.zoho.com',
+        host: process.env.EMAIL_SMTP,
         port: 465,
         secure: true, // use SSL
         auth: {
-            user: 'testmail@zoho.com',
-            pass: '123456'
+            user: process.env.EMAIL_UNAME,
+            pass: process.env.EMAIL_PASS
         }    
     });
     
@@ -36,9 +36,11 @@ const database      = require('./services/database/sqlite3.js'); //swap provider
     else 
         db_connection = new database(); //sqlite connects to a file, no username and password needed
 
+    //Start MLH api
+    var mlh_auth = new mymlh("", "");
     
     //Bind api calls
-    
+    app.use("/oauth", mlh_auth.auth_callback);  
 
     //Bind static content
     app.use("/", express.static("./static"));
@@ -47,5 +49,5 @@ const database      = require('./services/database/sqlite3.js'); //swap provider
 
     //Start the HTTP server
     const server = http.createServer(app);
-    server.listen(8000, "0.0.0.0");
+    server.listen(8000, "127.0.0.1");
 })();
