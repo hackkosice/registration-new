@@ -1,7 +1,7 @@
 //Import libs
 const http          = require('http');
 const express 		= require('express');
-const dotenv        = require('dotenv');
+const dotenv        = require('dotenv').config();
 const mymlh         = require('./services/auth/mymlh.js');
 const mail          = require('./services/email/email.js');
 const database      = require('./services/database/sqlite3.js'); //swap provider when needed
@@ -37,10 +37,10 @@ const database      = require('./services/database/sqlite3.js'); //swap provider
         db_connection = new database(); //sqlite connects to a file, no username and password needed
 
     //Start MLH api
-    var mlh_auth = new mymlh("", "");
+    var mlh_auth = new mymlh(process.env.MLH_APP_ID, process.env.MLH_APP_SECRET);
     
     //Bind api calls
-    app.use("/oauth", mlh_auth.auth_callback);  
+    app.use("/oauth", async (req, res) => { mlh_auth.auth_callback(req, res) });  //Node has a hella weird callback system
 
     //Bind static content
     app.use("/", express.static("./static"));
