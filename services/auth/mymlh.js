@@ -39,19 +39,15 @@ module.exports =  class MyMLH {
         const usercount_res = await fetch("https://my.mlh.io/api/v3/users.json?client_id=" + this.#id + "&secret=" + this.#secret + "&per_page=1");
         const usercount = await usercount_res.json();
 
-
-        //TODO: Fix
         var userdb = [];
 
         for (let i = 0; i < Math.ceil(usercount.pagination.results_total / 250); i++) {
             const users_res = await fetch("https://my.mlh.io/api/v3/users.json?client_id=" + this.#id + "&secret=" + this.#secret + "&page=" + i);
             const users = await users_res.json();
 
-            userdb.concat(users.data);
+            userdb = [].concat(userdb, users.data);
         }
 
-
-        console.log(userdb);
         return userdb;
     }
 

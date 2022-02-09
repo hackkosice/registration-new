@@ -3,7 +3,7 @@ const fs            = require("fs");
 
 
 
-module.exports = class MySQL_db {
+module.exports = class SQLite3_db {
     
     provider = "sqlite3";
 
@@ -16,8 +16,9 @@ module.exports = class MySQL_db {
         //Btw. toto pisem zjebany celkom
         var backup = true;
 
-        if(backup == undefined) 
+        if(typeof backup === 'undefined') 
             return;
+            
         setInterval(() => {
             this.#connection.backup(`hkbackup-${Date.now()}.db`)
                 .then(() => {
