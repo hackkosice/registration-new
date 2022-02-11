@@ -1,40 +1,63 @@
-const ejs           = require("ejs");
-const mail          = require('nodemailer');
-const path          = require("path");
+module.exports = class MailchimpMailer {
 
-
-module.exports = class Mailer {
-
-    constructor(transporterOptions) {
-        this.#transporter = mail.createTransport(transporterOptions);
-        this.#address = transporterOptions.auth.user;
+    constructor(mailChimpTx) {
+        this.#mailChimpTx = mailChimpTx
     }
 
-    //email: one of the html templates from email/static/
-    //resipients: array of recipient info with recipient-specific 
-    send_one = async function(email, subject, recipient) {
-        const body = await ejs.renderFile(path.join("email/static/", email), recipient);
-
-        const mail = {
-            from: "Hack Kosice " + this.#address,
-            to: recipient.to,
-            subject: subject,
-            html: body
-        };
-
-        this.#transporter.sendMail(mail, (err, info) => {
-            if (err) 
-                return console.log(err);
-        });
+    #send_template = async function(
+        templateName,
+        subject,
+        recipients,
+        global_merge_vars,
+        marge_vars
+    ) {   
+          this.#mailChimpTx.messages.sendTemplate({
+            template_name: templateName,
+            template_content: [{}],
+            message: {
+                from_email: "noreply@hackkosice.com",
+                subject: subject,
+                to: recipients,
+                global_merge_vars: global_merge_vars,
+                merge_vars: marge_vars
+            },
+          });
     }
 
-    //If there is a way to do it more fancily...
-    //I don't know it!
-    send_multiple = async function(email, subject, recipients) {
-        for (let i = 0; i < recipients.length; i++)
-            send_one(email, subject, recipients[i]);
+    // Example call:
+    // mailer.send_test_email_multiple(["mtarca@hackkosice.com"], [
+    //     {
+    //         rcpt: "mtarca@hackkosice.com",
+    //         vars: [
+    //             {
+    //                 name: "RECP_NAME",
+    //                 content: "Matej Tarca"
+    //             }
+    //         ]
+    //     }
+    // ])
+
+    send_test_email_multiple(recipientMails, recipientVars) {
+        const recipients = recipientMails.map((mail) => { 
+            return {
+                email: mail,
+                type: "to"
+            }
+        })
+
+        this.#send_template(
+            "hack-kosice-template-1",
+            "Test email",
+            recipients,
+            [
+                {
+                    name: "TITLE",
+                    content: "Vitaj v HK!"
+                }
+            ],
+            recipientVars
+        )
     }
 
-    #transporter = null;
-    #address = "";
+    #mailChimpTx = null;
 }

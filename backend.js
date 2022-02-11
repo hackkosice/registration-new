@@ -6,7 +6,7 @@ const dotenv                = require('dotenv').config();
 
 
 const MyMLH                 = require('./services/auth/mymlh.js');
-const Mailer                = require('./services/email/email.js');
+const MailchimpMailer       = require('./services/email/email.js');
 const Database              = require('./services/database/sqlite3.js'); //swap provider when needed
 
 const FormApiEndpoints      = require('./services/apis/form.js');
@@ -23,16 +23,9 @@ const TeamsApiEndpoints     = require('./services/apis/teams.js');
 
     //Setup APIs
 
-    // SMTP connection
-    var mail_connection = new Mailer({
-        host: process.env.EMAIL_SMTP,
-        port: 465,
-        secure: true, // use SSL
-        auth: {
-            user: process.env.EMAIL_UNAME,
-            pass: process.env.EMAIL_PASS
-        }    
-    });
+    // Email setup
+    const mailchimpTx = require("@mailchimp/mailchimp_transactional")(process.env.MAILCHIMP_API_KEY);
+    const mailer = new MailchimpMailer(mailchimpTx);
     
     // Database Connection
     var db_connection = null;
@@ -64,7 +57,7 @@ const TeamsApiEndpoints     = require('./services/apis/teams.js');
     router.post("/api/team-update", async (req, res) => { team_api.team_update_endpoint(req, res) });
 
     router.post("/api/admin", async () => {});
-    router.post("/api/judge", async () => {});
+    router.post("/api/judge", async () => {});    
 
     //Bind static content
     app.use("/", express.static("./static"));
