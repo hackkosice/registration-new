@@ -8,7 +8,7 @@ module.exports = class TeamsApiEndpoints {
     }
 
     async team_create_endpoint(req, res) {
-
+        
     }
 
     async team_update_endpoint(req, res) {
