@@ -25,6 +25,11 @@ window.onload = async function() {
             parent.appendChild(option);
         }
 
-       document.getElementById("datasets").appendChild(parent);
+        document.getElementById("datasets").appendChild(parent);
     }
+
+    const userinfo_res = await fetch("/api/user-info", {method: 'POST', credentials: 'same-origin'});
+    const userinfo = await userinfo_res.json();
+    window.userinfo = userinfo.data;
+    console.log(window.userinfo);
 }

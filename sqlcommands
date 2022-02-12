@@ -1,12 +1,14 @@
 CREATE TABLE "applications" (
 	"application_id"	INTEGER NOT NULL UNIQUE,
+	"application_status" TEXT NOT NULL,
+	"application_progress" INTEGER NOT NULL,
 	"team_id"	TEXT,
 	"mymlh_uid"	INTEGER NOT NULL UNIQUE,
-	"reimbusment"	INTEGER NOT NULL,
+	"reimbusment"	TEXT NOT NULL,
 	"travel_from"	TEXT,
 	"visa"	INTEGER,
 	"diet"	TEXT NOT NULL,
-	"t-shirt"	TEXT NOT NULL,
+	"tshirt"	TEXT NOT NULL,
 	"job_looking"	INTEGER NOT NULL,
 	"job_preference"	TEXT,
 	"cv_path"	TEXT UNIQUE,
@@ -26,5 +28,6 @@ CREATE TABLE "applications" (
 CREATE TABLE "teams" (
 	"team_id"	INTEGER NOT NULL UNIQUE,
 	"team_code"	TEXT NOT NULL UNIQUE,
+	"owner" INTEGER NOT NULL,
 	PRIMARY KEY("team_id" AUTOINCREMENT)
 );

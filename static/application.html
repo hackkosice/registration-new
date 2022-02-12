@@ -8,9 +8,15 @@
 		<link rel = "icon" type = "image/png" sizes = "48x48" href = "images/favicon/favicon.png">
 		<link rel = "icon" type = "image/png" sizes = "192x192" href = "images/favicon/favicon-192.png">
 
+		<script src = "/js/form.js"></script>
+
 	</head>
 
 	<body>
+
+		<!--This div is INVISIBLE, contains all suggestions for form (js generated)-->
+		<div id = "datasets">
+		</div>
 
 		<header>
 			<img src = "images/logo_oneline_purple.svg" alt = "Hack Kosice Logo"/>
@@ -18,7 +24,7 @@
 
 		<form>
 			<input id = "reimbusment" type = "checkbox"/> Do you need travel reimbursment? <br>
-			<input id = "travel_from" class = "autofill" fill = "one" fillsrc = "/countries.json" type = "text"/> <br>
+			<input id = "travel_from" list = "countries" type = "text"/> <br>
 			<input id = "visa" type = "checkbox"/> Do you need the invitation for travel visa? <br>
 
 			T-Shirt Size:
@@ -48,12 +54,20 @@
 			
 
 			<input id = "job_looking" type = "checkbox"/> Are you looking for a job?
-			<input id = "job_preference" class = "autofill" fill = "one" fillsrc = "/positions.json" type = "text"/> <br>
-			CV: <input id = "cv_path" type = "file"/>
-			Skills: <input id = "skills" class = "autofill" fill = "one" fillsrc = "/skills.json" type = "ri/> <br>
+			Job preference:
+			<select id = "job_preference">
+    			<option value = "xs"> xs </option>
+    			<option value = "s"> s </option>
+    			<option value = "m"> m </option>
+    			<option value = "l"> l </option>
+				<option value = "xl"> xl </option>
+				<option value = "xxl"> xxl </option>
+  			</select>
 
+			CV: <input id = "cv_path" type = "file" accept = ".pdf"/>
+			Skills: <input id = "skills" type="text" rows="12" cols="50"/> <br>
 
-				<button id = "continue"></button>
+			<button id = "continue"></button>
 		</form>
 	</body>
 </html>

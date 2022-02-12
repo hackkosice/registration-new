@@ -48,7 +48,7 @@ module.exports =  class MyMLH {
         }, this.#jwt_key, { expiresIn: '12h'});
     
         res.cookie('verification', usr_token, { 
-            maxAge: 12 * 60 * 60,
+            maxAge: 12 * 60 * 60 * 1000,
             httpOnly: true,
         }).redirect(path);
     }
@@ -80,13 +80,13 @@ module.exports =  class MyMLH {
     }
 
     async get_all_users() {
-        const usercount_res = await fetch("https://my.mlh.io/api/v3/users.json?client_id=" + this.#id + "&secret=" + this.#secret + "&per_page=1");
+        const usercount_res = await fetch("https://my.mlh.io/api/v3/users.json?client_id=" + this.#id + "&secret=" + this.#secret + "&per_page=1", {method: 'GET'});
         const usercount = await usercount_res.json();
 
         var userdb = [];
 
         for (let i = 0; i < Math.ceil(usercount.pagination.results_total / 250); i++) {
-            const users_res = await fetch("https://my.mlh.io/api/v3/users.json?client_id=" + this.#id + "&secret=" + this.#secret + "&page=" + i);
+            const users_res = await fetch("https://my.mlh.io/api/v3/users.json?client_id=" + this.#id + "&secret=" + this.#secret + "&page=" + i, {method: 'GET'});
             const users = await users_res.json();
 
             userdb = [].concat(userdb, users.data);

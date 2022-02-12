@@ -44,5 +44,4 @@ module.exports = class FormApiEndpoints {
 
     #db = null;
     #jwt_key = null;
-
 }
