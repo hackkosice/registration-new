@@ -17,7 +17,43 @@
 		</header>
 
 		<form>
-			<button id = "continue"></button>
+			<input id = "reimbusment" type = "checkbox"/> Do you need travel reimbursment? <br>
+			<input id = "travel_from" class = "autofill" fill = "one" fillsrc = "/countries.json" type = "text"/> <br>
+			<input id = "visa" type = "checkbox"/> Do you need the invitation for travel visa? <br>
+
+			T-Shirt Size:
+			<select id = "t-shirt">
+    			<option value = "xs"> xs </option>
+    			<option value = "s"> s </option>
+    			<option value = "m"> m </option>
+    			<option value = "l"> l </option>
+				<option value = "xl"> xl </option>
+				<option value = "xxl"> xxl </option>
+  			</select>
+			
+			<br>  
+
+			Dietary requirements:
+			<select id = "diet">
+    			<option value = "none"> none </option>
+    			<option value = "lactosefree"> Lactose Free </option>
+    			<option value = "glutenfree"> Gluten Free </option>
+    			<option value = "nopork"> No Pork </option>
+				<option value = "vegetarian"> Vegetarian </option>
+				<option value = "vegan"> Vegan </option>
+  			</select>
+
+			<br>
+
+			
+
+			<input id = "job_looking" type = "checkbox"/> Are you looking for a job?
+			<input id = "job_preference" class = "autofill" fill = "one" fillsrc = "/positions.json" type = "text"/> <br>
+			CV: <input id = "cv_path" type = "file"/>
+			Skills: <input id = "skills" class = "autofill" fill = "one" fillsrc = "/skills.json" type = "ri/> <br>
+
+
+				<button id = "continue"></button>
 		</form>
 	</body>
 </html>
