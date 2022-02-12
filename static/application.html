@@ -8,7 +8,7 @@
 		<link rel = "icon" type = "image/png" sizes = "48x48" href = "images/favicon/favicon.png">
 		<link rel = "icon" type = "image/png" sizes = "192x192" href = "images/favicon/favicon-192.png">
 
-		<script src = "/js/form.js"></script>
+		<script async src = "/js/form.js"></script>
 
 	</head>
 
@@ -22,7 +22,29 @@
 			<img src = "images/logo_oneline_purple.svg" alt = "Hack Kosice Logo"/>
 		</header>
 
-		<form>
+		<div id = "form-part1">
+
+			<h3>From MyMLH</h3>
+			
+			<p>First Name</p>
+			<input id = "firstname" disabled/>
+
+			<p>Last Name</p>
+			<input id = "lastname" disabled/>
+
+			<p>E-Mail</p>
+			<input id = "email" disabled/>
+
+			<p>Phone Number</p>
+			<input id = "phone" disabled/>
+
+			<p>Date of Birth (mm/dd/yyyy)</p>
+			<input id = "birth" type = "date" disabled/> <br> <br>
+
+			<button id = "1" class = "save_and_continue">Save And Continue</button>
+		</div>
+
+		<!--<form>
 			<input id = "reimbusment" type = "checkbox"/> Do you need travel reimbursment? <br>
 			<input id = "travel_from" list = "countries" type = "text"/> <br>
 			<input id = "visa" type = "checkbox"/> Do you need the invitation for travel visa? <br>
@@ -68,6 +90,6 @@
 			Skills: <input id = "skills" type="text" rows="12" cols="50"/> <br>
 
 			<button id = "continue"></button>
-		</form>
+		</form>-->
 	</body>
 </html>
