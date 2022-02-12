@@ -23,10 +23,10 @@ module.exports = class TeamsApiEndpoints {
             });
         }
 
-        const query = await this.#db.query("INSERT INTO applications (application_status, application_progress, mymlh_uid, reimbusment, diet, tshirt, job_looking, skills) VALUES (\"open\", 1," + verification.uid + ", 0, \"none\", \
-        \"xl\", 1, \"c/c++\");");
+        /*const query = await this.#db.query("INSERT INTO applications (application_status, application_progress, mymlh_uid, reimbusment, diet, tshirt, job_looking, skills) VALUES (\"open\", 1," + verification.uid + ", 0, \"none\", \
+        \"xl\", 1, \"c/c++\");");*/
 
-        const user = await this.#db.query("SELECT * FROM applications;"/*WHERE `mymlh_uid`=?;", 332*/);
+        const user = await this.#db.query("SELECT * FROM applications;");
         console.log(user);
 
     }

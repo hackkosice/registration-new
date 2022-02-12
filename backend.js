@@ -50,6 +50,7 @@ const TeamsApiEndpoints     = require('./services/apis/teams.js');
 
     router.post("/api/user-info", async (req, res) => { mlh_auth.get_user_data_endpoint(req, res) });
 
+    router.post("/api/form-data", async (req, res) => { form_api.form_data_endpoint(req, res) });
     router.post("/api/form-update", async (req, res) => { form_api.form_delta_endpoint(req, res) });
     router.post("/api/form-close", async (req, res) => { form_api.form_close_endpoint(req, res) });
 

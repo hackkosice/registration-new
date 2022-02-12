@@ -80,19 +80,29 @@ module.exports =  class MyMLH {
     }
 
     async get_all_users() {
-        const usercount_res = await fetch("https://my.mlh.io/api/v3/users.json?client_id=" + this.#id + "&secret=" + this.#secret + "&per_page=1", {method: 'GET'});
-        const usercount = await usercount_res.json();
+        return new Promise(async (resolve, reject) => {
+            const usercount_res = await fetch("https://my.mlh.io/api/v3/users.json?client_id=" + this.#id + "&secret=" + this.#secret + "&per_page=1", {method: 'GET'});
+            const usercount = await usercount_res.json();
 
-        var userdb = [];
+            var userdb = [];
+            var requests = []; 
 
-        for (let i = 0; i < Math.ceil(usercount.pagination.results_total / 250); i++) {
-            const users_res = await fetch("https://my.mlh.io/api/v3/users.json?client_id=" + this.#id + "&secret=" + this.#secret + "&page=" + i, {method: 'GET'});
-            const users = await users_res.json();
+            for (let i = 0; i < Math.ceil(usercount.pagination.results_total / 250); i++) {
+                requests.push(fetch("https://my.mlh.io/api/v3/users.json?client_id=" + this.#id + "&secret=" + this.#secret + "&page=" + i, {method: 'GET'}).then(async (response) => {
+                        const users = await response.json();
+                        userdb = [].concat(userdb, users.data);
+                    })
+                );
+            }
 
-            userdb = [].concat(userdb, users.data);
-        }
+            try {
+                await Promise.all(users);
+            } catch (err) {
+                reject("MyMLH Auth Error! Error: " + err);
+            }
 
-        return userdb;
+            resolve(userdb);
+        });
     }
 
     #id = "";

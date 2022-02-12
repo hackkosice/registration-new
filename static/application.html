@@ -44,13 +44,31 @@
 			<button id = "1" class = "save_and_continue">Save And Continue</button>
 		</div>
 
-		<!--<form>
-			<input id = "reimbusment" type = "checkbox"/> Do you need travel reimbursment? <br>
-			<input id = "travel_from" list = "countries" type = "text"/> <br>
-			<input id = "visa" type = "checkbox"/> Do you need the invitation for travel visa? <br>
+		<div id = "form-part2">
+			<h3> Travel </h3>
 
-			T-Shirt Size:
-			<select id = "t-shirt">
+			<p>Do you need reimbursment?</p>
+			<div id = "reimbursment_wrap">
+				<input id = "reimbursment_y" name = "reimbursment" type = "radio" /> Yes 
+				<input id = "reimbursment_n" name = "reimbursment" type = "radio"/> No
+			</div>
+
+
+			<p> From Where you would be traveling? </p>
+			<input id = "travel_from" list = "countries" type = "text"/>
+
+			<p> Do you need the invitation for travel visa? </p>
+
+			<div id = "visa_wrap">
+				<input id = "visa_y" name = "visa" type = "radio" /> Yes 
+				<input id = "visa_n" name = "visa" type = "radio"/> No
+			</div>
+
+			<button id = "2" class = "save_and_continue">Save And Continue</button>
+
+			<p> T-Shirt Size </p>
+
+			<select id = "tshirt">
     			<option value = "xs"> xs </option>
     			<option value = "s"> s </option>
     			<option value = "m"> m </option>
@@ -61,7 +79,7 @@
 			
 			<br>  
 
-			Dietary requirements:
+			<p> Dietary requirements </p>
 			<select id = "diet">
     			<option value = "none"> none </option>
     			<option value = "lactosefree"> Lactose Free </option>
@@ -70,11 +88,13 @@
 				<option value = "vegetarian"> Vegetarian </option>
 				<option value = "vegan"> Vegan </option>
   			</select>
+		</div>
 
-			<br>
+		<div id = "form-part3">
 
-			
+		</div>
 
+		<!--<form>
 			<input id = "job_looking" type = "checkbox"/> Are you looking for a job?
 			Job preference:
 			<select id = "job_preference">

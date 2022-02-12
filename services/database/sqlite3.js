@@ -1,5 +1,5 @@
 const sqlite         = require("better-sqlite3");
-const fs            = require("fs");
+const fs             = require("fs");
 
 
 
@@ -34,9 +34,18 @@ module.exports = class SQLite3_db {
         this.#connection.end();
     }
 
-    query = function(command, args = []) {
+    get = function(command, args = []) {
         return new Promise((resolve, reject) => {
+            try {
+                resolve(this.#connection.prepare(command).all(args));
+            } catch (err) {
+                return reject("SQLite error: " + err);
+            }
+        });
+    }
 
+    insert = function(command, args = []) {
+        return new Promise((resolve, reject) => {
             try {
                 resolve(this.#connection.prepare(command).run(args));
             } catch (err) {
@@ -44,7 +53,6 @@ module.exports = class SQLite3_db {
             }
         });
     }
-
 
     #connection = null;
 };
