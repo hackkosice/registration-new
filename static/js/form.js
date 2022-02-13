@@ -83,6 +83,11 @@ window.onload = async function() {
 
     }
 
+    if (typeof window.formdata.application_status !== 'undefined' 
+        && window.formdata.application_status !== "open")
+        window.location = "/dashboard.html";
+
+
     //Autofill boxes with info form MyMLH
     $("firstname").value = window.userinfo.first_name;
     $("lastname").value = window.userinfo.last_name;
@@ -90,6 +95,14 @@ window.onload = async function() {
     $("email").value = window.userinfo.email;
     $("phone").value = window.userinfo.phone_number;
     $("birth").value = window.userinfo.date_of_birth;
+
+    //Autofill the form 
+    
+    //Application object has always application id. If application id is undefined, no not autofill anything
+    if (typeof window.formdata.application_id === 'undefined')
+        return;
+
+    autofill_form();
 }
 
 async function sac_callback(progress) {
@@ -130,4 +143,26 @@ function get_all_skills() {
         skills += (child.value + ", ");
 
     return skills.trim().slice(0, skills.length - 2);
+}
+
+function autofill_form() {
+    
+    $(window.formdata.reimbusment === "yes" ? "reimbursment_y" : "reimbursment_n").checked = true;
+
+    //Set skills
+
+    const skills = window.formdata.skills.split(", ");
+
+    for (const skill of skills) {
+        let button = document.createElement("button");
+        button.addEventListener('click', () => {;
+            $("skills_wrap").removeChild(button);
+        });
+
+        button.value = skill;
+        button.textContent = skill;
+
+        $("skills_wrap").appendChild(button);
+    }
+
 }
