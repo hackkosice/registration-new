@@ -1,21 +1,21 @@
 CREATE TABLE "applications" (
-	"application_id"	INTEGER NOT NULL UNIQUE,
-	"application_status" TEXT NOT NULL,
-	"application_progress" INTEGER NOT NULL,
+	"application_id"	INTEGER UNIQUE,
+	"application_status" TEXT,
+	"application_progress" INTEGER,
 	"team_id"	TEXT,
-	"mymlh_uid"	INTEGER NOT NULL UNIQUE,
-	"reimbusment"	TEXT NOT NULL,
+	"mymlh_uid"	INTEGER UNIQUE,
+	"reimbusment"	TEXT,
 	"travel_from"	TEXT,
-	"visa"	INTEGER,
-	"diet"	TEXT NOT NULL,
-	"tshirt"	TEXT NOT NULL,
-	"job_looking"	INTEGER NOT NULL,
+	"visa"	TEXT,
+	"diet"	TEXT,
+	"tshirt"	TEXT,
+	"job_looking"	TEXT,
 	"job_preference"	TEXT,
 	"cv_path"	TEXT UNIQUE,
 	"skills"	TEXT,
 	"excited_hk22"	TEXT,
-	"first_hear_hk22"	TEXT,
-	"first_hack_hk22"	INTEGER,
+	"hear_hk22"	TEXT,
+	"first_hack_hk22"	TEXT,
 	"spirit_animal"	TEXT,
 	"pizza"	TEXT,
 	"site"	TEXT UNIQUE,
@@ -26,15 +26,15 @@ CREATE TABLE "applications" (
 );
 
 CREATE TABLE "teams" (
-	"team_id"	INTEGER NOT NULL UNIQUE,
-	"team_code"	TEXT NOT NULL UNIQUE,
-	"owner" INTEGER NOT NULL,
+	"team_id"	INTEGER UNIQUE,
+	"team_code"	TEXT UNIQUE,
+	"owner" INTEGER,
 	PRIMARY KEY("team_id" AUTOINCREMENT)
 );
 
 CREATE TABLE "votes" (
-	"voter_uid"	INTEGER NOT NULL,
-	"score"	INTEGER NOT NULL,
-	"application_id"	INTEGER NOT NULL,
+	"voter_uid"	INTEGER,
+	"score"	INTEGER,
+	"application_id"	INTEGER,
 	PRIMARY KEY("application_id")
 );

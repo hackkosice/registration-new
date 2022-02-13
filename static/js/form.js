@@ -146,9 +146,15 @@ function get_all_skills() {
 }
 
 function autofill_form() {
-    
+   
+    //Set checkboxes
     $(window.formdata.reimbusment === "yes" ? "reimbursment_y" : "reimbursment_n").checked = true;
-
+    $(window.formdata.visa === "yes" ? "visa_y" : "visa_n").checked = true;
+    $(window.formdata.job_looking === "yes" ? "job_y" : "job_n").checked = true;
+    $(window.formdata.first_hack_hk22 === "yes" ? "firsthack_y" : "firsthack_y").checked = true;
+   
+    //Set textboxes
+    $("travel_from").value = window.formdata.travel_from;
     //Set skills
 
     const skills = window.formdata.skills.split(", ");
