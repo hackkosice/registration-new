@@ -64,8 +64,6 @@
 				<input id = "visa_n" name = "visa" type = "radio"/> No
 			</div>
 
-			<button id = "2" class = "save_and_continue">Save And Continue</button>
-
 			<p> T-Shirt Size </p>
 
 			<select id = "tshirt">
@@ -76,8 +74,7 @@
 				<option value = "xl"> xl </option>
 				<option value = "xxl"> xxl </option>
   			</select>
-			
-			<br>  
+			 
 
 			<p> Dietary requirements </p>
 			<select id = "diet">
@@ -88,10 +85,38 @@
 				<option value = "vegetarian"> Vegetarian </option>
 				<option value = "vegan"> Vegan </option>
   			</select>
+
+			<br>
+
+			<button id = "2" class = "save_and_continue">Save And Continue</button>
 		</div>
 
 		<div id = "form-part3">
+			
+			<p> Are you looking for a job?</p>
+			<div id = "job_wrap">
+				<input id = "job_y" name = "visa" type = "radio" /> Yes 
+				<input id = "job_n" name = "visa" type = "radio"/> No
+			</div>
 
+			Job preference:
+			<select id = "job_preference">
+    			<option value = "xs"> xs </option>
+    			<option value = "s"> s </option>
+    			<option value = "m"> m </option>
+    			<option value = "l"> l </option>
+				<option value = "xl"> xl </option>
+				<option value = "xxl"> xxl </option>
+  			</select>
+
+			CV: <input id = "cv_path" type = "file" accept = ".pdf"/>
+
+			<p> Skills </p>
+			<div id = "skills_wrap"> 
+
+			</div>
+			<br>
+			<input id = "skills_input" type = "text" list = "skills"/> <br>
 		</div>
 
 		<!--<form>

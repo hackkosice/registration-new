@@ -12,7 +12,7 @@ CREATE TABLE "applications" (
 	"job_looking"	INTEGER NOT NULL,
 	"job_preference"	TEXT,
 	"cv_path"	TEXT UNIQUE,
-	"skills"	TEXT NOT NULL,
+	"skills"	TEXT,
 	"excited_hk22"	TEXT,
 	"first_hear_hk22"	TEXT,
 	"first_hack_hk22"	INTEGER,
@@ -30,4 +30,11 @@ CREATE TABLE "teams" (
 	"team_code"	TEXT NOT NULL UNIQUE,
 	"owner" INTEGER NOT NULL,
 	PRIMARY KEY("team_id" AUTOINCREMENT)
+);
+
+CREATE TABLE "votes" (
+	"voter_uid"	INTEGER NOT NULL,
+	"score"	INTEGER NOT NULL,
+	"application_id"	INTEGER NOT NULL,
+	PRIMARY KEY("application_id")
 );

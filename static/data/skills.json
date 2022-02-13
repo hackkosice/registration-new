@@ -1,6 +1,24 @@
 {
     "name": "skills",
     "data": [
-        
+        "C",
+        "C++",
+        "C#",
+        "Objective-C",
+        "Java",
+        "JavaScript",
+        "Front End",
+        "Back End",
+        "Bootstrap",
+        "ReactJS",
+        "Angular",
+        "Python",
+        "django",
+        "OpenGL",
+        "DirectX",
+        "Vulkan",
+        "OpenCL",
+        "SQL",
+        "Linux"
     ]
 }

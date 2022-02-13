@@ -13,6 +13,27 @@ window.onload = async function() {
         button.addEventListener('click', () => { sac_callback(button.id) });
     }
 
+    $("skills_input").addEventListener('change', () => { 
+        
+        for(const child of $("skills_wrap").children) 
+            if (child.value === $("skills_input").value)
+                return ($("skills_input").value = "");
+
+
+        let button = document.createElement("button");
+        button.addEventListener('click', () => {;
+            $("skills_wrap").removeChild(button);
+        });
+
+        button.value = $("skills_input").value;
+        button.textContent = $("skills_input").value;
+
+        $("skills_wrap").appendChild(button);
+        $("skills_input").value = "";
+    });
+
+
+
     var fetches = [];
    
     fetches.push(fetch("/api/user-info", {method: 'POST', credentials: 'same-origin'}).then(
@@ -100,4 +121,13 @@ async function sac_callback(progress) {
             linkedin,*/
         }
     })
+}
+
+function get_all_skills() {
+    var skills = "";
+
+    for (const child of $("skills_wrap").children)
+        skills += (child.value + ", ");
+
+    return skills.trim().slice(0, skills.length - 2);
 }
