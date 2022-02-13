@@ -6,12 +6,11 @@ const dotenv                = require('dotenv').config();
 
 
 const MyMLH                 = require('./services/auth/mymlh.js');
-const MailchimpMailer       = require('./services/email/email.js');
+const Mailer       = require('./services/email/email.js');
 const Database              = require('./services/database/sqlite3.js'); //swap provider when needed
 
 const FormApiEndpoints      = require('./services/apis/form.js');
 const TeamsApiEndpoints     = require('./services/apis/teams.js');
-
 
 
 (async function main() {
@@ -24,8 +23,8 @@ const TeamsApiEndpoints     = require('./services/apis/teams.js');
     //Setup APIs
 
     // Email setup
-    const mailchimpTx = require("@mailchimp/mailchimp_transactional")(process.env.MAILCHIMP_API_KEY);
-    const mailer = new MailchimpMailer(mailchimpTx);
+    const key = require('./credentials.json');
+    const mailer = new Mailer(key);
     
     // Database Connection
     var db_connection = null;

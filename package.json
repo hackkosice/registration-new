@@ -30,6 +30,8 @@
     "jsonwebtoken": "^8.5.1",
     "mysql": "^2.18.1",
     "node-fetch": "^2.6.7",
+    "nodemailer": "^6.7.2",
+    "nodemailer-express-handlebars": "^4.0.0",
     "websocket": "^1.0.34"
   }
 }
