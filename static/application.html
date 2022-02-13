@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html  lang = "en">
+<html lang = "en">
 	
 	<head>
 
@@ -21,154 +21,159 @@
 		<header>
 			<img src = "images/logo_oneline_purple.svg" alt = "Hack Kosice Logo"/>
 		</header>
+	
+		<div id = "application">
+			<div id = "form-part1">
 
-		<div id = "form-part1">
+				<h3>From MyMLH</h3>
 
-			<h3>From MyMLH</h3>
-			
-			<p>First Name</p>
-			<input id = "firstname" disabled/>
+				<p>First Name</p>
+				<input id = "firstname" disabled/>
 
-			<p>Last Name</p>
-			<input id = "lastname" disabled/>
+				<p>Last Name</p>
+				<input id = "lastname" disabled/>
 
-			<p>E-Mail</p>
-			<input id = "email" disabled/>
+				<p>E-Mail</p>
+				<input id = "email" disabled/>
 
-			<p>Phone Number</p>
-			<input id = "phone" disabled/>
+				<p>Phone Number</p>
+				<input id = "phone" disabled/>
 
-			<p>Date of Birth (mm/dd/yyyy)</p>
-			<input id = "birth" type = "date" disabled/> <br> <br>
+				<p>Date of Birth (mm/dd/yyyy)</p>
+				<input id = "birth" type = "date" disabled/> <br> <br>
 
-			<button id = "1" class = "save_and_continue">Save And Continue</button>
-		</div>
-
-		<div id = "form-part2">
-			<h3> Travel </h3>
-
-			<p>Do you need reimbursment?</p>
-			<div id = "reimbursment_wrap">
-				<input id = "reimbursment_y" name = "reimbursment" type = "radio"/> Yes 
-				<input id = "reimbursment_n" name = "reimbursment" type = "radio"/> No
+				<button id = "1" class = "save_and_continue">Save And Continue</button>
 			</div>
 
+			<div id = "form-part2">
+				<h3> Travel </h3>
 
-			<p> From Where you would be traveling? </p>
-			<input id = "travel_from" list = "countries" type = "text"/>
+				<p>Do you need reimbursment?</p>
+				<div id = "reimbursment_wrap">
+					<input id = "reimbursment_y" name = "reimbursment" type = "radio"/> Yes 
+					<input id = "reimbursment_n" name = "reimbursment" type = "radio"/> No
+				</div>
 
-			<p> Do you need the invitation for travel visa? </p>
 
-			<div id = "visa_wrap">
-				<input id = "visa_y" name = "visa" type = "radio" /> Yes 
-				<input id = "visa_n" name = "visa" type = "radio"/> No
+				<p> From Where you would be traveling? </p>
+				<input id = "travel_from" list = "countries" type = "text"/>
+
+				<p> Do you need the invitation for travel visa? </p>
+
+				<div id = "visa_wrap">
+					<input id = "visa_y" name = "visa" type = "radio" /> Yes 
+					<input id = "visa_n" name = "visa" type = "radio"/> No
+				</div>
+
+				<p> T-Shirt Size </p>
+
+				<select id = "tshirt">
+    				<option value = "xs"> xs </option>
+    				<option value = "s"> s </option>
+    				<option value = "m"> m </option>
+    				<option value = "l"> l </option>
+					<option value = "xl"> xl </option>
+					<option value = "xxl"> xxl </option>
+  				</select>
+			  
+
+				<p> Dietary requirements </p>
+				<select id = "diet">
+    				<option value = "none"> none </option>
+    				<option value = "lactosefree"> Lactose Free </option>
+    				<option value = "glutenfree"> Gluten Free </option>
+    				<option value = "nopork"> No Pork </option>
+					<option value = "vegetarian"> Vegetarian </option>
+					<option value = "vegan"> Vegan </option>
+  				</select>
+
+				<br>
+
+				<button id = "2" class = "save_and_continue">Save And Continue</button>
 			</div>
 
-			<p> T-Shirt Size </p>
+			<div id = "form-part3">
 
-			<select id = "tshirt">
-    			<option value = "xs"> xs </option>
-    			<option value = "s"> s </option>
-    			<option value = "m"> m </option>
-    			<option value = "l"> l </option>
-				<option value = "xl"> xl </option>
-				<option value = "xxl"> xxl </option>
-  			</select>
-			 
+				<h3> Job </h3>
 
-			<p> Dietary requirements </p>
-			<select id = "diet">
-    			<option value = "none"> none </option>
-    			<option value = "lactosefree"> Lactose Free </option>
-    			<option value = "glutenfree"> Gluten Free </option>
-    			<option value = "nopork"> No Pork </option>
-				<option value = "vegetarian"> Vegetarian </option>
-				<option value = "vegan"> Vegan </option>
-  			</select>
+				<p> Are you looking for a job?</p>
+				<div id = "job_wrap">
+					<input id = "job_y" name = "visa" type = "radio" /> Yes 
+					<input id = "job_n" name = "visa" type = "radio"/> No
+				</div>
 
-			<br>
+				Job preference:
+				<select id = "job_preference">
+    				<option value = "xs"> xs </option>
+    				<option value = "s"> s </option>
+    				<option value = "m"> m </option>
+    				<option value = "l"> l </option>
+					<option value = "xl"> xl </option>
+					<option value = "xxl"> xxl </option>
+  				</select>
 
-			<button id = "2" class = "save_and_continue">Save And Continue</button>
-		</div>
+				<p> Skills </p>
+				<div id = "skills_container">
+					<div id = "skills_wrap"> 
+					
+					</div>
+					
+					<input id = "skills_input" type = "text" list = "skills"/> <br>
+				</div>
+				<br>
 
-		<div id = "form-part3">
-			
-			<h3> Job </h3>
-
-			<p> Are you looking for a job?</p>
-			<div id = "job_wrap">
-				<input id = "job_y" name = "visa" type = "radio" /> Yes 
-				<input id = "job_n" name = "visa" type = "radio"/> No
+				<button id = "3" class = "save_and_continue">Save And Continue</button>
 			</div>
 
-			Job preference:
-			<select id = "job_preference">
-    			<option value = "xs"> xs </option>
-    			<option value = "s"> s </option>
-    			<option value = "m"> m </option>
-    			<option value = "l"> l </option>
-				<option value = "xl"> xl </option>
-				<option value = "xxl"> xxl </option>
-  			</select>
+			<div id = "form-part4">
 
-			<p> Skills </p>
-			<div id = "skills_wrap"> 
+				<h3> Show us what you build </h3>
+				<p> Website </p>
+				<input id = "site" placeholder = "https://example.com"/>
 
-			</div>
-			<br>
-			<input id = "skills_input" type = "text" list = "skills"/> <br>
-			<br>
+				<p> GitHub </p>
+				<input id = "github" placeholder = "https://github.com/hackkosice"/>
 
-			<button id = "3" class = "save_and_continue">Save And Continue</button>
-		</div>
+				<p> Devpost </p>
+				<input id = "devpost" placeholder = "https://devpost.com/user"/>
 
-		<div id = "form-part4">
+				<p> LinkedIn </p>
+				<input id = "linkedin" placeholder = "https://www.linkedin.com/in/user"/>
 
-			<h3> Show us what you build </h3>
-			<p> Website </p>
-			<input id = "site" placeholder = "https://example.com"/>
+				<p> CV: </p>
+				<input id = "cv_path" type = "file" accept = ".pdf"/>
+				<br>
 
-			<p> GitHub </p>
-			<input id = "github" placeholder = "https://github.com/hackkosice"/>
-			
-			<p> Devpost </p>
-			<input id = "devpost" placeholder = "https://devpost.com/user"/>
-			
-			<p> LinkedIn </p>
-			<input id = "linkedin" placeholder = "https://www.linkedin.com/in/user"/>
-
-			<p> CV: </p>
-			<input id = "cv_path" type = "file" accept = ".pdf"/>
-			<br>
-
-			<button id = "4" class = "save_and_continue">Save And Continue</button>
-		</div>
-
-		<div id = "form-part5">
-
-			<h3> Let us know you better </h3>
-			
-			<p> What are you excited about at Hack Kosice 2022? </p>
-			<textarea id = "spirit_animal" cols = "30" rows = "5"></textarea>
-
-			<p> How did you hear about Hack Kosice? </p>
-			<input id = "first_hear_hk22" list = "marketing_types"/>
-			
-			<p> Is Hack Kosice 2022 your first hackathon? </p>
-			<div id = "firsthack_wrap">
-				<input id = "firsthack_y" name = "firsthack" type = "radio" /> Yes 
-				<input id = "firsthack_n" name = "firsthack" type = "radio"/> No
+				<button id = "4" class = "save_and_continue">Save And Continue</button>
 			</div>
 
-			<p> What is your spirit animal? </p>
-			<textarea id = "spirit_animal" cols = "30" rows = "5"></textarea>
+			<div id = "form-part5">
 
-			<p> What kind of pizza is your favourite? </p>
-			<input id = "pizza" type = "text"/>
+				<h3> Let us know you better </h3>
 
-			<br>
-			<button id = "5" class = "save_and_continue">Save And Continue</button>
-			<button id = "save_and_close">Save And Close</button>
+				<p> What are you excited about at Hack Kosice 2022? </p>
+				<textarea id = "excited_hk22" cols = "30" rows = "5"></textarea>
+
+				<p> How did you hear about Hack Kosice? </p>
+				<input id = "hear_hk22" list = "marketing_types"/>
+
+				<p> Is Hack Kosice 2022 your first hackathon? </p>
+				<div id = "firsthack_wrap">
+					<input id = "firsthack_y" name = "firsthack" type = "radio" /> Yes 
+					<input id = "firsthack_n" name = "firsthack" type = "radio"/> No
+				</div>
+
+				<p> What is your spirit animal? </p>
+				<textarea id = "spirit_animal" cols = "30" rows = "5"></textarea>
+
+				<p> What kind of pizza is your favourite? </p>
+				<input id = "pizza" type = "text"/>
+
+				<br>
+				<button id = "5" class = "save_and_continue">Save And Continue</button>
+				<button id = "save_and_close">Save And Close</button>
+
+			</div>
 		</div>
 	</body>
 </html>

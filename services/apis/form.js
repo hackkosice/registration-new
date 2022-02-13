@@ -50,8 +50,26 @@ module.exports = class FormApiEndpoints {
             });
         }
 
+        try {
 
+            if (req.body.application_progress === 1) {
+                const user = await this.#db.get("SELECT `application_id` FROM applications WHERE `mymlh_uid`=?;", [verification.uid]);
+                
+                if (typeof user[0] !== 'undefined')             
+                    return res.status(200).send({ status: 'OK' });
 
+                await this.#db.insert("INSERT INTO applications(`application_progress`, `application_status`, `mymlh_uid`) VALUES (?, ?, ?)", 
+                                                [1, "open", verification.uid]);
+                return res.status(200).send({ status: 'OKi' });
+            }
+
+            for (const key in req.body) {
+                
+            }
+
+        } catch (err) {
+            console.log(err);
+        }
     }
 
     async form_close_endpoint(req, res) {

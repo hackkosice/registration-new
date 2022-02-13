@@ -1,16 +1,46 @@
 $ = (element) => { return document.getElementById(element); };
 
-
 //Build datalists from these jsons
 const suggestions_datasets = ["/data/countries.json",
                               "/data/marketing_types.json",
                               "/data/skills.json"];
 
+//A smol trick so I don't have to write out everything out by hand
+//Null: get value, id of the input is the same
+const parts = [
+    { //Part 1: nothing (mymlh uid is obtained from verification token)
+        fields: [],
+        functions: []
+    },
+
+    { //Part 2: Travel & etc
+        fields: ["reimbursment", "travel_from", "visa", "tshirt", "diet"],
+        functions: [() => { return $("reimbursment_y").checked ? "yes" : "no"; }, null,
+                    () => { return $("visa_y").checked ? "yes" : "no"; }, null, null]
+    },
+
+    { //Part 3: Job
+        fields: ["job_looking", "job_preference", "skills"],
+        functions: [() => { return $("job_y").checked ? "yes" : "no"; }, null, 
+                    () => { return get_all_skills(); }]
+    },
+
+    { //Part 4: what you've build
+        fields: ["site", "github", "devpost", "linkedin"],
+        functions: [null, null, null, null]
+    },
+
+    { //Part 5: get to know you
+        fields: ["excited_hk22", "hear_hk22", "first_hack_hk22", "spirit_animal", "pizza"],
+        functions: [null, null, () => { return $("firsthack_y").checked ? "yes" : "no"; }, 
+                    null, null]
+    }
+]
 
 window.onload = async function() {
 
     for (const button of document.getElementsByClassName("save_and_continue")) {
-        button.addEventListener('click', () => { sac_callback(button.id) });
+        button.addEventListener('click', () => { save_callback(button.id) });
     }
 
     $("skills_input").addEventListener('change', () => { 
@@ -105,36 +135,30 @@ window.onload = async function() {
     autofill_form();
 }
 
-async function sac_callback(progress) {
-    console.log(Number(progress));
+async function save_callback(progress) {
 
+    var body = {
+        application_progress: Number(progress)
+    };
+    
+    const progress_selector = parts[Number(progress) - 1]; //Convert to zero-index
+    
+    //A bit of a hack, but overall saves space
+    for (let i = 0; i < progress_selector.fields.length; i++) {
+        if (progress_selector.functions[i] == null)
+            body[progress_selector.fields[i]] = $(progress_selector.fields[i]).value;
+        else body[progress_selector.fields[i]] = progress_selector.functions[i]();
+    }
 
+    console.log(body);
     fetch("/api/form-update", {method: 'POST', credentials: 'same-origin',
-        body: {
-            
-            /*application_progress: Number(progress),
-            mymlh_uid: window.userinfo.id,
-            reimbusment: $(""),
-            "travel_from"	TEXT,
-            "visa"	INTEGER,
-            "diet"	TEXT NOT NULL,
-            "tshirt"	TEXT NOT NULL,
-            "job_looking"	INTEGER NOT NULL,
-            "job_preference"	TEXT,
-            "cv_path"	TEXT UNIQUE,
-            "skills"	TEXT NOT NULL,
-            "excited_hk22"	TEXT,
-            "first_hear_hk22"	TEXT,
-            "first_hack_hk22"	INTEGER,
-            "spirit_animal"	TEXT,
-            "pizza"	TEXT,
-            "site"	TEXT UNIQUE,
-            "github"	TEXT UNIQUE,
-            "devpost"	TEXT UNIQUE,
-            linkedin,*/
-        }
-    })
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+        },
+        body: JSON.stringify(body)
+    });
 }
+
 
 function get_all_skills() {
     var skills = "";
@@ -154,8 +178,17 @@ function autofill_form() {
     $(window.formdata.first_hack_hk22 === "yes" ? "firsthack_y" : "firsthack_y").checked = true;
    
     //Set textboxes
-    $("travel_from").value = window.formdata.travel_from;
-    //Set skills
+    //A bit of a hack... I don't know?!
+    for (const part of $("application").children) {
+        for (const child of part.children) {
+            if (child.tagName === "INPUT" && typeof window.formdata[child.id] !== 'undefined')
+                child.value = window.formdata[child.id];;
+        }
+    }
+
+    //Set skills (skills are sometimes null, that's why ==)
+    if (window.formdata.skills == null)
+        return;
 
     const skills = window.formdata.skills.split(", ");
 
