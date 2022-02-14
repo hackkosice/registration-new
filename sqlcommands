@@ -4,7 +4,7 @@ CREATE TABLE "applications" (
 	"application_progress" INTEGER,
 	"team_id"	TEXT,
 	"mymlh_uid"	INTEGER UNIQUE,
-	"reimbusment"	TEXT,
+	"reimbursment"	TEXT,
 	"travel_from"	TEXT,
 	"visa"	TEXT,
 	"diet"	TEXT,

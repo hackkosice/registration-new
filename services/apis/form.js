@@ -63,10 +63,22 @@ module.exports = class FormApiEndpoints {
                 return res.status(200).send({ status: 'OKi' });
             }
 
+            const user = await this.#db.get("SELECT `application_id` FROM applications WHERE `mymlh_uid`=?;", [verification.uid]);
+            if (typeof user[0] === 'undefined')             
+                return res.status(409).send({    
+                    status: 'error',
+                    error: {
+                        code: 409,
+                        message: "Application update failed! Error: Application does not exist!"
+                    }
+                });
+
+
             for (const key in req.body) {
-                
+                const result = await this.#db.insert("UPDATE applications SET " + whitelist[key] + "=? WHERE `mymlh_uid`=?;", [req.body[key], verification.uid]);
             }
 
+        //Todo: add calbacks
         } catch (err) {
             console.log(err);
         }
@@ -127,4 +139,31 @@ module.exports = class FormApiEndpoints {
 
     #db = null;
     #jwt_key = null;
+}
+
+//So no SQL injections are possible
+const whitelist = {
+    "application_id": "application_id",
+	"application_status": "application_status",
+	"application_progress": "application_progress",
+	"team_id": "team_id",
+	"mymlh_uid": "mymlh_uid",
+	"reimbursment": "reimbursment",
+	"travel_from": "travel_from",
+	"visa": "visa", 
+	"diet": "diet",
+	"tshirt": "tshirt",
+	"job_looking": "job_looking",
+	"job_preference": "job_preference",
+	"cv_path": "cv_path",
+	"skills": "skills",
+	"excited_hk22": "excited_hk22",
+	"hear_hk22": "hear_hk22",
+	"first_hack_hk22": "first_hack_hk22",
+	"spirit_animal": "spirit_animal",
+	"pizza": "pizza",
+	"site": "site",
+	"github": "github",
+	"devpost": "devpost",
+	"linkedin": "linkedin",
 }

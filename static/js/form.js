@@ -172,10 +172,10 @@ function get_all_skills() {
 function autofill_form() {
    
     //Set checkboxes
-    $(window.formdata.reimbusment === "yes" ? "reimbursment_y" : "reimbursment_n").checked = true;
+    $(window.formdata.reimbursment === "yes" ? "reimbursment_y" : "reimbursment_n").checked = true;
     $(window.formdata.visa === "yes" ? "visa_y" : "visa_n").checked = true;
     $(window.formdata.job_looking === "yes" ? "job_y" : "job_n").checked = true;
-    $(window.formdata.first_hack_hk22 === "yes" ? "firsthack_y" : "firsthack_y").checked = true;
+    $(window.formdata.first_hack_hk22 === "yes" ? "firsthack_y" : "firsthack_n").checked = true;
    
     //Set textboxes
     //A bit of a hack... I don't know?!
