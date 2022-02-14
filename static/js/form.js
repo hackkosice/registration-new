@@ -55,6 +55,7 @@ window.onload = async function() {
             $("skills_wrap").removeChild(button);
         });
 
+        button.classList.add("button", "is-link", "is-small", "mr-1", "mb-1")
         button.value = $("skills_input").value;
         button.textContent = $("skills_input").value;
 
@@ -200,6 +201,7 @@ function autofill_form() {
 
         button.value = skill;
         button.textContent = skill;
+        button.classList.add("button", "is-link", "is-small", "mr-1", "mb-1")
 
         $("skills_wrap").appendChild(button);
     }

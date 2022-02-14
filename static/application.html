@@ -9,6 +9,10 @@
 		<link rel = "icon" type = "image/png" sizes = "192x192" href = "images/favicon/favicon-192.png">
 
 		<script async src = "/js/form.js"></script>
+		
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="/css/mystyles.css">
 
 	</head>
 
@@ -18,162 +22,300 @@
 		<div id = "datasets">
 		</div>
 
-		<header>
+		<header style="padding: 0% 25%;">
 			<img src = "images/logo_oneline_purple.svg" alt = "Hack Kosice Logo"/>
 		</header>
-	
-		<div id = "application">
-			<div id = "form-part1">
 
-				<h3>From MyMLH</h3>
+		<div class="container mb-6">
+			<nav class="panel">
 
-				<p>First Name</p>
-				<input id = "firstname" disabled/>
+				<p class="panel-heading">
+					Hack Kosice 2022 application
+				</p>
 
-				<p>Last Name</p>
-				<input id = "lastname" disabled/>
+				<p class="panel-tabs is-large">
+					<a class="is-active">Basic info</a>
+					<a>Travel</a>
+					<a>Job & experience</a>
+					<a>Fun info</a>
+				  </p>
 
-				<p>E-Mail</p>
-				<input id = "email" disabled/>
+				<div class="panel-block" style="flex-direction: column;">
 
-				<p>Phone Number</p>
-				<input id = "phone" disabled/>
+					<div id = "application">
+			
+						<div id = "form-part1">
+							<h1 class="title primary">Basic info</h1>
 
-				<p>Date of Birth (mm/dd/yyyy)</p>
-				<input id = "birth" type = "date" disabled/> <br> <br>
+							<div class="field">
+								<label class="label">First Name</label>
+								<div class="control">
+									<input class="input" type="text" placeholder="First name" id="firstname" disabled>
+								</div>
+							</div>
+							<div class="field">
+								<label class="label">Last Name</label>
+								<div class="control">
+									<input class="input" type="text" placeholder="Last name" id="lastname" disabled>
+								</div>
+							</div>
 
-				<button id = "1" class = "save_and_continue">Save And Continue</button>
-			</div>
+							<div class="field">
+								<label class="label">E-Mail</label>
+								<div class="control">
+									<input class="input" type="text" placeholder="E-Mail" id="email" disabled>
+								</div>
+							</div>
 
-			<div id = "form-part2">
-				<h3> Travel </h3>
+							<div class="field">
+								<label class="label">Phone Number</label>
+								<div class="control">
+									<input class="input" type="text" placeholder="Last name" id="phone" disabled>
+								</div>
+							</div>
 
-				<p>Do you need reimbursment?</p>
-				<div id = "reimbursment_wrap">
-					<input id = "reimbursment_y" name = "reimbursment" type = "radio"/> Yes 
-					<input id = "reimbursment_n" name = "reimbursment" type = "radio"/> No
-				</div>
+							<div class="field">
+								<label class="label">Date of Birth (mm/dd/yyyy)</label>
+								<div class="control">
+									<input class="input" type="date" placeholder="Last name" id="birth" disabled>
+								</div>
+							</div>
+			
+							<button id = "1" class = "button is-primary is-light save_and_continue">Save And Continue</button>
+						</div>
 
+						<div id = "form-part2">
+							<h1 class="title primary"> Travel </h1>
 
-				<p> From Where you would be traveling? </p>
-				<input id = "travel_from" list = "countries" type = "text"/>
+							<div class="field">
+								<label class="label">Do you need reimbursment?</label>
+								<div class="control" id = "reimbursment_wrap">
+									<label class="radio">
+									<input id = "reimbursment_y" name = "reimbursment" type="radio">
+									Yes
+									</label>
+									<label class="radio">
+									<input id = "reimbursment_n" name = "reimbursment" type="radio">
+									No
+									</label>
+								</div>
+							</div>
 
-				<p> Do you need the invitation for travel visa? </p>
+							<div class="field">
+								<label class="label">From which country you would be traveling?</label>
+								<div class="control">
+									<input class="input" placholder="Start typing country..." id = "travel_from" list = "countries" type = "text">
+								</div>
+							</div>
 
-				<div id = "visa_wrap">
-					<input id = "visa_y" name = "visa" type = "radio" /> Yes 
-					<input id = "visa_n" name = "visa" type = "radio"/> No
-				</div>
+							<div class="field">
+								<label class="label">Do you need the invitation for travel visa?</label>
+								<div class="control" id = "visa_wrap">
+									<label class="radio">
+									<input id = "visa_y" name = "visa" type="radio">
+									Yes
+									</label>
+									<label class="radio">
+									<input id = "visa_n" name = "visa" type="radio">
+									No
+									</label>
+								</div>
+							</div>
 
-				<p> T-Shirt Size </p>
+							<div class="field">
+								<label class="label">T-Shirt Size</label>
+								<div class="control">
+								  <div class="select">
+									<select id = "tshirt">
+										<option value = "xs"> xs </option>
+										<option value = "s"> s </option>
+										<option value = "m"> m </option>
+										<option value = "l"> l </option>
+										<option value = "xl"> xl </option>
+										<option value = "xxl"> xxl </option>
+									</select>
+								  </div>
+								</div>
+							</div>
 
-				<select id = "tshirt">
-    				<option value = "xs"> xs </option>
-    				<option value = "s"> s </option>
-    				<option value = "m"> m </option>
-    				<option value = "l"> l </option>
-					<option value = "xl"> xl </option>
-					<option value = "xxl"> xxl </option>
-  				</select>
-			  
+							<div class="field">
+								<label class="label">Dietary requirements</label>
+								<div class="control">
+								  <div class="select">
+									<select id = "diet">
+										<option value = "none"> none </option>
+										<option value = "lactosefree"> Lactose Free </option>
+										<option value = "glutenfree"> Gluten Free </option>
+										<option value = "nopork"> No Pork </option>
+										<option value = "vegetarian"> Vegetarian </option>
+										<option value = "vegan"> Vegan </option>
+									</select>
+								  </div>
+								</div>
+							</div>
+			
+							<button id = "2" class = "button is-primary is-light save_and_continue">Save And Continue</button>
+						</div>
+			
+						<div id = "form-part3">
+			
+							<h1 class="title primary"> Job </h1>
 
-				<p> Dietary requirements </p>
-				<select id = "diet">
-    				<option value = "none"> none </option>
-    				<option value = "lactosefree"> Lactose Free </option>
-    				<option value = "glutenfree"> Gluten Free </option>
-    				<option value = "nopork"> No Pork </option>
-					<option value = "vegetarian"> Vegetarian </option>
-					<option value = "vegan"> Vegan </option>
-  				</select>
+							<div class="field">
+								<label class="label">Are you looking for a job?</label>
+								<div class="control" id = "job_wrap">
+									<label class="radio">
+									<input id = "job_y" name = "job" type="radio">
+									Yes
+									</label>
+									<label class="radio">
+									<input id = "job_n" name = "job" type="radio">
+									No
+									</label>
+								</div>
+							</div>
 
-				<br>
+							<div class="field">
+								<label class="label">Job preference</label>
+								<div class="control">
+								  <div class="select">
+									<select id = "job_preference">
+										<option value = "internship"> internship </option>
+										<option value = "part-time"> part-time </option>
+										<option value = "full-time"> full-time </option>
+									</select>
+								  </div>
+								</div>
+							</div>
 
-				<button id = "2" class = "save_and_continue">Save And Continue</button>
-			</div>
+							<div class="field">
+								<label class="label">Skills</label>
+								<div class="control">
+									<div style="max-width: 400px;" id = "skills_wrap" class="is-flex is-justify-content-start is-flex-wrap-wrap"> 
+								
+									</div>
+									<input class="input" placholder="Start typing country..." id = "skills_input" type = "text" list = "skills">
+								</div>
+							</div>
+			
+							<button id = "3" class = "button is-primary is-light save_and_continue">Save And Continue</button>
+						</div>
+			
+						<div id = "form-part4">
 
-			<div id = "form-part3">
+							<h1 class="title primary"> Show us what you build </h1>
 
-				<h3> Job </h3>
+							<div class="field">
+								<label class="label">Website</label>
+								<div class="control">
+									<input class="input" type="text" id = "site" placeholder = "https://mysite.com">
+								</div>
+							</div>
 
-				<p> Are you looking for a job?</p>
-				<div id = "job_wrap">
-					<input id = "job_y" name = "visa" type = "radio" /> Yes 
-					<input id = "job_n" name = "visa" type = "radio"/> No
-				</div>
+							<div class="field">
+								<label class="label">GitHub</label>
+								<div class="control">
+									<input class="input" type="text" id = "github" placeholder = "https://github.com/hackkosice">
+								</div>
+							</div>
 
-				Job preference:
-				<select id = "job_preference">
-    				<option value = "xs"> xs </option>
-    				<option value = "s"> s </option>
-    				<option value = "m"> m </option>
-    				<option value = "l"> l </option>
-					<option value = "xl"> xl </option>
-					<option value = "xxl"> xxl </option>
-  				</select>
+							<div class="field">
+								<label class="label">Devpost</label>
+								<div class="control">
+									<input class="input" type="text" id = "devpost" placeholder = "https://devpost.com/user">
+								</div>
+							</div>
 
-				<p> Skills </p>
-				<div id = "skills_container">
-					<div id = "skills_wrap"> 
-					
+							<div class="field">
+								<label class="label">LinkedIn</label>
+								<div class="control">
+									<input class="input" type="text" id = "linkedin" placeholder = "https://www.linkedin.com/in/user">
+								</div>
+							</div>
+
+							<div class="field">
+								<label class="label">CV:</label>
+								<div class="control">
+									<div class="file has-name">
+										<label class="file-label">
+										  <input class="file-input" id = "cv_path" type = "file" accept = ".pdf">
+										  <span class="file-cta">
+											<span class="file-icon">
+											  <i class="fas fa-upload"></i>
+											</span>
+											<span class="file-label">
+											  Choose a file…
+											</span>
+										  </span>
+										  <span class="file-name">
+											filename
+										  </span>
+										</label>
+									  </div>
+								</div>
+							</div>
+
+							<button id = "4" class = "button is-primary is-light save_and_continue">Save And Continue</button>
+						</div>
+			
+						<div id = "form-part5">
+							
+							<h1 class="title primary"> Let us know you better </h1>
+
+							<div class="field">
+								<label class="label">What are you excited about at Hack Kosice 2022?</label>
+								<div class="control">
+									<textarea class="textarea" id = "excited_hk22" cols = "30" rows = "5" placeholder="I am excited about free pizza!"></textarea>
+								</div>
+							</div>
+
+							<div class="field">
+								<label class="label">How did you hear about Hack Kosice?</label>
+								<div class="control">
+									<input class="input" type="text" id = "hear_hk22" list = "marketing_types">
+								</div>
+							</div>
+
+							<div class="field">
+								<label class="label">Is Hack Kosice 2022 your first hackathon?</label>
+								<div class="control" id = "firsthack_wrap">
+									<label class="radio">
+									<input id = "firsthack_y" name = "firsthack" type="radio">
+									Yes
+									</label>
+									<label class="radio">
+									<input id = "firsthack_n" name = "firsthack" type="radio">
+									No
+									</label>
+								</div>
+							</div>
+
+							<div class="field">
+								<label class="label">What is your spirit animal and why?</label>
+								<div class="control">
+									<textarea class="textarea" id = "spirit_animal" cols = "30" rows = "5" placeholder=""></textarea>
+								</div>
+							</div>
+
+							<div class="field">
+								<label class="label">What kind of pizza is your favourite?</label>
+								<div class="control">
+									<textarea class="textarea" id = "pizza" cols = "30" rows = "5" placeholder=""></textarea>
+								</div>
+							</div>
+
+							<button id = "5" class = "button is-primary is-light save_and_continue">Save And Continue</button> <br>
+							<button id = "save_and_close" class="button is-primary mt-2 mb-6">Save And Close</button>
+			
+						</div>
+
 					</div>
-					
-					<input id = "skills_input" type = "text" list = "skills"/> <br>
-				</div>
-				<br>
 
-				<button id = "3" class = "save_and_continue">Save And Continue</button>
-			</div>
-
-			<div id = "form-part4">
-
-				<h3> Show us what you build </h3>
-				<p> Website </p>
-				<input id = "site" placeholder = "https://example.com"/>
-
-				<p> GitHub </p>
-				<input id = "github" placeholder = "https://github.com/hackkosice"/>
-
-				<p> Devpost </p>
-				<input id = "devpost" placeholder = "https://devpost.com/user"/>
-
-				<p> LinkedIn </p>
-				<input id = "linkedin" placeholder = "https://www.linkedin.com/in/user"/>
-
-				<p> CV: </p>
-				<input id = "cv_path" type = "file" accept = ".pdf"/>
-				<br>
-
-				<button id = "4" class = "save_and_continue">Save And Continue</button>
-			</div>
-
-			<div id = "form-part5">
-
-				<h3> Let us know you better </h3>
-
-				<p> What are you excited about at Hack Kosice 2022? </p>
-				<textarea id = "excited_hk22" cols = "30" rows = "5"></textarea>
-
-				<p> How did you hear about Hack Kosice? </p>
-				<input id = "hear_hk22" list = "marketing_types"/>
-
-				<p> Is Hack Kosice 2022 your first hackathon? </p>
-				<div id = "firsthack_wrap">
-					<input id = "firsthack_y" name = "firsthack" type = "radio" /> Yes 
-					<input id = "firsthack_n" name = "firsthack" type = "radio"/> No
 				</div>
 
-				<p> What is your spirit animal? </p>
-				<textarea id = "spirit_animal" cols = "30" rows = "5"></textarea>
+			</nav>
+	
 
-				<p> What kind of pizza is your favourite? </p>
-				<input id = "pizza" type = "text"/>
-
-				<br>
-				<button id = "5" class = "save_and_continue">Save And Continue</button>
-				<button id = "save_and_close">Save And Close</button>
-
-			</div>
-		</div>
+	</div>
 	</body>
 </html>

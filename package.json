@@ -4,6 +4,7 @@
   "description": "HK application portal",
   "main": "backend.js",
   "scripts": {
+    "css-build": "node-sass --omit-source-map-url sass/mystyles.scss static/css/mystyles.css",
     "start": "node backend.js"
   },
   "repository": {
@@ -29,5 +30,9 @@
     "node-fetch": "^2.6.7",
     "nodemailer": "^6.7.2",
     "nodemailer-express-handlebars": "^4.0.0"
+  },
+  "devDependencies": {
+    "bulma": "^0.9.3",
+    "node-sass": "^7.0.1"
   }
 }
