@@ -141,6 +141,10 @@ async function save_callback(progress) {
         application_progress: Number(progress)
     };
     
+    //Bump local application status variable
+    window.formdata.application_progress = window.formdata.application_progress >= Number(progress) ? 
+                                           window.formdata.application_progress : Number(progress);
+
     const progress_selector = parts[Number(progress) - 1]; //Convert to zero-index
     
     //A bit of a hack, but overall saves space
@@ -178,11 +182,17 @@ function autofill_form() {
     $(window.formdata.first_hack_hk22 === "yes" ? "firsthack_y" : "firsthack_n").checked = true;
    
     //Set textboxes
+    $("excited_hk22").value = window.formdata.excited_hk22;
+    $("spirit_animal").value = window.formdata.spirit_animal;
+
     //A bit of a hack... I don't know?!
     for (const part of $("application").children) {
         for (const child of part.children) {
-            if (child.tagName === "INPUT" && typeof window.formdata[child.id] !== 'undefined')
-                child.value = window.formdata[child.id];;
+            if ((child.tagName === "INPUT" || child.tagName === "SELECT") && typeof window.formdata[child.id] !== 'undefined') {
+                console.log(child)
+                child.value = window.formdata[child.id];
+
+            }
         }
     }
 
