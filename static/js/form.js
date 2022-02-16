@@ -39,9 +39,11 @@ const parts = [
 
 window.onload = async function() {
 
-    for (const button of document.getElementsByClassName("save_and_continue")) {
+    for (const button of document.getElementsByClassName("save_and_continue"))
         button.addEventListener('click', () => { save_callback(button.id) });
-    }
+    
+    for (let i = 1; i < 6; i++)
+        $("show_form-part" + i).addEventListener('click', () => { header_callback(i) });
 
     $("skills_input").addEventListener('change', () => { 
         
@@ -51,7 +53,7 @@ window.onload = async function() {
 
 
         let button = document.createElement("button");
-        button.addEventListener('click', () => {;
+        button.addEventListener('click', () => {
             $("skills_wrap").removeChild(button);
         });
 
@@ -118,6 +120,23 @@ window.onload = async function() {
         && window.formdata.application_status !== "open")
         window.location = "/dashboard.html";
 
+    if (typeof window.formdata.application_progress !== 'undefined') {
+
+        for (var i = 5; i > window.formdata.application_progress; i--)
+            $("show_form-part" + i).classList.add("hidden");
+
+        $("form-part" + window.formdata.application_progress).classList.remove("hidden");
+        $("show_form-part" + window.formdata.application_progress).classList.add("is-active");
+    } else {
+
+        for (var i = 2; i < 6; i++)
+            $("show_form-part" + i).classList.add("hidden");
+
+        $("form-part1").classList.remove("hidden");
+        $("show_form-part1").classList.add("is-active");
+    }
+
+
 
     //Autofill boxes with info form MyMLH
     $("firstname").value = window.userinfo.first_name;
@@ -151,15 +170,39 @@ async function save_callback(progress) {
         else body[progress_selector.fields[i]] = progress_selector.functions[i]();
     }
 
-    console.log(body);
     fetch("/api/form-update", {method: 'POST', credentials: 'same-origin',
         headers: {
             'Content-Type': 'application/json;charset=utf-8'
         },
         body: JSON.stringify(body)
     });
+
+    console.log(body);
+    if (Number(progress) > 0 && Number(progress)  < 5) {
+        for (var i = 1; i < 6; i++){ 
+            $("form-part" + i).classList.add("hidden");
+            $("show_form-part" + i).classList.remove("is-active");
+        }
+    
+        $("show_form-part" + (Number(progress) + 1)).classList.remove("hidden");
+        $("show_form-part" + (Number(progress) + 1)).classList.add("is-active");
+        $("form-part" + (Number(progress) + 1)).classList.remove("hidden");
+    }
+
+    if (Number(progress) === 5)
+        window.location = "/dashboard.html";
 }
 
+async function header_callback(progress) {
+    for (var i = 1; i < 6; i++) {
+        $("show_form-part" + i).classList.remove("is-active");
+        $("form-part" + i).classList.add("hidden");
+    }
+
+    $("form-part" + progress).classList.remove("hidden");
+    $("show_form-part" + progress).classList.add("is-active");
+
+}
 
 function get_all_skills() {
     var skills = "";
@@ -179,12 +222,16 @@ function autofill_form() {
     $(window.formdata.first_hack_hk22 === "yes" ? "firsthack_y" : "firsthack_n").checked = true;
    
     //Set textboxes
-    //A bit of a hack... I don't know?!
-    for (const part of $("application").children) {
-        for (const child of part.children) {
-            if (child.tagName === "INPUT" && typeof window.formdata[child.id] !== 'undefined')
-                child.value = window.formdata[child.id];;
-        }
+    for (const part of document.getElementsByTagName("input")) {
+        if (typeof window.formdata[part.id] !== 'undefined')
+            part.value = window.formdata[part.id];
+        
+    }
+
+    for (const part of document.getElementsByTagName("selection")) {
+        if (typeof window.formdata[part.id] !== 'undefined')
+            part.value = window.formdata[part.id];
+        
     }
 
     //Set skills (skills are sometimes null, that's why ==)
