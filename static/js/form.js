@@ -116,6 +116,7 @@ window.onload = async function() {
 
     }
 
+
     if (typeof window.formdata.application_status !== 'undefined' 
         && window.formdata.application_status !== "open")
         window.location = "/dashboard.html";
@@ -146,7 +147,10 @@ window.onload = async function() {
     $("phone").value = window.userinfo.phone_number;
     $("birth").value = window.userinfo.date_of_birth;
 
-    //Autofill the form 
+    // Remove loader
+    $("loader").classList.remove("is-active");
+
+    //Autofill the form
     
     //Application object has always application id. If application id is undefined, no not autofill anything
     if (typeof window.formdata.application_id === 'undefined')
@@ -174,6 +178,11 @@ async function save_callback(progress) {
         else body[progress_selector.fields[i]] = progress_selector.functions[i]();
     }
 
+
+    if (body.application_progress === Number(4)) {
+        upload_cv();
+    }
+
     fetch("/api/form-update", {method: 'POST', credentials: 'same-origin',
         headers: {
             'Content-Type': 'application/json;charset=utf-8'
@@ -195,6 +204,15 @@ async function save_callback(progress) {
 
     if (Number(progress) === 5)
         window.location = "/dashboard.html";
+}
+
+async function upload_cv() {
+    const selectedFile = $("cv_path").files[0];
+    const data = new FormData();
+    data.append("cv", selectedFile);
+    fetch("/api/form-file-upload", {method: 'POST', credentials: 'same-origin',
+        body: data
+    });
 }
 
 async function header_callback(progress) {

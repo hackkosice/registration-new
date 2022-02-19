@@ -6,7 +6,7 @@ function error(res, status, msg) {
         status: 'error',
         error: {
             code: status,
-            message: message
+            message: msg
         }
     });
 }
@@ -20,36 +20,34 @@ module.exports = class FormApiEndpoints {
         this.#jwt_key = jwt_key;
     }
 
-    async form_data_endpoint(req, res) {
-        
-        //Authenticate user
-        var verification = null;
+    async form_data_auth_middleware(req, res, next) {
+        let verification = null;
         try {
             verification = await jwt.verify(req.cookies['verification'], this.#jwt_key);
         } catch (err) {
             return error(res, 401, "Authentification needed! Error: " + err);
         }
 
-        try {
+        req.verification = verification
+        next();
+    }
 
+    async form_data_endpoint(req, res) {
+
+        let verification = req.verification;
+
+        try {
             //Send user the whole DB entry
             const data = await this.#db.get("SELECT * FROM applications WHERE `mymlh_uid`=?;", [verification.uid]);
-            res.status(200).send(typeof data[0] === 'undefined' ? {} : data[0]); 
-
+            res.status(200).send(typeof data[0] === 'undefined' ? {} : data[0]);
         } catch(err) {
             return error(res, 500, "Database lookup failed! Error: " + err);
         }
     }
 
     async form_delta_endpoint(req, res) {
-        
-        //Authenticate user
-        var verification = null;
-        try {
-            verification = await jwt.verify(req.cookies['verification'], this.#jwt_key);
-        } catch (err) {
-            return error(res, 401, "Authentification needed! Error: " + err);
-        }
+
+        let verification = req.verification;
 
         try {
 
@@ -61,7 +59,7 @@ module.exports = class FormApiEndpoints {
                     return res.status(200).send({ status: 'OK' });
 
                 await this.#db.insert("INSERT INTO applications(`application_progress`, `application_status`, `mymlh_uid`, `reimbursement_progress`) VALUES (?, ?, ?, ?)", 
-                                                [1, "open", verification.uid], "none");
+                                                [1, "open", verification.uid, "none"]);
                 return res.status(200).send({ status: 'OK' });
             }
 
@@ -92,14 +90,8 @@ module.exports = class FormApiEndpoints {
     }
 
     async form_close_endpoint(req, res) {
-        
-        //Authenticate user
-         var verification = null;
-         try {
-             verification = await jwt.verify(req.cookies['verification'], this.#jwt_key);
-         } catch (err) {
-             return error(res, 401, "Authentification needed! Error: " + err);
-         }
+
+        let verification = req.verification;
 
         try {
             const status = await this.#db.get("SELECT `application_progress`, `application_status` FROM applications WHERE `mymlh_uid`=?;", verification.uid);
@@ -120,6 +112,21 @@ module.exports = class FormApiEndpoints {
         } catch (err) {
             return error(res, 500, "Database lookup failed! Error: " + err);
         }
+    }
+
+    async form_upload_file(req, res) {
+        let verification = req.verification;
+
+        let file = req.files.cv
+        let fileSplit = file.name.split(".")
+        let fileExtension = fileSplit[fileSplit.length - 1]
+
+        let randomString = Math.random().toString(36).substring(2);
+
+        let fileCode = `${verification.uid}${randomString}.${fileExtension}`
+        file.mv(`./uploads/cvs/${fileCode}`)
+
+        return res.status(200).send({ file_code: fileCode })
     }
 
     #db = null;
