@@ -7,7 +7,7 @@ const fileUpload            = require('express-fileupload');
 
 
 const MyMLH                 = require('./services/auth/mymlh.js');
-const Mailer       = require('./services/email/email.js');
+const Mailer                = require('./services/email/email.js');
 const Database              = require('./services/database/sqlite3.js'); //swap provider when needed
 
 const FormApiEndpoints      = require('./services/apis/form.js');
@@ -54,21 +54,24 @@ const TeamsApiEndpoints     = require('./services/apis/teams.js');
     router.post("/api/user-info", async (req, res) => { mlh_auth.get_user_data_endpoint(req, res) });
 
     router.post("/api/form-data",
-        async (req, res, next) => { form_api.form_data_auth_middleware(req, res, next) },
+        async (req, res, next) => { form_api.form_auth_middleware(req, res, next) },
         async (req, res) => { form_api.form_data_endpoint(req, res) });
     router.post("/api/form-update",
-        async (req, res, next) => { form_api.form_data_auth_middleware(req, res, next) },
+        async (req, res, next) => { form_api.form_auth_middleware(req, res, next) },
         async (req, res) => { form_api.form_delta_endpoint(req, res) });
     router.post("/api/form-close",
-        async (req, res, next) => { form_api.form_data_auth_middleware(req, res, next) },
+        async (req, res, next) => { form_api.form_auth_middleware(req, res, next) },
         async (req, res) => { form_api.form_close_endpoint(req, res) });
     router.post("/api/form-file-upload",
-        async (req, res, next) => { form_api.form_data_auth_middleware(req, res, next) },
+        async (req, res, next) => { form_api.form_auth_middleware(req, res, next) },
         async (req, res) => { form_api.form_upload_file(req, res) });
 
-    router.post("/api/team-create", async (req, res) => { team_api.team_create_endpoint(req, res) });
-    router.post("/api/team-update", async (req, res) => { team_api.team_update_endpoint(req, res) });
 
+    router.post("/api/team-info", 
+        async (req, res, next) => { team_api.team_auth_middleware(res, req, next) },
+        async (req, res) => { team_api.team_info_endpoint(req, res) }); 
+    router.post("/api/team-create", async (req, res) => { team_api.team_create_endpoint(req, res) });
+    
     router.post("/api/admin", async () => {});
     router.post("/api/judge", async () => {});    
 

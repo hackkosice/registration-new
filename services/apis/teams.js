@@ -19,6 +19,18 @@ module.exports = class TeamsApiEndpoints {
         this.#jwt_key = jwt_key;
         this.#mymlh = mymlh_api;
     }
+    
+    async team_auth_middleware(req, res, next) {
+        let verification = null;
+        try {
+            verification = await jwt.verify(req.cookies['verification'], this.#jwt_key);
+        } catch (err) {
+            return error(res, 401, "Authentification needed! Error: " + err);
+        }
+
+        req.verification = verification
+        next();
+    }
 
     async team_create_endpoint(req, res) {
         try {

@@ -51,6 +51,7 @@
 			
 						<div class = "hidden" id = "form-part1">
 							<h1 class="title primary">Basic info</h1>
+							<p>Here's the info we got from your MyMLH profile. Please, double check if it's accurete. If you wish to change it, do so in the settings of your MyMLH profile.</p>
 
 							<div class="field">
 								<label class="label">First Name</label>
@@ -113,6 +114,14 @@
 								</div>
 							</div>
 
+							<p> ... ... 
+								<ul>
+									<li>If you come from Slovakia, we sadly can not give you travel reimbursement</li>
+									<li>If you come from neighbouring coutries (i. e. Czechia, Poland, Ukraine, Hungary or Austria), you may recive travel reimbursment up to 20€</li>
+									<li>If you don't come from countries listed above, you may recive travel reimbursement up to 50€</li>
+								</ul>
+							</p>
+
 							<div class="field">
 								<label class="label">Do you need the invitation for travel visa?</label>
 								<div class="control" id = "visa_wrap">
@@ -124,38 +133,6 @@
 									<input id = "visa_n" name = "visa" type="radio">
 									No
 									</label>
-								</div>
-							</div>
-
-							<div class="field">
-								<label class="label">T-Shirt Size</label>
-								<div class="control">
-								  <div class="select">
-									<select id = "tshirt">
-										<option value = "xs"> xs </option>
-										<option value = "s"> s </option>
-										<option value = "m"> m </option>
-										<option value = "l"> l </option>
-										<option value = "xl"> xl </option>
-										<option value = "xxl"> xxl </option>
-									</select>
-								  </div>
-								</div>
-							</div>
-
-							<div class="field">
-								<label class="label">Dietary requirements</label>
-								<div class="control">
-								  <div class="select">
-									<select id = "diet">
-										<option value = "none"> none </option>
-										<option value = "lactosefree"> Lactose Free </option>
-										<option value = "glutenfree"> Gluten Free </option>
-										<option value = "nopork"> No Pork </option>
-										<option value = "vegetarian"> Vegetarian </option>
-										<option value = "vegan"> Vegan </option>
-									</select>
-								  </div>
 								</div>
 							</div>
 			
@@ -185,9 +162,10 @@
 								<div class="control">
 								  <div class="select">
 									<select id = "job_preference">
-										<option value = "internship"> internship </option>
-										<option value = "part-time"> part-time </option>
-										<option value = "full-time"> full-time </option>
+										<option value = "none"> Not Interested </option>
+										<option value = "internship"> Internship </option>
+										<option value = "part-time"> Part-time </option>
+										<option value = "full-time"> Full-time </option>
 									</select>
 								  </div>
 								</div>
@@ -203,6 +181,12 @@
 								</div>
 							</div>
 			
+							<p>
+								Although you've probably listed these in your CV, our sponsors want this more comprehensive access to the desired 
+								skills of the applicant. To add a skill, either select the one from the drop-down menu or write your own and press
+								Enter. To remove the skill, simply click the tag. (Nieco na styl ze nejde o pocet skillov)
+							</p>
+
 							<button id = "3" class = "button is-primary is-light save_and_continue">Save And Continue</button>
 						</div>
 			
@@ -305,6 +289,38 @@
 								<label class="label">What kind of pizza is your favourite?</label>
 								<div class="control">
 									<textarea class="textarea" id = "pizza" cols = "30" rows = "5" placeholder=""></textarea>
+								</div>
+							</div>
+
+							<div class="field">
+								<label class="label">T-Shirt Size</label>
+								<div class="control">
+								  <div class="select">
+									<select id = "tshirt">
+										<option value = "xs"> xs </option>
+										<option value = "s"> s </option>
+										<option value = "m"> m </option>
+										<option value = "l"> l </option>
+										<option value = "xl"> xl </option>
+										<option value = "xxl"> xxl </option>
+									</select>
+								  </div>
+								</div>
+							</div>
+
+							<div class="field">
+								<label class="label">Dietary requirements</label>
+								<div class="control">
+								  <div class="select">
+									<select id = "diet">
+										<option value = "none"> none </option>
+										<option value = "lactosefree"> Lactose Free </option>
+										<option value = "glutenfree"> Gluten Free </option>
+										<option value = "nopork"> No Pork </option>
+										<option value = "vegetarian"> Vegetarian </option>
+										<option value = "vegan"> Vegan </option>
+									</select>
+								  </div>
 								</div>
 							</div>
 

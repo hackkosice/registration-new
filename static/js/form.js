@@ -263,6 +263,7 @@ function autofill_form() {
         
     $("excited_hk22").value = window.formdata.excited_hk22;
     $("spirit_animal").value = window.formdata.spirit_animal;
+    $("pizza").value = window.formdata.pizza;
 
     //Set skills (skills are sometimes null, that's why ==)
     if (window.formdata.skills == null)

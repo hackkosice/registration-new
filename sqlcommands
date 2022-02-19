@@ -9,7 +9,6 @@ CREATE TABLE "applications" (
 	"application_progress" INTEGER,
 	"team_id"	TEXT,
 	"mymlh_uid"	INTEGER UNIQUE,
-	"name" TEXT,
 	"reimbursement"	TEXT,
 	"reimbursement_progress" TEXT,
 	"travel_from"	TEXT,
