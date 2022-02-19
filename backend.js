@@ -82,5 +82,6 @@ const TeamsApiEndpoints     = require('./services/apis/teams.js');
 
     //Start the HTTP server
     const server = http.createServer(app);
-    server.listen(8000, "127.0.0.1");
+    const port = process.env.PORT;
+    server.listen(port, "127.0.0.1");
 })();
