@@ -19,7 +19,7 @@ module.exports =  class MyMLH {
 
         //TODO: change
         const token_res = await fetch("https://my.mlh.io/oauth/token?client_id=" + this.#id + "&client_secret=" + this.#secret + 
-                                "&code=" + req.query.code + "&redirect_uri=" + "http%3A%2F%2F127.0.0.1%3A8000%2Foauth" + "&grant_type=authorization_code", { method: 'POST' });
+                                "&code=" + req.query.code + "&redirect_uri=" + process.env.MLH_REDIRECT_URI + "&grant_type=authorization_code", { method: 'POST' });
         const token = await token_res.json();
 
 
