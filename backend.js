@@ -3,6 +3,7 @@ const http                  = require('http');
 const express 		        = require('express');
 const cookie_parser         = require('cookie-parser');
 const dotenv                = require('dotenv').config();
+const fileUpload            = require('express-fileupload');
 
 
 const MyMLH                 = require('./services/auth/mymlh.js');
@@ -19,6 +20,9 @@ const TeamsApiEndpoints     = require('./services/apis/teams.js');
 
     app.use("/", require("body-parser").json());
     app.use(cookie_parser());
+    app.use(fileUpload({
+        createParentPath: true
+    }));
 
     //Setup APIs
 
@@ -49,9 +53,18 @@ const TeamsApiEndpoints     = require('./services/apis/teams.js');
 
     router.post("/api/user-info", async (req, res) => { mlh_auth.get_user_data_endpoint(req, res) });
 
-    router.post("/api/form-data", async (req, res) => { form_api.form_data_endpoint(req, res) });
-    router.post("/api/form-update", async (req, res) => { form_api.form_delta_endpoint(req, res) });
-    router.post("/api/form-close", async (req, res) => { form_api.form_close_endpoint(req, res) });
+    router.post("/api/form-data",
+        async (req, res, next) => { form_api.form_data_auth_middleware(req, res, next) },
+        async (req, res) => { form_api.form_data_endpoint(req, res) });
+    router.post("/api/form-update",
+        async (req, res, next) => { form_api.form_data_auth_middleware(req, res, next) },
+        async (req, res) => { form_api.form_delta_endpoint(req, res) });
+    router.post("/api/form-close",
+        async (req, res, next) => { form_api.form_data_auth_middleware(req, res, next) },
+        async (req, res) => { form_api.form_close_endpoint(req, res) });
+    router.post("/api/form-file-upload",
+        async (req, res, next) => { form_api.form_data_auth_middleware(req, res, next) },
+        async (req, res) => { form_api.form_upload_file(req, res) });
 
     router.post("/api/team-create", async (req, res) => { team_api.team_create_endpoint(req, res) });
     router.post("/api/team-update", async (req, res) => { team_api.team_update_endpoint(req, res) });
