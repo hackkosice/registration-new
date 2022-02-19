@@ -38,7 +38,7 @@ module.exports = class FormApiEndpoints {
 
         try {
             //Send user the whole DB entry
-            const data = await this.#db.get("SELECT * FROM applications WHERE `mymlh_uid`=?;", [verification.uid]);
+            const data = await this.#db.get("SELECT A.*, F.file_name AS cv_file_name FROM applications AS A LEFT JOIN files AS F ON A.cv_file_id = F.file_id WHERE `mymlh_uid`=?;", [verification.uid]);
             res.status(200).send(typeof data[0] === 'undefined' ? {} : data[0]);
         } catch(err) {
             return error(res, 500, "Database lookup failed! Error: " + err);
@@ -115,18 +115,23 @@ module.exports = class FormApiEndpoints {
     }
 
     async form_upload_file(req, res) {
-        let verification = req.verification;
+        const verification = req.verification;
 
-        let file = req.files.cv
-        let fileSplit = file.name.split(".")
-        let fileExtension = fileSplit[fileSplit.length - 1]
+        const file = req.files.cv
+        const fileSplit = file.name.split(".")
+        const fileExtension = fileSplit[fileSplit.length - 1]
 
-        let randomString = Math.random().toString(36).substring(2);
+        const randomString = Math.random().toString(36).substring(2);
 
-        let fileCode = `${verification.uid}${randomString}.${fileExtension}`
+        const fileCode = `${verification.uid}${randomString}.${fileExtension}`
         file.mv(`./uploads/cvs/${fileCode}`)
 
-        return res.status(200).send({ file_code: fileCode })
+        const resdb = await this.#db.insert("INSERT INTO files(`file_name`, `file_code`) VALUES (?, ?);", [file.name, fileCode])
+        const fileId = resdb.lastInsertRowid
+
+        return res.status(200).send({ 
+            fileId: fileId
+        })
     }
 
     #db = null;
@@ -147,7 +152,7 @@ const whitelist = {
 	"tshirt": "tshirt",
 	"job_looking": "job_looking",
 	"job_preference": "job_preference",
-	"cv_path": "cv_path",
+	"cv_file_id": "cv_file_id",
 	"skills": "skills",
 	"excited_hk22": "excited_hk22",
 	"hear_hk22": "hear_hk22",

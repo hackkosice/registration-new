@@ -1,6 +1,7 @@
 DROP TABLE "applications";
 DROP TABLE "teams";
 DROP TABLE "votes";
+DROP TABLE "files";
 
 CREATE TABLE "applications" (
 	"application_id"	INTEGER UNIQUE,
@@ -17,7 +18,7 @@ CREATE TABLE "applications" (
 	"tshirt"	TEXT,
 	"job_looking"	TEXT,
 	"job_preference"	TEXT,
-	"cv_path"	TEXT UNIQUE,
+	"cv_file_id"	INTEGER,
 	"skills"	TEXT,
 	"excited_hk22"	TEXT,
 	"hear_hk22"	TEXT,
@@ -42,4 +43,10 @@ CREATE TABLE "votes" (
 	"score"	INTEGER,
 	"application_id"	INTEGER,
 	PRIMARY KEY("application_id")
+);
+CREATE TABLE "files" (
+	"file_id" INTEGER,
+	"file_name" TEXT,
+	"file_code" TEXT,
+	PRIMARY KEY("file_id" AUTOINCREMENT)
 );

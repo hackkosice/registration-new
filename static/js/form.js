@@ -26,8 +26,8 @@ const parts = [
     },
 
     { //Part 4: what you've build
-        fields: ["site", "github", "devpost", "linkedin"],
-        functions: [null, null, null, null]
+        fields: ["site", "github", "devpost", "linkedin", "cv_file_id"],
+        functions: [null, null, null, null, () => { return 0 }]
     },
 
     { //Part 5: get to know you
@@ -65,6 +65,10 @@ window.onload = async function() {
         $("skills_input").value = "";
     });
 
+    $("cv_path").addEventListener("change", () => {
+        const selectedFile = $("cv_path").files[0];
+        $("cv-file-name").innerHTML = selectedFile.name;
+    })
 
 
     var fetches = [];
@@ -180,7 +184,8 @@ async function save_callback(progress) {
 
 
     if (body.application_progress === Number(4)) {
-        upload_cv();
+        const fileId = await upload_cv();
+        body["cv_file_id"] = fileId;
     }
 
     fetch("/api/form-update", {method: 'POST', credentials: 'same-origin',
@@ -192,7 +197,7 @@ async function save_callback(progress) {
 
     console.log(body);
     if (Number(progress) > 0 && Number(progress)  < 5) {
-        for (var i = 1; i < 6; i++){ 
+        for (var i = 1; i < 6; i++){ 
             $("form-part" + i).classList.add("hidden");
             $("show_form-part" + i).classList.remove("is-active");
         }
@@ -210,9 +215,11 @@ async function upload_cv() {
     const selectedFile = $("cv_path").files[0];
     const data = new FormData();
     data.append("cv", selectedFile);
-    fetch("/api/form-file-upload", {method: 'POST', credentials: 'same-origin',
+    const res = await fetch("/api/form-file-upload", {method: 'POST', credentials: 'same-origin',
         body: data
     });
+    const resData = await res.json();
+    return resData.fileId;
 }
 
 async function header_callback(progress) {
@@ -275,5 +282,8 @@ function autofill_form() {
 
         $("skills_wrap").appendChild(button);
     }
+
+    //Set cv filename
+    $("cv-file-name").innerHTML = window.formdata.cv_file_name;
 
 }
