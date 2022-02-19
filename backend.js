@@ -43,9 +43,9 @@ const TeamsApiEndpoints     = require('./services/apis/teams.js');
 
     //Bind api calls
     router.get("/oauth", async (req, res) => { mlh_auth.auth_callback(req, res) });  //Node has a hella weird callback system
-    router.get("/", async (req, res) => { res.redirect("https://my.mlh.io/oauth/authorize?client_id=" + process.env.MLH_APP_ID + 
-                                                       "&redirect_uri=" + "http%3A%2F%2F127.0.0.1%3A8000%2Foauth" +
-                                                       "&response_type=code&scope=email+education+birthday+phone_number+demographics") }); //Auto-redirrect the user to mymlh
+    router.get("/my-mlh-login", async (req, res) => { res.redirect("https://my.mlh.io/oauth/authorize?client_id=" + process.env.MLH_APP_ID +
+                                                        "&redirect_uri=" + "http%3A%2F%2F127.0.0.1%3A8000%2Foauth" +
+                                                        "&response_type=code&scope=email+education+birthday+phone_number+demographics") }); //Auto-redirrect the user to mymlh
 
     router.post("/api/user-info", async (req, res) => { mlh_auth.get_user_data_endpoint(req, res) });
 
