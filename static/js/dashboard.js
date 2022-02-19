@@ -27,30 +27,15 @@ window.onload = async function() {
         })
     );
 
-    
-    for (const dataset of suggestions_datasets) {
-
-        //Load the dataset
-        fetches.push(fetch(dataset, {method: 'GET'}).then( 
-            async (response) => {
-                const suggestions = await response.json();
-
-                var parent = document.createElement("datalist");
-                parent.id = suggestions.name;
-    
-                for (const item of suggestions.data) {
-    
-                    var option = document.createElement("option");
-                    option.value = item;
-                    option.textContent = item;
-    
-                    parent.appendChild(option);
-                }
-                $("datasets").appendChild(parent);
-            })
-        );
-    }
-
+    //So we can ease the load on the server at least a bit 
+    fetches.push(fetch("/api/team-info", {method: 'POST', credentials: 'same-origin', cache: 'force-cache'}).then(
+        async (response) => {
+            const formdata = await response.json(); 
+            window.formdata = formdata;
+            $("state").textContent = formdata.application_status;
+            $("description").textContent = desctriptions[formdata.application_status];
+        })
+    );
 
 
     //Resolve all promises

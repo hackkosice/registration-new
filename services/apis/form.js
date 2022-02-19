@@ -20,7 +20,7 @@ module.exports = class FormApiEndpoints {
         this.#jwt_key = jwt_key;
     }
 
-    async form_data_auth_middleware(req, res, next) {
+    async form_auth_middleware(req, res, next) {
         let verification = null;
         try {
             verification = await jwt.verify(req.cookies['verification'], this.#jwt_key);
@@ -28,7 +28,7 @@ module.exports = class FormApiEndpoints {
             return error(res, 401, "Authentification needed! Error: " + err);
         }
 
-        req.verification = verification
+        req.verification = verification;
         next();
     }
 

@@ -26,8 +26,8 @@ const parts = [
     },
 
     { //Part 4: what you've build
-        fields: ["site", "github", "devpost", "linkedin"],
-        functions: [null, null, null, null]
+        fields: ["site", "github", "devpost", "linkedin", "cv_path"],
+        functions: [null, null, null, null, () => { return upload_cv(); }]
     },
 
     { //Part 5: get to know you
@@ -178,11 +178,6 @@ async function save_callback(progress) {
         else body[progress_selector.fields[i]] = progress_selector.functions[i]();
     }
 
-
-    if (body.application_progress === Number(4)) {
-        upload_cv();
-    }
-
     fetch("/api/form-update", {method: 'POST', credentials: 'same-origin',
         headers: {
             'Content-Type': 'application/json;charset=utf-8'
@@ -256,6 +251,7 @@ function autofill_form() {
         
     $("excited_hk22").value = window.formdata.excited_hk22;
     $("spirit_animal").value = window.formdata.spirit_animal;
+    $("pizza").value = window.formdata.pizza;
 
     //Set skills (skills are sometimes null, that's why ==)
     if (window.formdata.skills == null)
