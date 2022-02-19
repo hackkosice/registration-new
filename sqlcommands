@@ -29,6 +29,7 @@ CREATE TABLE "applications" (
 CREATE TABLE "teams" (
 	"team_id"	INTEGER UNIQUE,
 	"team_code"	TEXT UNIQUE,
+	"team_name" TEXT UNIQUE, 
 	"owner" INTEGER,
 	PRIMARY KEY("team_id" AUTOINCREMENT)
 );
