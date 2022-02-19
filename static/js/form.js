@@ -14,8 +14,8 @@ const parts = [
     },
 
     { //Part 2: Travel & etc
-        fields: ["reimbursment", "travel_from", "visa", "tshirt", "diet"],
-        functions: [() => { return $("reimbursment_y").checked ? "yes" : "no"; }, null,
+        fields: ["reimbursement", "travel_from", "visa", "tshirt", "diet"],
+        functions: [() => { return $("reimbursement_y").checked ? "yes" : "no"; }, null,
                     () => { return $("visa_y").checked ? "yes" : "no"; }, null, null]
     },
 
@@ -216,7 +216,7 @@ function get_all_skills() {
 function autofill_form() {
    
     //Set checkboxes
-    $(window.formdata.reimbursment === "yes" ? "reimbursment_y" : "reimbursment_n").checked = true;
+    $(window.formdata.reimbursement === "yes" ? "reimbursement_y" : "reimbursement_n").checked = true;
     $(window.formdata.visa === "yes" ? "visa_y" : "visa_n").checked = true;
     $(window.formdata.job_looking === "yes" ? "job_y" : "job_n").checked = true;
     $(window.formdata.first_hack_hk22 === "yes" ? "firsthack_y" : "firsthack_n").checked = true;
