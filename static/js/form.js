@@ -161,6 +161,10 @@ async function save_callback(progress) {
         application_progress: Number(progress)
     };
     
+    //Bump local application status variable
+    window.formdata.application_progress = window.formdata.application_progress >= Number(progress) ? 
+                                           window.formdata.application_progress : Number(progress);
+
     const progress_selector = parts[Number(progress) - 1]; //Convert to zero-index
     
     //A bit of a hack, but overall saves space
@@ -225,14 +229,15 @@ function autofill_form() {
     for (const part of document.getElementsByTagName("input")) {
         if (typeof window.formdata[part.id] !== 'undefined')
             part.value = window.formdata[part.id];
-        
     }
 
     for (const part of document.getElementsByTagName("selection")) {
         if (typeof window.formdata[part.id] !== 'undefined')
             part.value = window.formdata[part.id];
-        
     }
+        
+    $("excited_hk22").value = window.formdata.excited_hk22;
+    $("spirit_animal").value = window.formdata.spirit_animal;
 
     //Set skills (skills are sometimes null, that's why ==)
     if (window.formdata.skills == null)

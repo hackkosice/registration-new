@@ -1,5 +1,6 @@
 const mysql         = require("mysql");
 const fs            = require("fs");
+const { get } = require("http");
 
 
 
@@ -29,7 +30,7 @@ module.exports = class MySQL_db {
         this.#connection.end();
     }
 
-    query = function(command, args = []) {
+    get = function(command, args = []) {
         return new Promise((resolve, reject) => {
             if (this.#connection == null) 
                 return reject("Connection is null!");
@@ -42,6 +43,10 @@ module.exports = class MySQL_db {
         });
     }
 
+    //Written this way due to SQLite handling Writes/Reads a bit differently
+    insert = function(command, args = []) {
+        return get(command, args);
+    }
 
     #connection = null;
 };
