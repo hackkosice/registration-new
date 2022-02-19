@@ -1,11 +1,16 @@
+DROP TABLE "applications";
+DROP TABLE "teams";
+DROP TABLE "votes";
+
 CREATE TABLE "applications" (
 	"application_id"	INTEGER UNIQUE,
 	"application_status" TEXT,
 	"application_progress" INTEGER,
-	"reimbursement_status" TEXT,
 	"team_id"	TEXT,
 	"mymlh_uid"	INTEGER UNIQUE,
+	"name" TEXT,
 	"reimbursement"	TEXT,
+	"reimbursement_progress" TEXT,
 	"travel_from"	TEXT,
 	"visa"	TEXT,
 	"diet"	TEXT,
@@ -25,14 +30,12 @@ CREATE TABLE "applications" (
 	"linkedin"	TEXT UNIQUE,
 	PRIMARY KEY("application_id" AUTOINCREMENT)
 );
-
 CREATE TABLE "teams" (
 	"team_id"	INTEGER UNIQUE,
 	"team_code"	TEXT UNIQUE,
 	"owner" INTEGER,
 	PRIMARY KEY("team_id" AUTOINCREMENT)
 );
-
 CREATE TABLE "votes" (
 	"voter_uid"	INTEGER,
 	"score"	INTEGER,

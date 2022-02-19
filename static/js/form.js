@@ -116,6 +116,7 @@ window.onload = async function() {
 
     }
 
+
     if (typeof window.formdata.application_status !== 'undefined' 
         && window.formdata.application_status !== "open")
         window.location = "/dashboard.html";
@@ -146,7 +147,10 @@ window.onload = async function() {
     $("phone").value = window.userinfo.phone_number;
     $("birth").value = window.userinfo.date_of_birth;
 
-    //Autofill the form 
+    // Remove loader
+    $("loader").classList.remove("is-active");
+
+    //Autofill the form
     
     //Application object has always application id. If application id is undefined, no not autofill anything
     if (typeof window.formdata.application_id === 'undefined')

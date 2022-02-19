@@ -6,7 +6,7 @@ function error(res, status, msg) {
         status: 'error',
         error: {
             code: status,
-            message: message
+            message: msg
         }
     });
 }
@@ -61,7 +61,7 @@ module.exports = class FormApiEndpoints {
                     return res.status(200).send({ status: 'OK' });
 
                 await this.#db.insert("INSERT INTO applications(`application_progress`, `application_status`, `mymlh_uid`, `reimbursement_progress`) VALUES (?, ?, ?, ?)", 
-                                                [1, "open", verification.uid], "none");
+                                                [1, "open", verification.uid, "none"]);
                 return res.status(200).send({ status: 'OK' });
             }
 
