@@ -23,8 +23,8 @@ const TeamsApiEndpoints     = require('./services/apis/teams.js');
     //Setup APIs
 
     // Email setup
-    const key = require('./credentials.json');
-    const mailer = new Mailer(key);
+    //const key = require('./credentials.json');
+    //const mailer = new Mailer(key);
     
     // Database Connection
     var db_connection = null;

@@ -60,8 +60,8 @@ module.exports = class FormApiEndpoints {
                 if (typeof user[0] !== 'undefined')             
                     return res.status(200).send({ status: 'OK' });
 
-                await this.#db.insert("INSERT INTO applications(`application_progress`, `application_status`, `mymlh_uid`) VALUES (?, ?, ?)", 
-                                      [1, "open", verification.uid]);
+                await this.#db.insert("INSERT INTO applications(`application_progress`, `application_status`, `mymlh_uid`, `reimbursement_progress`) VALUES (?, ?, ?, ?)", 
+                                                [1, "open", verification.uid], "none");
                 return res.status(200).send({ status: 'OK' });
             }
 
@@ -133,7 +133,7 @@ const whitelist = {
 	"application_progress": "application_progress",
 	"team_id": "team_id",
 	"mymlh_uid": "mymlh_uid",
-	"reimbursment": "reimbursment",
+	"reimbursement": "reimbursement",
 	"travel_from": "travel_from",
 	"visa": "visa", 
 	"diet": "diet",
