@@ -78,6 +78,11 @@ module.exports = class FormApiEndpoints {
                 if (req.body.application_progress <= user[0].application_progress)
                     delete req.body.application_progress;
 
+            // If there's no file coming from frontend don't do update in database (it may override the old file ID)
+            if (req.body["cv_file_id"] == 0) {
+                delete req.body["cv_file_id"]
+            }
+
             for (const key in req.body) {
                 const result = await this.#db.insert("UPDATE applications SET " + whitelist[key] + "=? WHERE `mymlh_uid`=?;", [req.body[key], verification.uid]);
             }

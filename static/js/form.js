@@ -213,13 +213,18 @@ async function save_callback(progress) {
 
 async function upload_cv() {
     const selectedFile = $("cv_path").files[0];
-    const data = new FormData();
-    data.append("cv", selectedFile);
-    const res = await fetch("/api/form-file-upload", {method: 'POST', credentials: 'same-origin',
-        body: data
-    });
-    const resData = await res.json();
-    return resData.fileId;
+    if (selectedFile) {
+        const data = new FormData();
+        data.append("cv", selectedFile);
+        const res = await fetch("/api/form-file-upload", {method: 'POST', credentials: 'same-origin',
+            body: data
+        });
+        const resData = await res.json();
+        return resData.fileId;
+    } else {
+        return 0;
+    }
+    
 }
 
 async function header_callback(progress) {
