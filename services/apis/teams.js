@@ -74,7 +74,7 @@ module.exports = class TeamsApiEndpoints {
             
                 //Check if the team exist
                 if (typeof team_id[0] === 'undefined')
-                    return error(res, 409, "Sorry, but requested theam does not exist.");        
+                    return error(res, 409, "Sorry, but requested team does not exist.");
                 
 
             const user = await this.#db.get("SELECT `team_id`, `application_progress` FROM applications WHERE `mymlh_uid`=?;", [verification.uid]);
