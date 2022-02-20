@@ -24,15 +24,16 @@ window.onload = async function() {
                 to_app.textContent = "Edit application";
                 $("state_wrap").appendChild(to_app);
             }
+
+            if (formdata.team_id !== null) {
+                $("join_wrap").classList.add("hidden");
+                $("create_wrap").classList.add("hidden");
+            }
         })
     );
 
     //So we can ease the load on the server at least a bit 
-    fetches.push(fetch("/api/team-info", {method: 'POST', credentials: 'same-origin', cache: 'force-cache'}).then(
-        async (response) => {
-
-        })
-    );
+    fetches.push(load_team);
 
 
     //Resolve all promises
@@ -41,4 +42,54 @@ window.onload = async function() {
     } catch (err) {
 
     }
+
+    //Add callback
+    $("join").addEventListener('click', async () => {
+        try {
+
+            const body = {
+
+            };
+
+            await fetch("/api/team_join", {method: 'POST', credentials: 'same-origin', 
+                headers: {
+                    'Content-Type': 'application/json;charset=utf-8'
+                },
+                body: JSON.stringify()
+            });
+        } catch(err) {
+            //Display error message
+        }
+
+        await load_team();
+    });
+}
+
+
+async function load_team() {
+    
+    fetch("/api/team-info", {method: 'POST', credentials: 'same-origin', cache: 'force-cache'}).then(
+        async (response) => {
+
+            const teamdata = await response.json();
+            window.teamdata = teamdata;
+
+            let root = document.createElement("table");
+            root.id = "team_table";
+
+            for (const member of teamdata.members) {
+                let row = document.createElement("tr");
+
+                let name = document.createElement("th");
+                name.textContent = member.name;
+
+                let status = document.createElement("td");
+                status.textContent = "Application Status: " + status;
+
+                row.appendChild(name);
+                row.appendChild(status);
+                root.appendChild(row);
+            }
+            team.appendChild(root);
+    });
 }
