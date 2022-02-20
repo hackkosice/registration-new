@@ -174,11 +174,11 @@ module.exports = class TeamsApiEndpoints {
         var result = [];
 
         for (const user of users) {
-            for (var i = 0; i < 4; i++)
-                if(user.id === team_members[i].mymlh_uid) {
+            for (const member of members)
+                if(user.id === member.mymlh_uid) {
                     result.push({
-                        mymlh_uid: team_members[i].mymlh_uid,
-                        application: team_members[i].application_status,
+                        mymlh_uid: member.mymlh_uid,
+                        application: member.application_status,
                         name: (user.first_name + " " + user.last_name)
                     });
                     break;

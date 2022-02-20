@@ -48,20 +48,44 @@ window.onload = async function() {
         try {
 
             const body = {
-
+                team_code: $("team_code").value
             };
 
-            await fetch("/api/team_join", {method: 'POST', credentials: 'same-origin', 
+            await fetch("/api/team-join", {method: 'POST', credentials: 'same-origin', 
                 headers: {
                     'Content-Type': 'application/json;charset=utf-8'
                 },
-                body: JSON.stringify()
+                body: JSON.stringify(body)
             });
+
+            await load_team();
         } catch(err) {
             //Display error message
         }
+    });
 
-        await load_team();
+    $("create").addEventListener('click', async () => {
+        try {
+
+            const body = {
+                team_name: $("team_name").value
+            };
+
+            const data = await fetch("/api/team-create", {method: 'POST', credentials: 'same-origin', 
+                headers: {
+                    'Content-Type': 'application/json;charset=utf-8'
+                },
+                body: JSON.stringify(body)
+            });
+
+            const data_res = data.json();
+            console.log(data_res);
+
+            await load_team();
+        } catch(err) {
+            //Display error message
+            console.log(err);
+        }
     });
 }
 
