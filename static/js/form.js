@@ -3,7 +3,8 @@ $ = (element) => { return document.getElementById(element); };
 //Build datalists from these jsons
 const suggestions_datasets = ["/data/countries.json",
                               "/data/marketing_types.json",
-                              "/data/skills.json"];
+                              "/data/skills.json",
+                              "/data/diet.json"];
 
 //A smol trick so I don't have to write out everything out by hand
 //Null: get value, id of the input is the same
