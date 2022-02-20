@@ -257,7 +257,8 @@ async function save_callback(progress, noRedirect = false) {
         },
         body: JSON.stringify(body)
     }).catch( (reason) => {
-        window.location = "/404.html";
+        // fix for safari
+        //window.location = "/404.html";
     });
 
     if (Number(progress) > 0 && Number(progress)  < 5) {
