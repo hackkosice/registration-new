@@ -91,7 +91,7 @@ window.onload = async function() {
 
 async function load_team() {
     
-    fetch("/api/team-info", {method: 'POST', credentials: 'same-origin', cache: 'force-cache'}).then(
+    return fetch("/api/team-info", {method: 'POST', credentials: 'same-origin', cache: 'force-cache'}).then(
         async (response) => {
             const teamdata = await response.json();
             window.teamdata = teamdata;
@@ -111,9 +111,17 @@ async function load_team() {
 
                 let status = document.createElement("td");
                 status.textContent = "Application Status: " + status;
-
+                
                 row.appendChild(name);
                 row.appendChild(status);
+                
+                
+                if (teamdata.data.owner === member.mymlh_uid) {
+                    let owner = document.createElement("td");
+                    owner.textContent = "owner";
+                    row.appendChild(owner);
+                }
+                
                 root.appendChild(row);
             }
 
