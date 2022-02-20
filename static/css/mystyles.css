@@ -7874,9 +7874,10 @@ a.has-text-danger-dark:hover, a.has-text-danger-dark:focus {
   display: none; }
 
 #application {
-  max-width: 40%;
-  width: 40%;
   min-width: 384px; }
+  @media screen and (min-width: 769px) {
+    #application {
+      max-width: 45%; } }
 
 .save_and_continue, #save_and_close {
   margin-top: 2em;

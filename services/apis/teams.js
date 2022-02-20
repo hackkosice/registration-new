@@ -165,7 +165,7 @@ module.exports = class TeamsApiEndpoints {
         const users = await this.#mymlh.get_all_users();
         const team_id = await this.#db.get("SELECT `team_id` FROM applications WHERE `mymlh_uid`=?;", [verification.uid]); 
 
-        if (team_id[0].team_id !== null)
+        if (team_id[0].team_id == null)
             return res.status(200).send([]);
 
         const team_members = await this.#db.get("SELECT `mymlh_uid` FROM applications WHERE `team_id`=?;", [team_id[0].team_id]);

@@ -54,34 +54,34 @@
 							<p>Here's the info we got from your MyMLH profile. Please, double check if it's accurete. If you wish to change it, do so in the settings of your MyMLH profile.</p>
 
 							<div class="field">
-								<label class="label">First Name</label>
+								<label class="label">First Name <span class="help is-danger is-inline">*</span></label>
 								<div class="control">
 									<input class="input" type="text" placeholder="First name" id="firstname" disabled>
 								</div>
 							</div>
 							<div class="field">
-								<label class="label">Last Name</label>
+								<label class="label">Last Name <span class="help is-danger is-inline">*</span></label>
 								<div class="control">
 									<input class="input" type="text" placeholder="Last name" id="lastname" disabled>
 								</div>
 							</div>
 
 							<div class="field">
-								<label class="label">E-Mail</label>
+								<label class="label">E-Mail <span class="help is-danger is-inline">*</span></label>
 								<div class="control">
 									<input class="input" type="text" placeholder="E-Mail" id="email" disabled>
 								</div>
 							</div>
 
 							<div class="field">
-								<label class="label">Phone Number</label>
+								<label class="label">Phone Number <span class="help is-danger is-inline">*</span></label>
 								<div class="control">
 									<input class="input" type="text" placeholder="Last name" id="phone" disabled>
 								</div>
 							</div>
 
 							<div class="field">
-								<label class="label">Date of Birth (mm/dd/yyyy)</label>
+								<label class="label">Date of Birth (mm/dd/yyyy) <span class="help is-danger is-inline">*</span></label>
 								<div class="control">
 									<input class="input" type="date" placeholder="Last name" id="birth" disabled>
 								</div>
@@ -94,23 +94,24 @@
 							<h1 class="title primary"> Travel </h1>
 
 							<div class="field">
-								<label class="label">Do you need reimbursement?</label>
-								<div class="control" id = "reimbursement_wrap">
+								<label class="label">Do you need reimbursement? <span class="help is-danger is-inline">*</span></label>
+								<div class="control" id = "reimbursement">
 									<label class="radio">
 									<input id = "reimbursement_y" name = "reimbursement" type="radio">
 									Yes
 									</label>
 									<label class="radio">
-									<input id = "reimbursement_n" name = "reimbursement" type="radio">
+									<input id = "reimbursement_n" name = "reimbursement" type="radio" checked>
 									No
 									</label>
 								</div>
 							</div>
 
 							<div class="field">
-								<label class="label">From which country you would be traveling?</label>
+								<label class="label">From which country you would be traveling? <span class="help is-danger is-inline">*</span></label>
 								<div class="control">
-									<input class="input" placholder="Start typing country..." id = "travel_from" list = "countries" type = "text">
+									<input class="input" placholder="Start typing country..." id = "travel_from" list = "countries" type = "text" required>
+									<p id="travel_from_error" class="help is-danger hidden">This field is required</p>
 								</div>
 							</div>
 
@@ -123,14 +124,14 @@
 							</p>
 
 							<div class="field">
-								<label class="label">Do you need the invitation for travel visa?</label>
-								<div class="control" id = "visa_wrap">
+								<label class="label">Do you need the invitation for travel visa? <span class="help is-danger is-inline">*</span></label>
+								<div class="control" id = "visa">
 									<label class="radio">
 									<input id = "visa_y" name = "visa" type="radio">
 									Yes
 									</label>
 									<label class="radio">
-									<input id = "visa_n" name = "visa" type="radio">
+									<input id = "visa_n" name = "visa" type="radio" checked>
 									No
 									</label>
 								</div>
@@ -144,21 +145,21 @@
 							<h1 class="title primary"> Job </h1>
 
 							<div class="field">
-								<label class="label">Are you looking for a job?</label>
-								<div class="control" id = "job_wrap">
+								<label class="label">Are you looking for a job? <span class="help is-danger is-inline">*</span></label>
+								<div class="control" id = "job_looking">
 									<label class="radio">
 									<input id = "job_y" name = "job" type="radio">
 									Yes
 									</label>
 									<label class="radio">
-									<input id = "job_n" name = "job" type="radio">
+									<input id = "job_n" name = "job" type="radio" checked>
 									No
 									</label>
 								</div>
 							</div>
 
 							<div class="field">
-								<label class="label">Job preference</label>
+								<label class="label">Job preference <span class="help is-danger is-inline">*</span></label>
 								<div class="control">
 								  <div class="select">
 									<select id = "job_preference">
@@ -172,12 +173,13 @@
 							</div>
 
 							<div class="field">
-								<label class="label">Skills</label>
+								<label class="label">Skills <span class="help is-danger is-inline">*</span></label>
 								<div class="control">
 									<div style="max-width: 400px;" id = "skills_wrap" class="is-flex is-justify-content-start is-flex-wrap-wrap"> 
 								
 									</div>
-									<input class="input" placholder="Start typing country..." id = "skills_input" type = "text" list = "skills">
+									<input class="input" placholder="Start typing country..." id = "skills" type = "text" list = "skills_data" required>
+									<p id="skills_error" class="help is-danger hidden">Please choose at least 3 skills</p>
 								</div>
 							</div>
 			
@@ -227,7 +229,7 @@
 								<div class="control">
 									<div class="file has-name">
 										<label class="file-label">
-										  <input class="file-input" id = "cv_path" type = "file" accept = ".pdf">
+										  <input class="file-input" id = "cv_file_id" type = "file" accept = ".pdf">
 										  <span class="file-cta">
 											<span class="file-icon">
 											  <i class="fas fa-upload"></i>
@@ -251,22 +253,24 @@
 							<h1 class="title primary"> Let us know you better </h1>
 
 							<div class="field">
-								<label class="label">What are you excited about at Hack Kosice 2022?</label>
+								<label class="label">What are you excited about at Hack Kosice 2022? <span class="help is-danger is-inline">*</span></label>
 								<div class="control">
-									<textarea class="textarea" id = "excited_hk22" cols = "30" rows = "5" placeholder="I am excited about free pizza!"></textarea>
+									<textarea required class="textarea" id = "excited_hk22" cols = "30" rows = "5" placeholder="I am excited about free pizza!"></textarea>
+									<p id="excited_hk22_error" class="help is-danger hidden">This field is required</p>
 								</div>
 							</div>
 
 							<div class="field">
-								<label class="label">How did you hear about Hack Kosice?</label>
+								<label class="label">How did you hear about Hack Kosice? <span class="help is-danger is-inline">*</span></label>
 								<div class="control">
-									<input class="input" type="text" id = "hear_hk22" list = "marketing_types">
+									<input class="input" type="text" id = "hear_hk22" list = "marketing_types" required>
+									<p id="hear_hk22_error" class="help is-danger hidden">This field is required</p>
 								</div>
 							</div>
 
 							<div class="field">
-								<label class="label">Is Hack Kosice 2022 your first hackathon?</label>
-								<div class="control" id = "firsthack_wrap">
+								<label class="label">Is Hack Kosice 2022 your first hackathon? <span class="help is-danger is-inline">*</span></label>
+								<div class="control" id = "first_hack_hk22">
 									<label class="radio">
 									<input id = "firsthack_y" name = "firsthack" type="radio">
 									Yes
@@ -293,7 +297,7 @@
 							</div>
 
 							<div class="field">
-								<label class="label">T-Shirt Size</label>
+								<label class="label">T-Shirt Size <span class="help is-danger is-inline">*</span></label>
 								<div class="control">
 								  <div class="select">
 									<select id = "tshirt">
@@ -309,7 +313,7 @@
 							</div>
 
 							<div class="field">
-								<label class="label">Dietary requirements</label>
+								<label class="label">Dietary requirements <span class="help is-danger is-inline">*</span></label>
 								<div class="control">
 								  <div class="select">
 									<select id = "diet">
@@ -325,9 +329,11 @@
 							</div>
 
 							<button id = "5" class = "button is-primary is-light save_and_continue">Save And Exit</button> <br>
-							<button id = "save_and_close" class="button is-primary mt-2 mb-6">Save And Close</button>
+							<button id = "save_and_close" class="button is-primary mt-2">Save And Close</button>
 			
 						</div>
+
+						<p class="help is-danger">* required field</p>
 
 					</div>
 

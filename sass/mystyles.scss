@@ -48,9 +48,10 @@ $title-color: $hkpurple;
 }
 
 #application {
-  max-width: 40%;
-  width: 40%;
   min-width: 384px;
+  @media screen and (min-width: $tablet) {
+    max-width: 45%;
+  }
 }
 
 .save_and_continue, #save_and_close {
