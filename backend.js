@@ -26,8 +26,8 @@ const TeamsApiEndpoints     = require('./services/apis/teams.js');
     //Setup APIs
 
     // Email setup
-    //const key = require('./credentials.json');
-    //const mailer = new Mailer(key);
+    const key = require('./credentials.json');
+    const mailer = new Mailer(key);
     
     // Database Connection
     var db_connection = null;
@@ -41,7 +41,7 @@ const TeamsApiEndpoints     = require('./services/apis/teams.js');
     var mlh_auth = new MyMLH(process.env.MLH_APP_ID, process.env.MLH_APP_SECRET, process.env.JWT_SECRET);    
     
     //Start APIs
-    var form_api = new FormApiEndpoints(db_connection, process.env.JWT_SECRET);
+    var form_api = new FormApiEndpoints(db_connection, process.env.JWT_SECRET, mailer, mlh_auth);
     var team_api = new TeamsApiEndpoints(db_connection, process.env.JWT_SECRET, mlh_auth);
 
     //Bind api calls

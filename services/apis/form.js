@@ -14,10 +14,12 @@ function error(res, status, msg) {
 
 module.exports = class FormApiEndpoints {
 
-    constructor(database, jwt_key) {
+    constructor(database, jwt_key, mailer, mymlh) {
 
         this.#db = database;
         this.#jwt_key = jwt_key;
+        this.#mailer = mailer;
+        this.#mymlh = mymlh;
     }
 
     async form_auth_middleware(req, res, next) {
@@ -112,6 +114,17 @@ module.exports = class FormApiEndpoints {
             
             //We do not need the return value of this, since if we got here, this query will always succeed (failing is caught by try/catch)
             await this.#db.insert("UPDATE applications SET `application_status`=? WHERE `mymlh_uid`=?;", ["closed", verification.uid]);
+
+            // Send confirmation email to user's address
+            const user = await this.#mymlh.get_user_info(verification.token);
+            this.#mailer.sendMailTemplate(
+                user.data.email,
+                "Hack Kosice 2022 - Your application",
+                "applicationCloseConfirmation",
+                {
+                    name: `${user.data.first_name}`
+                });
+
             return res.status(200).send({ status: 'OK' });
 
         } catch (err) {
@@ -141,6 +154,8 @@ module.exports = class FormApiEndpoints {
 
     #db = null;
     #jwt_key = null;
+    #mailer = null;
+    #mymlh = null;
 }
 
 //So no SQL injections are possible

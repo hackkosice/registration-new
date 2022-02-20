@@ -68,8 +68,7 @@ module.exports =  class MyMLH {
             });
         }
 
-        const user_res = await fetch("https://my.mlh.io/api/v3/user.json?access_token=" + verification.token, {method: 'GET'});
-        const user = await user_res.json();
+        const user = await this.get_user_info(verification.token)
 
         if (user.status === 'error')
             res.status(user.error.code).send(user);
@@ -77,6 +76,11 @@ module.exports =  class MyMLH {
         res.status(200).send(user);
 
   
+    }
+
+    async get_user_info(userToken) {
+        const user_res = await fetch("https://my.mlh.io/api/v3/user.json?access_token=" + userToken, {method: 'GET'});
+        return await user_res.json();
     }
 
     async get_all_users() {
