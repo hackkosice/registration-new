@@ -42,7 +42,7 @@ const TeamsApiEndpoints     = require('./services/apis/teams.js');
     
     //Start APIs
     var form_api = new FormApiEndpoints(db_connection, process.env.JWT_SECRET);
-    var team_api = new TeamsApiEndpoints(db_connection, process.env.JWT_SECRET);
+    var team_api = new TeamsApiEndpoints(db_connection, process.env.JWT_SECRET, mlh_auth);
 
     //Bind api calls
     router.get("/oauth", async (req, res) => { mlh_auth.auth_callback(req, res) });  //Node has a hella weird callback system
@@ -67,7 +67,7 @@ const TeamsApiEndpoints     = require('./services/apis/teams.js');
 
 
     router.post("/api/team-info", 
-        async (req, res, next) => { team_api.team_auth_middleware(res, req, next) },
+        async (req, res, next) => { team_api.team_auth_middleware(req, res, next) },
         async (req, res) => { team_api.team_info_endpoint(req, res) }); 
     router.post("/api/team-create", async (req, res) => { team_api.team_create_endpoint(req, res) });
     
