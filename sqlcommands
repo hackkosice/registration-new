@@ -7,7 +7,7 @@ CREATE TABLE "applications" (
 	"application_id"	INTEGER UNIQUE,
 	"application_status" TEXT,
 	"application_progress" INTEGER,
-	"team_id"	TEXT,
+	"team_id"	INTEGER,
 	"mymlh_uid"	INTEGER UNIQUE,
 	"reimbursement"	TEXT,
 	"reimbursement_progress" TEXT,

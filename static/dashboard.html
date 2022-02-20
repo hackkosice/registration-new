@@ -21,30 +21,70 @@
 			<img src = "images/logo_oneline_purple.svg" alt = "Hack Kosice Logo"/>
 		</header>
 
-        <div id = "state_wrap">
-            <h3>Your application is currently: </h3>
-            <h2 id = "state"></h2>
-            <p id = "description"></p>
-        </div> 
+		<div class="container mb-6">
+			<nav class="panel">
 
-		<div id = "reimbursement">
-			
-		</div>
-		<div id = "team">
-			<h3>You and your team</h3>
-			<div id = "join_wrap">
-				<p>Join a team </p>
-				<input id = "team_code" placeholder = "Team code goes here" type = "text"/>
-				<button id = "join">Join!</button>
-			</div>
+				<p class="panel-heading">
+					Hack Kosice 2022 application
+				</p>
 
-			<div id = "create_wrap">
-				<p>Or create one!</p>
-				<input id = "team_name" placeholder = "Give your team a cactchy name!" type = "text"/>
-				<button id = "create">Create!</button>
-			</div>
+				<div id="loader" class="loader-wrapper is-active">
+					<div class="loader is-loading"></div>
+				</div>
+
+				<div class="panel-block p-5" style="flex-direction: column;">
+					<div id="application">
+					<h1 class="title primary">Application status</h1>
+					<div id = "state_wrap">
+						<article class="message" id="status-card">
+							<div class="message-header">
+								<p id="state"></p>
+							</div>
+							<div class="message-body" id="description">
+							</div>
+						</article>
+
+						<a href="/application.html" id="edit-application">
+							<button class="button is-link">Edit application</button>
+						</a>
+					</div>
+
+					<div id = "reimbursement">
+
+					</div>
+
+					<div id = "team">
+						<h1 class="title primary mt-6">Your team</h1>
+
+						<div class="field" id="join_wrap">
+							<label class="label">Join a team</label>
+							<div class="is-flex is-flex-direction-row">
+								<div class="control" style="width: 100%;">
+									<input class="input" id = "team_code" placeholder = "Team code goes here" type = "text">
+								</div>
+								<button id = "join" class="button is-light is-link ml-2">Join!</button>
+							</div>
+						</div>
+
+						<div class="field" id="create_wrap">
+							<label class="label">Or create one!</label>
+							<div class="is-flex is-flex-direction-row">
+								<div class="control" style="width: 100%;">
+									<input class="input" id = "team_name" placeholder = "Give your team a catchy name!"  type = "text">
+								</div>
+								<button id = "create" class="button is-light is-success ml-2">Create!</button>
+							</div>
+						</div>
+
+						<div class="team_info_wrap">
+
+						</div>
 
 
+					</div>
+						</div>
+				</div>
+			</nav>
 		</div>
 	</body>
 </html>

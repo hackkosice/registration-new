@@ -6,7 +6,7 @@ function error(res, status, msg) {
         status: 'error',
         error: {
             code: status,
-            message: message
+            message: msg
         }
     });
 }
@@ -38,7 +38,7 @@ module.exports = class TeamsApiEndpoints {
 
         try {
             const team = await this.#db.get("SELECT `team_id` FROM teams WHERE `team_name`=?;", [req.body.team_name]);
-            
+
             if (typeof team[0] !== 'undefined')
                 return error(res, 409, "Team Exists!");
             
@@ -54,7 +54,7 @@ module.exports = class TeamsApiEndpoints {
             
             await this.#db.insert("INSERT INTO teams (team_code, team_name, owner) VALUES (?, ?, ?)", [team_code, req.body.team_name, verification.uid]);
 
-            const team_id = await this.#db.get("SELECT `team_id` FROM teams WHERE `team_code=?;", [team_code])
+            const team_id = await this.#db.get("SELECT `team_id` FROM teams WHERE `team_code`=?;", [team_code])
             await this.#db.insert("UPDATE applications SET `team_id`=? WHERE `mymlh_uid`=?;", [team_id[0].team_id, verification.uid]);
 
             return res.status(200).send({status: 'OK', team_code: team_code});
@@ -174,13 +174,13 @@ module.exports = class TeamsApiEndpoints {
         if (team_id[0].team_id === null)
             return res.status(200).send({});
 
-        const team_members = await this.#db.get("SELECT `mymlh_uid`, `application_stauts` FROM applications WHERE `team_id`=?;", [team_id[0].team_id]);
+        const team_members = await this.#db.get("SELECT `mymlh_uid`, `application_status` FROM applications WHERE `team_id`=?;", [team_id[0].team_id]);
         const team_data = await this.#db.get("SELECT * FROM teams WHERE `team_id`=?;", [team_id[0].team_id])
 
         var result = [];
 
         for (const user of users) {
-            for (const member of members)
+            for (const member of team_members)
                 if(user.id === member.mymlh_uid) {
                     result.push({
                         mymlh_uid: member.mymlh_uid,
