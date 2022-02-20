@@ -24,7 +24,7 @@ const reimbData = {
     "requested": {
         class: "is-warning",
         title: "Status: Requested",
-        description: "You have requested reimbursement. We are now going to judge, if you are allegeable to recive it."
+        description: "You have requested reimbursement. We are now going to judge, if you are allegeable to receive it."
     }
     //add more
 };
