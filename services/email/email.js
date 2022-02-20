@@ -47,6 +47,8 @@ module.exports = class GSuiteMailer {
      * @param  {Object} context  Context to pass to the template
      */
     sendMailTemplate(addressTo, subject, template, context) {
+        if (process.env.NODE_ENV !== "production") return;
+
         this.#transporter.sendMail({
             from: {
                 name: "Hack Kosice", 
