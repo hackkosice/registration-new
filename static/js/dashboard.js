@@ -41,10 +41,15 @@ window.onload = async function() {
             if (typeof window.formdata.application_status === 'undefined')
                 window.location = "/application.html";
 
-            let status = statusData[formdata.application_status]
+            let status = statusData[formdata.application_status];
             $("state").textContent = status.title;
             $("description").textContent = status.description;
             $("status-card").classList.add(status.class);
+
+            let reimb = reimbData[formdata.reimbursement_status];
+            $("reimb").textContent = reimb.title;
+            $("reimb_description").textContent = reimb.description;
+            $("reimb-card").classList.add(reimb.class);
         
             if (formdata.application_status === "open") {
                 $("edit-application").classList.remove("hidden")
