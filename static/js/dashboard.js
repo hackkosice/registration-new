@@ -24,15 +24,16 @@ window.onload = async function() {
                 to_app.textContent = "Edit application";
                 $("state_wrap").appendChild(to_app);
             }
+
+            if (formdata.team_id !== null) {
+                $("join_wrap").classList.add("hidden");
+                $("create_wrap").classList.add("hidden");
+            }
         })
     );
 
     //So we can ease the load on the server at least a bit 
-    fetches.push(fetch("/api/team-info", {method: 'POST', credentials: 'same-origin', cache: 'force-cache'}).then(
-        async (response) => {
-
-        })
-    );
+    fetches.push(load_team);
 
 
     //Resolve all promises
@@ -41,4 +42,78 @@ window.onload = async function() {
     } catch (err) {
 
     }
+
+    //Add callback
+    $("join").addEventListener('click', async () => {
+        try {
+
+            const body = {
+                team_code: $("team_code").value
+            };
+
+            await fetch("/api/team-join", {method: 'POST', credentials: 'same-origin', 
+                headers: {
+                    'Content-Type': 'application/json;charset=utf-8'
+                },
+                body: JSON.stringify(body)
+            });
+
+            await load_team();
+        } catch(err) {
+            //Display error message
+        }
+    });
+
+    $("create").addEventListener('click', async () => {
+        try {
+
+            const body = {
+                team_name: $("team_name").value
+            };
+
+            const data = await fetch("/api/team-create", {method: 'POST', credentials: 'same-origin', 
+                headers: {
+                    'Content-Type': 'application/json;charset=utf-8'
+                },
+                body: JSON.stringify(body)
+            });
+
+            const data_res = data.json();
+            console.log(data_res);
+
+            await load_team();
+        } catch(err) {
+            //Display error message
+            console.log(err);
+        }
+    });
+}
+
+
+async function load_team() {
+    
+    fetch("/api/team-info", {method: 'POST', credentials: 'same-origin', cache: 'force-cache'}).then(
+        async (response) => {
+
+            const teamdata = await response.json();
+            window.teamdata = teamdata;
+
+            let root = document.createElement("table");
+            root.id = "team_table";
+
+            for (const member of teamdata.members) {
+                let row = document.createElement("tr");
+
+                let name = document.createElement("th");
+                name.textContent = member.name;
+
+                let status = document.createElement("td");
+                status.textContent = "Application Status: " + status;
+
+                row.appendChild(name);
+                row.appendChild(status);
+                root.appendChild(row);
+            }
+            team.appendChild(root);
+    });
 }

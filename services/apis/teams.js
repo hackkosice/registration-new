@@ -79,7 +79,7 @@ module.exports = class TeamsApiEndpoints {
                 
                 //Check if your application is finnished 
                 if (typeof user[0] === 'undefined' || user[0].application_progress < 5)
-                    return error(res, 409, "Unable to join team! Error: Application not yet finnished or not existant!");
+                    return error(res, 400, "Unable to join team! Error: Application not yet finnished or not existant!");
                 
                 //Check if you aren't in a team already
                 if (user[0].team_id !== null)
@@ -165,20 +165,21 @@ module.exports = class TeamsApiEndpoints {
         const users = await this.#mymlh.get_all_users();
         const team_id = await this.#db.get("SELECT `team_id` FROM applications WHERE `mymlh_uid`=?;", [verification.uid]); 
 
-        if (team_id[0].team_id == null)
+        if (team_id[0].team_id === null)
             return res.status(200).send([]);
 
-        const team_members = await this.#db.get("SELECT `mymlh_uid` FROM applications WHERE `team_id`=?;", [team_id[0].team_id]);
+        const team_members = await this.#db.get("SELECT `mymlh_uid`, `application_stauts` FROM applications WHERE `team_id`=?;", [team_id[0].team_id]);
         const team_data = await this.#db.get("SELECT * FROM teams WHERE `team_id`=?;", [team_id[0].team_id])
 
         var result = [];
 
         for (const user of users) {
-            for (var i = 0; i < 4; i++)
-                if(user.id === team_members[i].mymlh_uid) {
+            for (const member of members)
+                if(user.id === member.mymlh_uid) {
                     result.push({
-                        mymlh_uid: team_members[i].mymlh_uid,
-                        name: (user.first_name + user.last_name)
+                        mymlh_uid: member.mymlh_uid,
+                        application: member.application_status,
+                        name: (user.first_name + " " + user.last_name)
                     });
                     break;
                 }
