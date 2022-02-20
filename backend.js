@@ -20,7 +20,11 @@ const TeamsApiEndpoints     = require('./services/apis/teams.js');
     app.use("/", require("body-parser").json());
     app.use(cookie_parser());
     app.use(fileUpload({
-        createParentPath: true
+        createParentPath: true,
+        limits: {
+            fileSize: 10000000 //10mb
+        },
+        abortOnLimit: true
     }));
 
     //Setup APIs

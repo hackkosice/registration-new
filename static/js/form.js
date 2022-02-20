@@ -7,6 +7,7 @@ const suggestions_datasets = ["/data/countries.json",
                               "/data/diet.json"];
 
 let COUNTRIES = null;
+const MAX_CV_SIZE = 10000000;
 
 //A smol trick so I don't have to write out everything out by hand
 //Null: get value, id of the input is the same
@@ -80,8 +81,17 @@ window.onload = async function() {
     });
 
     $("cv_file_id").addEventListener("change", () => {
-        const selectedFile = $("cv_file_id").files[0];
-        $("cv-file-name").innerHTML = selectedFile.name;
+        if ($("cv_file_id").files.length > 0) {
+            const selectedFile = $("cv_file_id").files[0];
+            if (selectedFile.size > MAX_CV_SIZE) {
+                showError("cv_file_wrapper", "File is too big");
+            }
+            $("cv-file-name").innerHTML = selectedFile.name;
+        } else {
+            hideError("cv_file_wrapper")
+            $("cv-file-name").innerHTML = "";
+        }
+
     })
 
 
@@ -235,8 +245,10 @@ async function save_callback(progress, noRedirect = false) {
     }
 
     if (body.application_progress === Number(3)) {
-        const fileId = await upload_cv();
-        body["cv_file_id"] = fileId;
+        if (!cv_is_ok()) {
+            return false;
+        }
+        body["cv_file_id"] = await upload_cv();
     }
 
     fetch("/api/form-update", {method: 'POST', credentials: 'same-origin',
@@ -287,6 +299,16 @@ async function save_and_close_callback() {
     } catch(err) {
         window.location = "/404.html";
     }
+}
+
+function cv_is_ok() {
+    if ($("cv_file_id").files.length > 0) {
+        const selectedFile = $("cv_file_id").files[0];
+        if (selectedFile.size > MAX_CV_SIZE) {
+            return false;
+        }
+    }
+    return true;
 }
 
 async function upload_cv() {
