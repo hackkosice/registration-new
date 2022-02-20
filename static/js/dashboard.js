@@ -73,40 +73,77 @@ window.onload = async function() {
     $("join").addEventListener('click', async () => {
         try {
 
+            const teamCode = $("team_code").value;
+
+            if (teamCode.trim() === "") {
+                showError("team_code", "Code of the team can not be empty")
+                return;
+            }
+
             const body = {
-                team_code: $("team_code").value
+                team_code: teamCode
             };
+
+            $("join").classList.add("is-loading")
 
             await fetch("/api/team-join", {method: 'POST', credentials: 'same-origin', 
                 headers: {
                     'Content-Type': 'application/json;charset=utf-8'
                 },
                 body: JSON.stringify(body)
+            }).then(async (response) => {
+                if (response.status !== 200) {
+                    const resData = await response.json()
+                    $("join").classList.remove("is-loading")
+                    showError("team_code", resData.error.message)
+                }
             });
+
+            $("join").classList.remove("is-loading")
 
             await load_team();
         } catch(err) {
             //Display error message
+            $("join").classList.remove("is-loading")
         }
     });
 
     $("create").addEventListener('click', async () => {
         try {
 
+
+            const teamName = $("team_name").value;
+
+            if (teamName.trim() === "") {
+                showError("team_name", "Name of the team can not be empty")
+                return;
+            }
+
             const body = {
                 team_name: $("team_name").value
             };
+
+            $("create").classList.add("is-loading")
 
             const data = await fetch("/api/team-create", {method: 'POST', credentials: 'same-origin', 
                 headers: {
                     'Content-Type': 'application/json;charset=utf-8'
                 },
                 body: JSON.stringify(body)
-            });
+            }).then(async (response) => {
+                if (response.status !== 200) {
+                    const resData = await response.json()
+                    $("create").classList.remove("is-loading")
+                    showError("team_name", resData.error.message)
+                }
+            })
 
             await load_team();
+
+            $("create").classList.remove("is-loading")
         } catch(err) {
             //Display error message
+            $("create").classList.remove("is-loading")
             console.log(err);
         }
     });
@@ -172,4 +209,10 @@ async function load_team() {
             $("join_wrap").classList.add("hidden");
             $("create_wrap").classList.add("hidden");
     });
+}
+
+function showError(elementId, errorMessage) {
+    $(elementId).classList.add("is-danger")
+    $(`${elementId}_error`).classList.remove("hidden");
+    $(`${elementId}_error`).textContent = errorMessage;
 }
