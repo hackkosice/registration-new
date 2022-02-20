@@ -164,7 +164,25 @@ async function load_team() {
                 return;
 
             let root = document.createElement("table");
+            root.classList.add("table", "is-fullwidth")
             root.id = "team_table";
+
+            let header = document.createElement("tr")
+
+            let name_header = document.createElement("th")
+            name_header.textContent = "Name"
+            header.appendChild(name_header)
+
+            let status_header = document.createElement("th")
+            status_header.textContent = "Application status"
+            header.appendChild(status_header)
+
+            let owner_header = document.createElement("th")
+            owner_header.textContent = "Team role"
+            header.appendChild(owner_header)
+
+
+            root.appendChild(header);
 
             for (const member of teamdata.members) {
                 let row = document.createElement("tr");
@@ -173,26 +191,28 @@ async function load_team() {
                 name.textContent = member.name;
 
                 let status = document.createElement("td");
-                status.textContent = "Application Status: " + member.application;
+                status.textContent = member.application;
                 
                 row.appendChild(name);
                 row.appendChild(status);
-                
-                
+
+                let owner = document.createElement("td");
+
                 if (teamdata.data.owner === member.mymlh_uid) {
-                    let owner = document.createElement("td");
                     owner.textContent = "owner";
-                    row.appendChild(owner);
                 }
-                
+
+                row.appendChild(owner);
+
                 root.appendChild(row);
             }
 
-            let label = document.createElement("p");
-            label.textContent = "Your team's code is: " + teamdata.data.team_code;
+            $("team_code_label").textContent = teamdata.data.team_code;
+            $("team_name_label").textContent = "Team name: " + teamdata.data.team_name;
 
             let leave_button = document.createElement("button");
             leave_button.textContent = "Leave team";
+            leave_button.classList.add("button", "is-primary", "is-light")
             leave_button.addEventListener('click', async () => {
                 
                 fetch("/api/team-leave", {method: 'POST', credentials: 'same-origin'}).then(
@@ -204,10 +224,10 @@ async function load_team() {
             });
 
             team.appendChild(root);
-            team.appendChild(label);
             team.appendChild(leave_button);
             $("join_wrap").classList.add("hidden");
             $("create_wrap").classList.add("hidden");
+            $("team_info_wrap").classList.remove("hidden");
     });
 }
 
