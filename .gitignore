@@ -106,6 +106,8 @@ dist
 # SQLite databases
 *.db
 
+#Email Credentials
 credentials.json
 
+#CV uploads
 uploads/

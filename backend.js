@@ -13,7 +13,6 @@ const Database              = require('./services/database/sqlite3.js'); //swap 
 const FormApiEndpoints      = require('./services/apis/form.js');
 const TeamsApiEndpoints     = require('./services/apis/teams.js');
 
-
 (async function main() {
     const app     = express();
     const router  = express.Router();
@@ -48,7 +47,7 @@ const TeamsApiEndpoints     = require('./services/apis/teams.js');
     //Bind api calls
     router.get("/oauth", async (req, res) => { mlh_auth.auth_callback(req, res) });  //Node has a hella weird callback system
     router.get("/my-mlh-login", async (req, res) => { res.redirect("https://my.mlh.io/oauth/authorize?client_id=" + process.env.MLH_APP_ID +
-                                                        "&redirect_uri=" + process.env.MLH_REDIRECT_URI +
+                                                        "&redirect_uri=" + encodeURIComponent(process.env.MLH_REDIRECT_URI) +
                                                         "&response_type=code&scope=email+education+birthday+phone_number+demographics") }); //Auto-redirrect the user to mymlh
 
     router.post("/api/user-info", async (req, res) => { mlh_auth.get_user_data_endpoint(req, res) });
