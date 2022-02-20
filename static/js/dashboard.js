@@ -120,7 +120,7 @@ async function load_team() {
                 name.textContent = member.name;
 
                 let status = document.createElement("td");
-                status.textContent = "Application Status: " + status;
+                status.textContent = "Application Status: " + member.application;
                 
                 row.appendChild(name);
                 row.appendChild(status);

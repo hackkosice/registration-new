@@ -77,7 +77,7 @@ module.exports = class TeamsApiEndpoints {
                     return error(res, 409, "Unable to join team! Error: Team does not exist!");        
                 
 
-            const user = await this.#db.get("SELECT `team_id`. `application_progress` FROM applications WHERE `mymlh_uid`=?;", [verification.uid]);
+            const user = await this.#db.get("SELECT `team_id`, `application_progress` FROM applications WHERE `mymlh_uid`=?;", [verification.uid]);
                 
                 //Check if your application is finnished 
                 if (typeof user[0] === 'undefined' || user[0].application_progress < 5)
@@ -87,7 +87,7 @@ module.exports = class TeamsApiEndpoints {
                 if (user[0].team_id !== null)
                     return error(res, 409, "Unable to join team! Error: User has already team assigned!");
 
-            const team_members = await this.#db.get("SELECT `mymlh_id` FROM applications WHERE `team_id`=?;", [team_id[0].team_id]);
+            const team_members = await this.#db.get("SELECT `mymlh_uid` FROM applications WHERE `team_id`=?;", [team_id[0].team_id]);
                 
                 //Check if team isn't full            
                 if (team_members.length === 4)
@@ -110,16 +110,23 @@ module.exports = class TeamsApiEndpoints {
         try {
 
             //Get the user's team_id
-            const team_id = await this.#db.get("SELECT `team_id` FROM applications WHERE `mymlh_uid`=?;", [verification.uid])
+            const team = await this.#db.get("SELECT `team_id` FROM applications WHERE `mymlh_uid`=?;", [verification.uid])
+
+            if (typeof team[0] === "undefined")
+                return error(res, 400, "User doesnt exist");
+
+            const team_id = team[0].team_id
+
+            if (team_id === null)
+                return error(res, 400, "User is not in a team");
 
             //Remove user from the team
             await this.#db.insert("UPDATE applications SET `team_id`=? WHERE `mymlh_uid`=?;", [null, verification.uid]);
 
-
             const owner = await this.#db.get("SELECT `owner` FROM teams WHERE `team_id`=?;", [team_id]);
             
             //Check if user is the owner
-            if (team[0] !== undefined && team_id[0].owner === verification.uid) {
+            if (owner[0].owner === verification.uid) {
             
                 //Set someone else as team owner
                 const members = await this.#db.get("SELECT `mymlh_uid` FROM applications WHERE `team_id`=?;", [team_id]);
@@ -127,8 +134,7 @@ module.exports = class TeamsApiEndpoints {
                     await this.#db.insert("UPDATE teams SET `owner`=? WHERE `team_id`=?;", [members[0].mymlh_uid, team_id]);
                 else
                     //If there's noone left, delete the team
-                    await this.#db.insert("DELETE FROM teams `team_id`=?;", [team_id]);
-            
+                    await this.#db.insert("DELETE FROM teams WHERE `team_id`=?;", [team_id]);
             }
             return res.status(200).send({status: 'OK'});
 
