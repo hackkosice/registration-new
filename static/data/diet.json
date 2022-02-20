@@ -1,0 +1,11 @@
+{
+    "name": "dietary_requirements",
+    "data": [
+        "None",
+        "Lactose Free",
+        "Gluten Free",
+        "Vegetarian",
+        "Vegan",
+        "No Pork"
+    ]
+}

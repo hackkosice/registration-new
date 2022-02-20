@@ -52,9 +52,11 @@ window.onload = async function() {
             $("reimb-card").classList.add(reimb.class);
         
             if (formdata.application_status === "open") {
-                $("edit-application").classList.remove("hidden")
+                $("edit-application").classList.remove("hidden");
+                $("close-application").classList.remove("hidden");
             } else {
-                $("edit-application").classList.add("hidden")
+                $("edit-application").classList.add("hidden");
+                $("close-application").classList.add("hidden");
             }
         })
     );
@@ -145,6 +147,16 @@ window.onload = async function() {
             //Display error message
             $("create").classList.remove("is-loading")
             console.log(err);
+        }
+    });
+
+    $("close-application").addEventListener('click', async () => {
+        
+        try {
+            await fetch("/api/form-close", {method: 'POST', credentials: 'same-origin'});
+            window.location = window.location;
+        } catch (err) {
+            window.location = "/404.html";
         }
     });
 
