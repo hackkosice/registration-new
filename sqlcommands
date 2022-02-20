@@ -15,7 +15,6 @@ CREATE TABLE "applications" (
 	"visa"	TEXT,
 	"diet"	TEXT,
 	"tshirt"	TEXT,
-	"job_looking"	TEXT,
 	"job_preference"	TEXT,
 	"cv_file_id"	INTEGER,
 	"skills"	TEXT,

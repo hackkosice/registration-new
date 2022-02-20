@@ -174,7 +174,6 @@ const whitelist = {
 	"visa": "visa", 
 	"diet": "diet",
 	"tshirt": "tshirt",
-	"job_looking": "job_looking",
 	"job_preference": "job_preference",
 	"cv_file_id": "cv_file_id",
 	"skills": "skills",

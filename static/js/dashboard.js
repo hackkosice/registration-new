@@ -4,7 +4,7 @@ const statusData = {
     "open": {
         class: "is-info",
         title: "Status: Open",
-        description: "You can still edit your application but we won't be able to judge it."
+        description: "You can still make changes to your application and we don't see it yet. Don't forget to submit once you are finished!"
     },
     "closed": {
         class: "is-warning",
@@ -24,7 +24,7 @@ const reimbData = {
     "requested": {
         class: "is-warning",
         title: "Status: Requested",
-        description: "You have requested reimbursement. We are now going to judge, if you are allegeable to receive it."
+        description: "You have requested reimbursement. We are now going to judge if you are allegeable to receive it."
     }
     //add more
 };
@@ -75,43 +75,77 @@ window.onload = async function() {
     $("join").addEventListener('click', async () => {
         try {
 
+            const teamCode = $("team_code").value;
+
+            if (teamCode.trim() === "") {
+                showError("team_code", "Code of the team can not be empty")
+                return;
+            }
+
             const body = {
-                team_code: $("team_code").value
+                team_code: teamCode
             };
+
+            $("join").classList.add("is-loading")
 
             await fetch("/api/team-join", {method: 'POST', credentials: 'same-origin', 
                 headers: {
                     'Content-Type': 'application/json;charset=utf-8'
                 },
                 body: JSON.stringify(body)
+            }).then(async (response) => {
+                if (response.status !== 200) {
+                    const resData = await response.json()
+                    $("join").classList.remove("is-loading")
+                    showError("team_code", resData.error.message)
+                }
             });
+
+            $("join").classList.remove("is-loading")
 
             await load_team();
         } catch(err) {
             //Display error message
+            $("join").classList.remove("is-loading")
         }
     });
 
     $("create").addEventListener('click', async () => {
         try {
 
+
+            const teamName = $("team_name").value;
+
+            if (teamName.trim() === "") {
+                showError("team_name", "Name of the team can not be empty")
+                return;
+            }
+
             const body = {
                 team_name: $("team_name").value
             };
+
+            $("create").classList.add("is-loading")
 
             const data = await fetch("/api/team-create", {method: 'POST', credentials: 'same-origin', 
                 headers: {
                     'Content-Type': 'application/json;charset=utf-8'
                 },
                 body: JSON.stringify(body)
-            });
-
-            const data_res = data.json();
-            console.log(data_res);
+            }).then(async (response) => {
+                if (response.status !== 200) {
+                    const resData = await response.json()
+                    $("create").classList.remove("is-loading")
+                    showError("team_name", resData.error.message)
+                }
+            })
 
             await load_team();
+
+            $("create").classList.remove("is-loading")
         } catch(err) {
             //Display error message
+            $("create").classList.remove("is-loading")
             console.log(err);
         }
     });
@@ -142,7 +176,25 @@ async function load_team() {
                 return;
 
             let root = document.createElement("table");
+            root.classList.add("table", "is-fullwidth")
             root.id = "team_table";
+
+            let header = document.createElement("tr")
+
+            let name_header = document.createElement("th")
+            name_header.textContent = "Name"
+            header.appendChild(name_header)
+
+            let status_header = document.createElement("th")
+            status_header.textContent = "Application status"
+            header.appendChild(status_header)
+
+            let owner_header = document.createElement("th")
+            owner_header.textContent = "Team role"
+            header.appendChild(owner_header)
+
+
+            root.appendChild(header);
 
             for (const member of teamdata.members) {
                 let row = document.createElement("tr");
@@ -151,26 +203,28 @@ async function load_team() {
                 name.textContent = member.name;
 
                 let status = document.createElement("td");
-                status.textContent = "Application Status: " + member.application;
+                status.textContent = member.application;
                 
                 row.appendChild(name);
                 row.appendChild(status);
-                
-                
+
+                let owner = document.createElement("td");
+
                 if (teamdata.data.owner === member.mymlh_uid) {
-                    let owner = document.createElement("td");
                     owner.textContent = "owner";
-                    row.appendChild(owner);
                 }
-                
+
+                row.appendChild(owner);
+
                 root.appendChild(row);
             }
 
-            let label = document.createElement("p");
-            label.textContent = "Your team's code is: " + teamdata.data.team_code;
+            $("team_code_label").textContent = teamdata.data.team_code;
+            $("team_name_label").textContent = "Team name: " + teamdata.data.team_name;
 
             let leave_button = document.createElement("button");
             leave_button.textContent = "Leave team";
+            leave_button.classList.add("button", "is-primary", "is-light")
             leave_button.addEventListener('click', async () => {
                 
                 fetch("/api/team-leave", {method: 'POST', credentials: 'same-origin'}).then(
@@ -182,9 +236,15 @@ async function load_team() {
             });
 
             team.appendChild(root);
-            team.appendChild(label);
             team.appendChild(leave_button);
             $("join_wrap").classList.add("hidden");
             $("create_wrap").classList.add("hidden");
+            $("team_info_wrap").classList.remove("hidden");
     });
+}
+
+function showError(elementId, errorMessage) {
+    $(elementId).classList.add("is-danger")
+    $(`${elementId}_error`).classList.remove("hidden");
+    $(`${elementId}_error`).textContent = errorMessage;
 }

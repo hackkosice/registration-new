@@ -6,6 +6,8 @@ const suggestions_datasets = ["/data/countries.json",
                               "/data/skills.json",
                               "/data/diet.json"];
 
+let COUNTRIES = null;
+
 //A smol trick so I don't have to write out everything out by hand
 //Null: get value, id of the input is the same
 const parts = [
@@ -23,10 +25,11 @@ const parts = [
     },
 
     { //Part 3: Job
-        fields: ["job_looking", "job_preference", "skills", "cv_file_id"],
-        functions: [() => { return $("job_y").checked ? "yes" : "no"; }, null, 
-                    () => { return get_all_skills(); }, () => { return 0 }],
-        requirements: [() => { return $("job_y").checked || $("job_n").checked; }, null, 
+        fields: ["job_preference", "skills", "cv_file_id"],
+        functions: [null,
+                    () => { return get_all_skills(); },
+                    () => { return 0 }],
+        requirements: [null,
                        () => { return $("skills_wrap").children.length > 2; }]
 
     },
@@ -108,6 +111,10 @@ window.onload = async function() {
 
                 var parent = document.createElement("datalist");
                 parent.id = suggestions.name;
+
+                if (dataset === "/data/countries.json") {
+                    COUNTRIES = suggestions.data
+                }
     
                 for (const item of suggestions.data) {
     
@@ -202,7 +209,11 @@ async function save_callback(progress, noRedirect = false) {
 
             if (!callback()) {
                 //Show error message
-                showError(progress_selector.fields[i]);
+                let errorMessage = "This field is required"
+                if (progress_selector.fields[i] === "skills")
+                    errorMessage = "Please choose at least 3 skills"
+
+                showError(progress_selector.fields[i], errorMessage);
                 requiredOk = false;
             } else {
                 hideError(progress_selector.fields[i]);
@@ -215,6 +226,13 @@ async function save_callback(progress, noRedirect = false) {
     }
 
     if (!requiredOk) return false;
+
+    if (body.application_progress === Number(2)) {
+        if (!COUNTRIES.includes($(["travel_from"]).value)) {
+            showError("travel_from", "Value not in the list")
+            return false;
+        }
+    }
 
     if (body.application_progress === Number(3)) {
         const fileId = await upload_cv();
@@ -247,9 +265,10 @@ async function save_callback(progress, noRedirect = false) {
     return true;
 }
 
-function showError(elementId) {
+function showError(elementId, errorMessage) {
     $(elementId).classList.add("is-danger")
     $(`${elementId}_error`).classList.remove("hidden");
+    $(`${elementId}_error`).textContent = errorMessage;
 }
 
 function hideError(elementId) {
@@ -316,7 +335,6 @@ function autofill_form() {
     //Set checkboxes
     $(window.formdata.reimbursement === "yes" ? "reimbursement_y" : "reimbursement_n").checked = true;
     $(window.formdata.visa === "yes" ? "visa_y" : "visa_n").checked = true;
-    $(window.formdata.job_looking === "yes" ? "job_y" : "job_n").checked = true;
     $(window.formdata.first_hack_hk22 === "yes" ? "firsthack_y" : "firsthack_n").checked = true;
    
     //Set textboxes
@@ -328,8 +346,8 @@ function autofill_form() {
             part.value = window.formdata[part.id];
     }
 
-    for (const part of document.getElementsByTagName("selection")) {
-        if (typeof window.formdata[part.id] !== 'undefined')
+    for (const part of document.getElementsByTagName("select")) {
+        if (typeof window.formdata[part.id] !== 'undefined' && window.formdata[part.id] !== null)
             part.value = window.formdata[part.id];
     }
         

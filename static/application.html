@@ -40,7 +40,7 @@
 				<p class="panel-tabs is-large">
 					<a href = "javascript:void(0)" class = "header_nav" id = "show_form-part1">Basic info</a>
 					<a href = "javascript:void(0)" class = "header_nav" id = "show_form-part2">Travel</a>
-					<a href = "javascript:void(0)" class = "header_nav" id = "show_form-part3">Job & experience</a>
+					<a href = "javascript:void(0)" class = "header_nav" id = "show_form-part3">Skills</a>
 					<a href = "javascript:void(0)" class = "header_nav" id = "show_form-part4">Your projects</a>
 					<a href = "javascript:void(0)" class = "header_nav" id = "show_form-part5">Fun info</a>
 				  </p>
@@ -99,7 +99,7 @@
 								<label class="label">From which country you would be traveling? <span class="help is-danger is-inline">*</span></label>
 								<div class="control">
 									<input class="input" placholder="Start typing country..." id = "travel_from" list = "countries" type = "text" required>
-									<p id="travel_from_error" class="help is-danger hidden">This field is required</p>
+									<p id="travel_from_error" class="help is-danger hidden"></p>
 								</div>
 							</div>
 
@@ -151,7 +151,7 @@
 			
 						<div class = "hidden" id = "form-part3">
 			
-							<h1 class="title primary"> Job & experience </h1>
+							<h1 class="title primary"> Skills & experience </h1>
 
 							<p class="mb-3">In this section we will ask you about your job experience and preferences. This info will be shared with our sponsors
 							which are looking for new talents. <b>We highly encourage you to upload your CV.</b> It increases your chance of being chosen to participate in our hackathon
@@ -201,33 +201,19 @@
 								
 									</div>
 									<input class="input" placholder="Start typing country..." id = "skills" type = "text" list = "skills_data" required>
-									<p id="skills_error" class="help is-danger hidden">Please choose at least 3 skills</p>
+									<p id="skills_error" class="help is-danger hidden"></p>
 								</div>
 							</div>
 
 							<div class="field">
-								<label class="label">Are you looking for a job? <span class="help is-danger is-inline">*</span></label>
-								<div class="control" id = "job_looking">
-									<label class="radio">
-										<input id = "job_y" name = "job" type="radio">
-										Yes
-									</label>
-									<label class="radio">
-										<input id = "job_n" name = "job" type="radio" checked>
-										No
-									</label>
-								</div>
-							</div>
-
-							<div class="field">
-								<label class="label">Job preference <span class="help is-danger is-inline">*</span></label>
+								<label class="label">Are you open to work? Our sponsoring companies might reach out to you during or after the event.<span class="help is-danger is-inline">*</span></label>
 								<div class="control">
 									<div class="select">
 										<select id = "job_preference">
-											<option value = "none"> Not Interested </option>
-											<option value = "internship"> Internship </option>
-											<option value = "part-time"> Part-time </option>
-											<option value = "full-time"> Full-time </option>
+											<option value = "none"> No, not Interested </option>
+											<option value = "internship"> Yes, I prefer Internship </option>
+											<option value = "part-time"> Yes, I prefer Part-time </option>
+											<option value = "full-time"> Yes, I prefer Full-time </option>
 										</select>
 									</div>
 								</div>
@@ -243,7 +229,7 @@
 
 							<h1 class="title primary"> Show us what you've built</h1>
 
-							<p class="mb-3">One project speaks 1000 words. Especially in IT world. Use fields below to showcase examples of what you've already built.</p>
+							<p class="mb-3">One project speaks 1000 words. Especially in the IT world. Use fields below to showcase examples of what you've already built.</p>
 
 							<div class="field">
 								<label class="label">Website</label>
@@ -289,7 +275,7 @@
 								<label class="label">What are you excited about at Hack Kosice 2022? <span class="help is-danger is-inline">*</span></label>
 								<div class="control">
 									<textarea required class="textarea" id = "excited_hk22" cols = "30" rows = "5" placeholder="I am excited about free pizza!"></textarea>
-									<p id="excited_hk22_error" class="help is-danger hidden">This field is required</p>
+									<p id="excited_hk22_error" class="help is-danger hidden"></p>
 								</div>
 							</div>
 
@@ -297,7 +283,7 @@
 								<label class="label">How did you hear about Hack Kosice? <span class="help is-danger is-inline">*</span></label>
 								<div class="control">
 									<input class="input" type="text" id = "hear_hk22" list = "marketing_types" required>
-									<p id="hear_hk22_error" class="help is-danger hidden">This field is required</p>
+									<p id="hear_hk22_error" class="help is-danger hidden"></p>
 								</div>
 							</div>
 
@@ -368,7 +354,7 @@
 							</article>
 
 							<button id = "5" class = "button is-primary is-light save_and_continue" style="margin-top: 0;">Save And Continue Later</button> <br>
-							<button id = "save_and_close" class="button is-primary mt-2">Send For a Review</button>
+							<button id = "save_and_close" class="button is-primary mt-2">Send For Review</button>
 			
 						</div>
 
