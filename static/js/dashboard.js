@@ -1,8 +1,16 @@
 $ = (element) => { return document.getElementById(element); };
 
-const desctriptions = {
-    "open": "You can still edit your application but we won't be eable to judge it.",
-    "closed": "You can no longer edit your application, as it's beeing reviewed by our staff.",
+const statusData = {
+    "open": {
+        class: "is-info",
+        title: "Status: open",
+        description: "You can still edit your application but we won't be able to judge it."
+    },
+    "closed": {
+        class: "is-warning",
+        title: "Status: closed",
+        description: "You can no longer edit your application, as it's being reviewed by our staff."
+    }
     //add more
 };
 
@@ -15,14 +23,16 @@ window.onload = async function() {
         async (response) => {
             const formdata = await response.json(); 
             window.formdata = formdata;
-            $("state").textContent = formdata.application_status;
-            $("description").textContent = desctriptions[formdata.application_status];
+
+            let status = statusData[formdata.application_status]
+            $("state").textContent = status.title;
+            $("description").textContent = status.description;
+            $("status-card").classList.add(status.class);
         
             if (formdata.application_status === "open") {
-                var to_app = document.createElement("a");
-                to_app.href = "/application.html";
-                to_app.textContent = "Edit application";
-                $("state_wrap").appendChild(to_app);
+                $("edit-application").classList.remove("hidden")
+            } else {
+                $("edit-application").classList.add("hidden")
             }
 
             if (formdata.team_id !== null) {
@@ -33,8 +43,7 @@ window.onload = async function() {
     );
 
     //So we can ease the load on the server at least a bit 
-    fetches.push(load_team);
-
+    fetches.push(load_team());
 
     //Resolve all promises
     try {
@@ -87,12 +96,14 @@ window.onload = async function() {
             console.log(err);
         }
     });
+
+    // Remove loader
+    $("loader").classList.remove("is-active");
 }
 
 
 async function load_team() {
-    
-    fetch("/api/team-info", {method: 'POST', credentials: 'same-origin', cache: 'force-cache'}).then(
+    return fetch("/api/team-info", {method: 'POST', credentials: 'same-origin', cache: 'force-cache'}).then(
         async (response) => {
 
             const teamdata = await response.json();
