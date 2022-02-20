@@ -48,7 +48,6 @@ $title-color: $hkpurple;
 }
 
 #application {
-  min-width: 384px;
   @media screen and (min-width: $tablet) {
     max-width: 45%;
   }
