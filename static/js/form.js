@@ -3,7 +3,8 @@ $ = (element) => { return document.getElementById(element); };
 //Build datalists from these jsons
 const suggestions_datasets = ["/data/countries.json",
                               "/data/marketing_types.json",
-                              "/data/skills.json"];
+                              "/data/skills.json",
+                              "/data/diet.json"];
 
 //A smol trick so I don't have to write out everything out by hand
 //Null: get value, id of the input is the same
@@ -127,7 +128,7 @@ window.onload = async function() {
     try {
         await Promise.all(fetches);
     } catch (err) {
-
+        window.location = "/404.html";
     }
 
 
@@ -225,6 +226,8 @@ async function save_callback(progress, noRedirect = false) {
             'Content-Type': 'application/json;charset=utf-8'
         },
         body: JSON.stringify(body)
+    }).catch( (reason) => {
+        window.location = "/404.html";
     });
 
     if (Number(progress) > 0 && Number(progress)  < 5) {
@@ -258,25 +261,34 @@ function hideError(elementId) {
 async function save_and_close_callback() {
     if(!(await save_callback(Number(5), true))) return;
 
-    await fetch("/api/form-close", {method: 'POST', credentials: 'same-origin'});
+    try {
+        await fetch("/api/form-close", {method: 'POST', credentials: 'same-origin'});
 
-    window.location = "/dashboard.html";
+        window.location = "/dashboard.html";
+    } catch(err) {
+        window.location = "/404.html";
+    }
 }
 
 async function upload_cv() {
-    const selectedFile = $("cv_file_id").files[0];
-    if (selectedFile) {
-        const data = new FormData();
-        data.append("cv", selectedFile);
-        const res = await fetch("/api/form-file-upload", {method: 'POST', credentials: 'same-origin',
-            body: data
-        });
-        const resData = await res.json();
-        return resData.fileId;
-    } else {
-        return 0;
-    }
     
+    try {
+        const selectedFile = $("cv_file_id").files[0];
+        if (selectedFile) {
+            const data = new FormData();
+            data.append("cv", selectedFile);
+            const res = await fetch("/api/form-file-upload", {method: 'POST', credentials: 'same-origin',
+                body: data
+            });
+            const resData = await res.json();
+            return resData.fileId;
+        } else {
+            return 0;
+        }
+    }
+    catch (err) {
+        window.location = "/404.html";
+    }
 }
 
 async function header_callback(progress) {
