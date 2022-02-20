@@ -24,7 +24,7 @@ const reimbData = {
     "requested": {
         class: "is-warning",
         title: "Status: Requested",
-        description: "You have requested reimbursement. We are now going to judge, if you are allegeable to recive it."
+        description: "You have requested reimbursement. We are now going to judge, if you are allegeable to receive it."
     }
     //add more
 };
@@ -46,7 +46,7 @@ window.onload = async function() {
             $("description").textContent = status.description;
             $("status-card").classList.add(status.class);
 
-            let reimb = reimbData[formdata.reimbursement_status];
+            let reimb = reimbData[formdata.reimbursement_progress];
             $("reimb").textContent = reimb.title;
             $("reimb_description").textContent = reimb.description;
             $("reimb-card").classList.add(reimb.class);
