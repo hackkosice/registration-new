@@ -3,17 +3,31 @@ $ = (element) => { return document.getElementById(element); };
 const statusData = {
     "open": {
         class: "is-info",
-        title: "Status: open",
+        title: "Status: Open",
         description: "You can still edit your application but we won't be able to judge it."
     },
     "closed": {
         class: "is-warning",
-        title: "Status: closed",
+        title: "Status: Closed",
         description: "You can no longer edit your application, as it's being reviewed by our staff."
     }
     //add more
 };
 
+
+const reimbData = {
+    "none": {
+        class: "is-error",
+        title: "Status: None",
+        description: "You have not requested travel reimbursement in your application."
+    },
+    "requested": {
+        class: "is-warning",
+        title: "Status: Requested",
+        description: "You have requested reimbursement. We are now going to judge, if you are allegeable to recive it."
+    }
+    //add more
+};
 window.onload = async function() {
 
     

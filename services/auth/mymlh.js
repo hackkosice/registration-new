@@ -25,7 +25,7 @@ module.exports =  class MyMLH {
 
         if (typeof token.error !== 'undefined') {
             //TODO: send out error page
-            return res.status(401).send(token.error_description);
+            return res.status(401).redirect("/404.html");
         }
 
         //Choose the right path for the user to be sent to

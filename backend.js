@@ -89,6 +89,12 @@ const TeamsApiEndpoints     = require('./services/apis/teams.js');
     app.use("/", express.static("./static"));
     app.use("/", router);
 
+    //404 handler
+    app.use(function(req, res) {
+        res.status(404);
+        res.redirect("/404.html");
+    });
+
 
     //Start the HTTP server
     const server = http.createServer(app);
