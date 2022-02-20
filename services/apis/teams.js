@@ -57,6 +57,8 @@ module.exports = class TeamsApiEndpoints {
             const team_id = await this.#db.get("SELECT `team_id` FROM teams WHERE `team_code`=?;", [team_code])
             await this.#db.insert("UPDATE applications SET `team_id`=? WHERE `mymlh_uid`=?;", [team_id[0].team_id, verification.uid]);
 
+            return res.status(200).send({status: 'OK', team_code: team_code});
+
         } catch(err) {
             return error(res, 500, "Unable to join team! Error: " + err);
         }
@@ -94,6 +96,8 @@ module.exports = class TeamsApiEndpoints {
             //Add user to the team
             const update_result = await this.#db.insert("UPDATE applications SET `team_id`=? WHERE `mymlh_uid`=?;", [team_id[0].team_id, verification.uid]);
 
+            return res.status(200).send({status: 'OK'});
+
         } catch(err) {
             return error(res, 500, "Unable to join team! Error: " + err);
         }
@@ -105,27 +109,28 @@ module.exports = class TeamsApiEndpoints {
 
         try {
 
-            if(typeof req.body.team_id === "undefined") 
-                return error(res, 400, "Bad request! team_id missing!");
+            //Get the user's team_id
+            const team_id = await this.#db.get("SELECT `team_id` FROM applications WHERE `mymlh_uid`=?;", [verification.uid])
 
             //Remove user from the team
             await this.#db.insert("UPDATE applications SET `team_id`=? WHERE `mymlh_uid`=?;", [null, verification.uid]);
 
 
-            const owner = await this.#db.get("SELECT `owner` FROM teams WHERE `team_id`=?;", [req.body.team_id]);
+            const owner = await this.#db.get("SELECT `owner` FROM teams WHERE `team_id`=?;", [team_id]);
             
             //Check if user is the owner
             if (team[0] !== undefined && team_id[0].owner === verification.uid) {
             
                 //Set someone else as team owner
-                const members = await this.#db.get("SELECT `mymlh_uid` FROM applications WHERE `team_id`=?;", [req.body.team_id]);
+                const members = await this.#db.get("SELECT `mymlh_uid` FROM applications WHERE `team_id`=?;", [team_id]);
                 if (typeof members[0] !== 'undefined') 
-                    await this.#db.insert("UPDATE teams SET `owner`=? WHERE `team_id`=?;", [members[0].mymlh_uid, req.body.team_id]);
+                    await this.#db.insert("UPDATE teams SET `owner`=? WHERE `team_id`=?;", [members[0].mymlh_uid, team_id]);
                 else
                     //If there's noone left, delete the team
-                    await this.#db.insert("DELETE FROM teams `team_id`=?;", [req.body.team_id]);
+                    await this.#db.insert("DELETE FROM teams `team_id`=?;", [team_id]);
             
             }
+            return res.status(200).send({status: 'OK'});
 
         } catch(err) {
             return error(res, 500, "Database Error! Error: " + err);
@@ -152,6 +157,7 @@ module.exports = class TeamsApiEndpoints {
             //Remove user from the team
             await this.#db.insert("UPDATE applications SET `team_id`=? WHERE `mymlh_uid`=?;", [null, req.body.target]);
             
+            return res.status(200).send({status: 'OK'});
 
         } catch(err) {
             return error(res, 500, "Database Error! Error: " + err);
@@ -166,7 +172,7 @@ module.exports = class TeamsApiEndpoints {
         const team_id = await this.#db.get("SELECT `team_id` FROM applications WHERE `mymlh_uid`=?;", [verification.uid]); 
 
         if (team_id[0].team_id === null)
-            return res.status(200).send([]);
+            return res.status(200).send({});
 
         const team_members = await this.#db.get("SELECT `mymlh_uid`, `application_status` FROM applications WHERE `team_id`=?;", [team_id[0].team_id]);
         const team_data = await this.#db.get("SELECT * FROM teams WHERE `team_id`=?;", [team_id[0].team_id])
