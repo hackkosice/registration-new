@@ -22,18 +22,18 @@ const parts = [
     },
 
     { //Part 3: Job
-        fields: ["job_looking", "job_preference", "skills"],
+        fields: ["job_looking", "job_preference", "skills", "cv_file_id"],
         functions: [() => { return $("job_y").checked ? "yes" : "no"; }, null, 
-                    () => { return get_all_skills(); }],
+                    () => { return get_all_skills(); }, () => { return 0 }],
         requirements: [() => { return $("job_y").checked || $("job_n").checked; }, null, 
                        () => { return $("skills_wrap").children.length > 2; }]
 
     },
 
     { //Part 4: what you've build
-        fields: ["site", "github", "devpost", "linkedin", "cv_file_id"],
-        functions: [null, null, null, null, () => { return 0 }],
-        requirements:  [null, null, null, null, null] //null means input.value !== null || input.value !== ""
+        fields: ["site", "github", "devpost", "linkedin"],
+        functions: [null, null, null, null],
+        requirements:  [null, null, null, null] //null means input.value !== null || input.value !== ""
     },
 
     { //Part 5: get to know you
@@ -215,7 +215,7 @@ async function save_callback(progress, noRedirect = false) {
 
     if (!requiredOk) return false;
 
-    if (body.application_progress === Number(4)) {
+    if (body.application_progress === Number(3)) {
         const fileId = await upload_cv();
         body["cv_file_id"] = fileId;
     }

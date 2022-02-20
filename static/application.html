@@ -41,7 +41,7 @@
 					<a href = "javascript:void(0)" class = "header_nav" id = "show_form-part1">Basic info</a>
 					<a href = "javascript:void(0)" class = "header_nav" id = "show_form-part2">Travel</a>
 					<a href = "javascript:void(0)" class = "header_nav" id = "show_form-part3">Job & experience</a>
-					<a href = "javascript:void(0)" class = "header_nav" id = "show_form-part4">Show us what you've built</a>
+					<a href = "javascript:void(0)" class = "header_nav" id = "show_form-part4">Your projects</a>
 					<a href = "javascript:void(0)" class = "header_nav" id = "show_form-part5">Fun info</a>
 				  </p>
 
@@ -51,7 +51,7 @@
 			
 						<div class = "hidden" id = "form-part1">
 							<h1 class="title primary">Basic info</h1>
-							<p>Here's the info we got from your MyMLH profile. Please, double check if it's accurete. If you wish to change it, do so in the settings of your MyMLH profile.</p>
+							<p class="mb-3">Here's the info we got from your MyMLH profile. Please, double check if it's accurate. If you wish to change it, do so in the settings of your MyMLH profile.</p>
 
 							<div class="field">
 								<label class="label">First Name <span class="help is-danger is-inline">*</span></label>
@@ -93,8 +93,18 @@
 						<div class = "hidden" id = "form-part2">
 							<h1 class="title primary"> Travel </h1>
 
+							<p class="mb-3">In this section we will ask you some questions regarding your travel to Košice.</p>
+
 							<div class="field">
-								<label class="label">Do you need reimbursement? <span class="help is-danger is-inline">*</span></label>
+								<label class="label">From which country you would be traveling? <span class="help is-danger is-inline">*</span></label>
+								<div class="control">
+									<input class="input" placholder="Start typing country..." id = "travel_from" list = "countries" type = "text" required>
+									<p id="travel_from_error" class="help is-danger hidden">This field is required</p>
+								</div>
+							</div>
+
+							<div class="field">
+								<label class="label">Would you like to get travel reimbursement? <span class="help is-danger is-inline">*</span></label>
 								<div class="control" id = "reimbursement">
 									<label class="radio">
 									<input id = "reimbursement_y" name = "reimbursement" type="radio">
@@ -107,21 +117,20 @@
 								</div>
 							</div>
 
-							<div class="field">
-								<label class="label">From which country you would be traveling? <span class="help is-danger is-inline">*</span></label>
-								<div class="control">
-									<input class="input" placholder="Start typing country..." id = "travel_from" list = "countries" type = "text" required>
-									<p id="travel_from_error" class="help is-danger hidden">This field is required</p>
+							<article class="message is-info">
+								<div class="message-header">
+									<p>Travel reimbursement info</p>
 								</div>
-							</div>
+								<div class="message-body content">
+									<ul class="mt-0">
+										<li>If you come from Slovakia, we sadly can not give you travel reimbursement.</li>
+										<li>If you come from neighbouring countries (i. e. Czechia, Poland, Ukraine, Hungary or Austria), you may receive travel reimbursement up to <b>20€</b></li>
+										<li>If you don't come from countries listed above, you may receive travel reimbursement up to <b>50€</b></li>
+									</ul>
+								</div>
+							</article>
 
-							<p> ... ... 
-								<ul>
-									<li>If you come from Slovakia, we sadly can not give you travel reimbursement</li>
-									<li>If you come from neighbouring coutries (i. e. Czechia, Poland, Ukraine, Hungary or Austria), you may recive travel reimbursment up to 20€</li>
-									<li>If you don't come from countries listed above, you may recive travel reimbursement up to 50€</li>
-								</ul>
-							</p>
+
 
 							<div class="field">
 								<label class="label">Do you need the invitation for travel visa? <span class="help is-danger is-inline">*</span></label>
@@ -142,35 +151,48 @@
 			
 						<div class = "hidden" id = "form-part3">
 			
-							<h1 class="title primary"> Job </h1>
+							<h1 class="title primary"> Job & experience </h1>
+
+							<p class="mb-3">In this section we will ask you about your job experience and preferences. This info will be shared with our sponsors
+							which are looking for new talents. <b>We highly encourage you to upload your CV.</b> It increases your chance of being chosen to participate in our hackathon
+							as well as being noticed by our sponsors.</p>
+
 
 							<div class="field">
-								<label class="label">Are you looking for a job? <span class="help is-danger is-inline">*</span></label>
-								<div class="control" id = "job_looking">
-									<label class="radio">
-									<input id = "job_y" name = "job" type="radio">
-									Yes
-									</label>
-									<label class="radio">
-									<input id = "job_n" name = "job" type="radio" checked>
-									No
-									</label>
-								</div>
-							</div>
-
-							<div class="field">
-								<label class="label">Job preference <span class="help is-danger is-inline">*</span></label>
+								<label class="label">CV:</label>
 								<div class="control">
-								  <div class="select">
-									<select id = "job_preference">
-										<option value = "none"> Not Interested </option>
-										<option value = "internship"> Internship </option>
-										<option value = "part-time"> Part-time </option>
-										<option value = "full-time"> Full-time </option>
-									</select>
-								  </div>
+									<div class="file has-name">
+										<label class="file-label">
+											<input class="file-input" id = "cv_file_id" type = "file" accept = ".pdf">
+											<span class="file-cta">
+											<span class="file-icon">
+											  <i class="fas fa-upload"></i>
+											</span>
+											<span class="file-label">
+											  Choose a file…
+											</span>
+										  </span>
+											<span id="cv-file-name" class="file-name">
+										  </span>
+										</label>
+									</div>
 								</div>
 							</div>
+
+
+							<article class="message is-info">
+								<div class="message-header">
+									<p>Your skills and experience</p>
+								</div>
+								<div class="message-body content">
+									<ul class="mt-0">
+										<li>Although you've probably listed these in your CV, please use the textbox below to highlight your most interesting skills. This helps us to better
+										process your application.</li>
+										<li>To add a skill, either select the one from the drop-down menu or write your own and press
+											Enter. To remove the skill, simply click on the tag.</li>
+									</ul>
+								</div>
+							</article>
 
 							<div class="field">
 								<label class="label">Skills <span class="help is-danger is-inline">*</span></label>
@@ -182,19 +204,46 @@
 									<p id="skills_error" class="help is-danger hidden">Please choose at least 3 skills</p>
 								</div>
 							</div>
-			
-							<p>
-								Although you've probably listed these in your CV, our sponsors want this more comprehensive access to the desired 
-								skills of the applicant. To add a skill, either select the one from the drop-down menu or write your own and press
-								Enter. To remove the skill, simply click the tag. (Nieco na styl ze nejde o pocet skillov)
-							</p>
+
+							<div class="field">
+								<label class="label">Are you looking for a job? <span class="help is-danger is-inline">*</span></label>
+								<div class="control" id = "job_looking">
+									<label class="radio">
+										<input id = "job_y" name = "job" type="radio">
+										Yes
+									</label>
+									<label class="radio">
+										<input id = "job_n" name = "job" type="radio" checked>
+										No
+									</label>
+								</div>
+							</div>
+
+							<div class="field">
+								<label class="label">Job preference <span class="help is-danger is-inline">*</span></label>
+								<div class="control">
+									<div class="select">
+										<select id = "job_preference">
+											<option value = "none"> Not Interested </option>
+											<option value = "internship"> Internship </option>
+											<option value = "part-time"> Part-time </option>
+											<option value = "full-time"> Full-time </option>
+										</select>
+									</div>
+								</div>
+							</div>
+
+
+
 
 							<button id = "3" class = "button is-primary is-light save_and_continue">Save And Continue</button>
 						</div>
 			
 						<div class = "hidden" id = "form-part4">
 
-							<h1 class="title primary"> Show us what you build </h1>
+							<h1 class="title primary"> Show us what you've built</h1>
+
+							<p class="mb-3">One project speaks 1000 words. Especially in IT world. Use fields below to showcase examples of what you've already built.</p>
 
 							<div class="field">
 								<label class="label">Website</label>
@@ -224,26 +273,7 @@
 								</div>
 							</div>
 
-							<div class="field">
-								<label class="label">CV:</label>
-								<div class="control">
-									<div class="file has-name">
-										<label class="file-label">
-										  <input class="file-input" id = "cv_file_id" type = "file" accept = ".pdf">
-										  <span class="file-cta">
-											<span class="file-icon">
-											  <i class="fas fa-upload"></i>
-											</span>
-											<span class="file-label">
-											  Choose a file…
-											</span>
-										  </span>
-										  <span id="cv-file-name" class="file-name">
-										  </span>
-										</label>
-									  </div>
-								</div>
-							</div>
+
 
 							<button id = "4" class = "button is-primary is-light save_and_continue">Save And Continue</button>
 						</div>
@@ -251,6 +281,9 @@
 						<div class = "hidden" id = "form-part5">
 							
 							<h1 class="title primary"> Let us know you better </h1>
+
+							<p class="mb-3">Here are some last informal questions for us to get to know you better. Hackathon is not only about coding but also about meeting new people and
+							having fun. Feel free to write anything you want in this final section of your application.</p>
 
 							<div class="field">
 								<label class="label">What are you excited about at Hack Kosice 2022? <span class="help is-danger is-inline">*</span></label>
@@ -328,7 +361,21 @@
 								</div>
 							</div>
 
-							<button id = "5" class = "button is-primary is-light save_and_continue">Save And Exit</button> <br>
+							<article class="message is-info">
+								<div class="message-header">
+									<p>Saving your application</p>
+								</div>
+								<div class="message-body content">
+									<ul class="mt-0">
+										<li>By clicking <b>Save And Exit</b> you will save your application and continue to the dashboard. You can
+										still <b>edit</b> the application later.</li>
+										<li>By clicking <b>Save and Close</b> you will close your application and <b>lock</b> all your information. Our team can now see it
+										and start <b>reviewing</b> it. You can still visit the dashboard to see your current status.</li>
+									</ul>
+								</div>
+							</article>
+
+							<button id = "5" class = "button is-primary is-light save_and_continue" style="margin-top: 0;">Save And Exit</button> <br>
 							<button id = "save_and_close" class="button is-primary mt-2">Save And Close</button>
 			
 						</div>
