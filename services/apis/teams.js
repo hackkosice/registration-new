@@ -28,11 +28,14 @@ module.exports = class TeamsApiEndpoints {
             return error(res, 401, "Authentification needed! Error: " + err);
         }
 
-        req.verification = verification
+        req.verification = verification;
         next();
     }
 
     async team_create_endpoint(req, res) {
+
+        let verification = req.verification;
+
         try {
             const team = await this.#db.get("SELECT `team_id` FROM teams WHERE `team_name`=?;", [req.body.team_name]);
             
@@ -62,12 +65,7 @@ module.exports = class TeamsApiEndpoints {
 
     async team_join_endpoint(req, res) {
         
-        var verification = null;
-        try {
-            verification = await jwt.verify(req.cookies['verification'], this.#jwt_key);
-        } catch (err) {
-            return error(res, 401, "Authentification needed! Error: " + err);
-        }
+        let verification = req.verification;
 
         try {
             const team_id = await this.#db.get("SELECT `team_id` FROM teams WHERE `team_code`=?;", [req.body.team_code]);
@@ -102,12 +100,8 @@ module.exports = class TeamsApiEndpoints {
     }
 
     async team_leave_endpoint(req, res) {
-        var verification = null;
-        try {
-            verification = await jwt.verify(req.cookies['verification'], this.#jwt_key);
-        } catch (err) {
-            return error(res, 401,"Authentification needed! Error: " + err);
-        }
+
+        let verification = req.verification;
 
         try {
 
@@ -139,12 +133,8 @@ module.exports = class TeamsApiEndpoints {
     }
 
     async team_kick_endpoint(req, res) {
-        var verification = null;
-        try {
-            verification = await jwt.verify(req.cookies['verification'], this.#jwt_key);
-        } catch (err) {
-            return error(res, 401,"Authentification needed! Error: " + err);
-        }
+       
+        let verification = req.verification;
 
         try {
 
@@ -169,20 +159,17 @@ module.exports = class TeamsApiEndpoints {
     }
 
     async team_info_endpoint(req, res) {
-        var verification = null;
-        try {
-            verification = await jwt.verify(req.cookies['verification'], this.#jwt_key);
-        } catch (err) {
-            return error(res, 401,"Authentification needed! Error: " + err);
-        }
+
+        let verification = req.verification;
 
         const users = await this.#mymlh.get_all_users();
         const team_id = await this.#db.get("SELECT `team_id` FROM applications WHERE `mymlh_uid`=?;", [verification.uid]); 
 
-        if (team_id !== null)
+        if (team_id[0].team_id !== null)
             return res.status(200).send([]);
 
-        const team_members = await this.#db.get("SELECT `mymlh_uid` FROM applications WHERE `team_id`=?")
+        const team_members = await this.#db.get("SELECT `mymlh_uid` FROM applications WHERE `team_id`=?;", [team_id[0].team_id]);
+        const team_data = await this.#db.get("SELECT * FROM teams WHERE `team_id`=?;", [team_id[0].team_id])
 
         var result = [];
 
@@ -197,7 +184,12 @@ module.exports = class TeamsApiEndpoints {
                 }
         }
 
-        res.status(200).send(result);
+
+
+        res.status(200).send({
+            members: result,
+            data: team_data[0]
+        });
 
     }
 

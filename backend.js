@@ -66,10 +66,21 @@ const TeamsApiEndpoints     = require('./services/apis/teams.js');
         async (req, res) => { form_api.form_upload_file(req, res) });
 
 
+    router.post("/api/team-create", 
+        async (req, res, next) => { team_api.team_auth_middleware(req, res, next) },
+        async (req, res) => { team_api.team_create_endpoint(req, res) }); 
+    router.post("/api/team-join", 
+        async (req, res, next) => { team_api.team_auth_middleware(req, res, next) },
+        async (req, res) => { team_api.team_join_endpoint(req, res) }); 
+    router.post("/api/team-leave", 
+        async (req, res, next) => { team_api.team_auth_middleware(req, res, next) },
+        async (req, res) => { team_api.team_leave_endpoint(req, res) }); 
+    router.post("/api/team-kick", 
+        async (req, res, next) => { team_api.team_auth_middleware(req, res, next) },
+        async (req, res) => { team_api.team_kick_endpoint(req, res) }); 
     router.post("/api/team-info", 
         async (req, res, next) => { team_api.team_auth_middleware(req, res, next) },
         async (req, res) => { team_api.team_info_endpoint(req, res) }); 
-    router.post("/api/team-create", async (req, res) => { team_api.team_create_endpoint(req, res) });
     
     router.post("/api/admin", async () => {});
     router.post("/api/judge", async () => {});    
