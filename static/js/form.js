@@ -26,7 +26,7 @@ const parts = [
         functions: [() => { return $("job_y").checked ? "yes" : "no"; }, null, 
                     () => { return get_all_skills(); }],
         requirements: [() => { return $("job_y").checked || $("job_n").checked; }, null, 
-                       () => { return $("skills_wrap").children.length > 0; }]
+                       () => { return $("skills_wrap").children.length > 2; }]
 
     },
 
@@ -55,11 +55,11 @@ window.onload = async function() {
     for (let i = 1; i < 6; i++)
         $("show_form-part" + i).addEventListener('click', () => { header_callback(i) });
 
-    $("skills_input").addEventListener('change', () => { 
+    $("skills").addEventListener('change', () => {
         
         for(const child of $("skills_wrap").children) 
-            if (child.value === $("skills_input").value)
-                return ($("skills_input").value = "");
+            if (child.value === $("skills").value)
+                return ($("skills").value = "");
 
 
         let button = document.createElement("button");
@@ -68,15 +68,15 @@ window.onload = async function() {
         });
 
         button.classList.add("button", "is-link", "is-small", "mr-1", "mb-1")
-        button.value = $("skills_input").value;
-        button.textContent = $("skills_input").value;
+        button.value = $("skills").value;
+        button.textContent = $("skills").value;
 
         $("skills_wrap").appendChild(button);
-        $("skills_input").value = "";
+        $("skills").value = "";
     });
 
-    $("cv_path").addEventListener("change", () => {
-        const selectedFile = $("cv_path").files[0];
+    $("cv_file_id").addEventListener("change", () => {
+        const selectedFile = $("cv_file_id").files[0];
         $("cv-file-name").innerHTML = selectedFile.name;
     })
 
@@ -184,30 +184,36 @@ async function save_callback(progress, noRedirect = false) {
                                            window.formdata.application_progress : Number(progress);
 
     const progress_selector = parts[Number(progress) - 1]; //Convert to zero-index
-    
+
+    let requiredOk = true;
     //A bit of a hack, but overall saves space
     for (let i = 0; i < progress_selector.fields.length; i++) {
 
+
         //Check, if the item is required and if it's filled in
         if ($(progress_selector.fields[i]).required) {
-        
+
             var callback;
             if (progress_selector.requirements[i] == null)
                 callback = () => { return $(progress_selector.fields[i]).value.trim() !== ""; }
             else 
                 callback = progress_selector.requirements[i];
 
-            if (!callback())
-                //Do stuff here
-                return;
+            if (!callback()) {
+                //Show error message
+                showError(progress_selector.fields[i]);
+                requiredOk = false;
+            } else {
+                hideError(progress_selector.fields[i]);
+            }
         }
-
 
         if (progress_selector.functions[i] == null)
             body[progress_selector.fields[i]] = $(progress_selector.fields[i]).value;
         else body[progress_selector.fields[i]] = progress_selector.functions[i]();
     }
 
+    if (!requiredOk) return false;
 
     if (body.application_progress === Number(4)) {
         const fileId = await upload_cv();
@@ -221,7 +227,6 @@ async function save_callback(progress, noRedirect = false) {
         body: JSON.stringify(body)
     });
 
-    console.log(body);
     if (Number(progress) > 0 && Number(progress)  < 5) {
         for (var i = 1; i < 6; i++){ 
             $("form-part" + i).classList.add("hidden");
@@ -235,10 +240,23 @@ async function save_callback(progress, noRedirect = false) {
 
     if (Number(progress) === 5 && !noRedirect)
         window.location = "/dashboard.html";
+
+    return true;
 }
 
+function showError(elementId) {
+    $(elementId).classList.add("is-danger")
+    $(`${elementId}_error`).classList.remove("hidden");
+}
+
+function hideError(elementId) {
+    $(elementId).classList.remove("is-danger")
+    $(`${elementId}_error`).classList.add("hidden");
+}
+
+
 async function save_and_close_callback() {
-    save_callback(Number(5), true);
+    if(!(await save_callback(Number(5), true))) return;
 
     await fetch("/api/form-close", {method: 'POST', credentials: 'same-origin'});
 
@@ -246,7 +264,7 @@ async function save_and_close_callback() {
 }
 
 async function upload_cv() {
-    const selectedFile = $("cv_path").files[0];
+    const selectedFile = $("cv_file_id").files[0];
     if (selectedFile) {
         const data = new FormData();
         data.append("cv", selectedFile);
@@ -290,7 +308,10 @@ function autofill_form() {
     $(window.formdata.first_hack_hk22 === "yes" ? "firsthack_y" : "firsthack_n").checked = true;
    
     //Set textboxes
+    let whitelist = ["skills", "cv_file_id"]
     for (const part of document.getElementsByTagName("input")) {
+        if (whitelist.includes(part.id)) continue
+
         if (typeof window.formdata[part.id] !== 'undefined')
             part.value = window.formdata[part.id];
     }
