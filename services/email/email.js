@@ -16,6 +16,14 @@ module.exports = class GSuiteMailer {
             },
         });
 
+        this.#transporter.verify(function (error, success) {
+            if (error) {
+                console.log(error);
+            } else {
+                console.log("Email service is ready!");
+            }
+        });
+
         const options = {
             viewEngine : {
                 extname: '.hbs',
@@ -36,7 +44,7 @@ module.exports = class GSuiteMailer {
      * @param  {String} addressTo  Address to send email to.
      * @param  {String} subject   Subject of the email.
      * @param  {String} template Name of the template to use (not file path and without extension)
-     * @param  {String} context  Context to pass to the template
+     * @param  {Object} context  Context to pass to the template
      */
     sendMailTemplate(addressTo, subject, template, context) {
         this.#transporter.sendMail({
@@ -50,7 +58,7 @@ module.exports = class GSuiteMailer {
             context: context
         })
         .then(() => {
-            console.log("Email sent")
+            console.log("Email sent to " + addressTo)
         })
         .catch(error => {
             console.error(error);

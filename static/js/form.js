@@ -50,6 +50,7 @@ window.onload = async function() {
 
     for (const button of document.getElementsByClassName("save_and_continue"))
         button.addEventListener('click', () => { save_callback(button.id) });
+    $("save_and_close").addEventListener("click", () => { save_and_close_callback() })
     
     for (let i = 1; i < 6; i++)
         $("show_form-part" + i).addEventListener('click', () => { header_callback(i) });
@@ -172,7 +173,7 @@ window.onload = async function() {
     autofill_form();
 }
 
-async function save_callback(progress) {
+async function save_callback(progress, noRedirect = false) {
 
     var body = {
         application_progress: Number(progress)
@@ -232,8 +233,16 @@ async function save_callback(progress) {
         $("form-part" + (Number(progress) + 1)).classList.remove("hidden");
     }
 
-    if (Number(progress) === 5)
+    if (Number(progress) === 5 && !noRedirect)
         window.location = "/dashboard.html";
+}
+
+async function save_and_close_callback() {
+    save_callback(Number(5), true);
+
+    await fetch("/api/form-close", {method: 'POST', credentials: 'same-origin'});
+
+    window.location = "/dashboard.html";
 }
 
 async function upload_cv() {
