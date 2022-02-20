@@ -348,16 +348,8 @@
 							<div class="field">
 								<label class="label">Dietary requirements <span class="help is-danger is-inline">*</span></label>
 								<div class="control">
-								  <div class="select">
-									<select id = "diet">
-										<option value = "none"> none </option>
-										<option value = "lactosefree"> Lactose Free </option>
-										<option value = "glutenfree"> Gluten Free </option>
-										<option value = "nopork"> No Pork </option>
-										<option value = "vegetarian"> Vegetarian </option>
-										<option value = "vegan"> Vegan </option>
-									</select>
-								  </div>
+									<input class = "input" id = "diet" type = "text" list = "dietary_requirements" required/>
+									<p id = "diet_error" class = "help is-danger hidden">This field is required</p>
 								</div>
 							</div>
 
@@ -367,16 +359,16 @@
 								</div>
 								<div class="message-body content">
 									<ul class="mt-0">
-										<li>By clicking <b>Save And Exit</b> you will save your application and continue to the dashboard. You can
+										<li>By clicking <b>Saave And Continue Later</b> you will save your application and continue to the dashboard. You can
 										still <b>edit</b> the application later.</li>
-										<li>By clicking <b>Save and Close</b> you will close your application and <b>lock</b> all your information. Our team can now see it
+										<li>By clicking <b>Send For a Review</b> you will close your application and <b>lock</b> all your information in. Our team can now see it
 										and start <b>reviewing</b> it. You can still visit the dashboard to see your current status.</li>
 									</ul>
 								</div>
 							</article>
 
-							<button id = "5" class = "button is-primary is-light save_and_continue" style="margin-top: 0;">Save And Exit</button> <br>
-							<button id = "save_and_close" class="button is-primary mt-2">Save And Close</button>
+							<button id = "5" class = "button is-primary is-light save_and_continue" style="margin-top: 0;">Save And Continue Later</button> <br>
+							<button id = "save_and_close" class="button is-primary mt-2">Send For a Review</button>
 			
 						</div>
 

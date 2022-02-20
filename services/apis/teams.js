@@ -74,7 +74,7 @@ module.exports = class TeamsApiEndpoints {
             
                 //Check if the team exist
                 if (typeof team_id[0] === 'undefined')
-                    return error(res, 409, "Unable to join team! Error: Team does not exist!");        
+                    return error(res, 409, "Sorry, but requested theam does not exist.");        
                 
 
             const user = await this.#db.get("SELECT `team_id`, `application_progress` FROM applications WHERE `mymlh_uid`=?;", [verification.uid]);
@@ -85,13 +85,13 @@ module.exports = class TeamsApiEndpoints {
                 
                 //Check if you aren't in a team already
                 if (user[0].team_id !== null)
-                    return error(res, 409, "Unable to join team! Error: User has already team assigned!");
+                    return error(res, 409, "You are already in one team.");
 
             const team_members = await this.#db.get("SELECT `mymlh_uid` FROM applications WHERE `team_id`=?;", [team_id[0].team_id]);
                 
                 //Check if team isn't full            
                 if (team_members.length === 4)
-                    return error(res, 409, "Unable to join team! Error: Team is full!");
+                    return error(res, 409, "You were too late. Team is already full :'(");
 
             //Add user to the team
             const update_result = await this.#db.insert("UPDATE applications SET `team_id`=? WHERE `mymlh_uid`=?;", [team_id[0].team_id, verification.uid]);
@@ -176,6 +176,9 @@ module.exports = class TeamsApiEndpoints {
 
         const users = await this.#mymlh.get_all_users();
         const team_id = await this.#db.get("SELECT `team_id` FROM applications WHERE `mymlh_uid`=?;", [verification.uid]); 
+
+        if (typeof team_id[0] === 'undefined')
+            return error(res, 500, "Error: User not found!");
 
         if (team_id[0].team_id === null)
             return res.status(200).send({});
