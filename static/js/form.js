@@ -22,10 +22,11 @@ const parts = [
     },
 
     { //Part 3: Job
-        fields: ["job_looking", "job_preference", "skills", "cv_file_id"],
-        functions: [() => { return $("job_y").checked ? "yes" : "no"; }, null, 
-                    () => { return get_all_skills(); }, () => { return 0 }],
-        requirements: [() => { return $("job_y").checked || $("job_n").checked; }, null, 
+        fields: ["job_preference", "skills", "cv_file_id"],
+        functions: [null,
+                    () => { return get_all_skills(); },
+                    () => { return 0 }],
+        requirements: [null,
                        () => { return $("skills_wrap").children.length > 2; }]
 
     },
@@ -304,7 +305,6 @@ function autofill_form() {
     //Set checkboxes
     $(window.formdata.reimbursement === "yes" ? "reimbursement_y" : "reimbursement_n").checked = true;
     $(window.formdata.visa === "yes" ? "visa_y" : "visa_n").checked = true;
-    $(window.formdata.job_looking === "yes" ? "job_y" : "job_n").checked = true;
     $(window.formdata.first_hack_hk22 === "yes" ? "firsthack_y" : "firsthack_n").checked = true;
    
     //Set textboxes
@@ -316,8 +316,8 @@ function autofill_form() {
             part.value = window.formdata[part.id];
     }
 
-    for (const part of document.getElementsByTagName("selection")) {
-        if (typeof window.formdata[part.id] !== 'undefined')
+    for (const part of document.getElementsByTagName("select")) {
+        if (typeof window.formdata[part.id] !== 'undefined' && window.formdata[part.id] !== null)
             part.value = window.formdata[part.id];
     }
         

@@ -4,7 +4,7 @@ const statusData = {
     "open": {
         class: "is-info",
         title: "Status: Open",
-        description: "You can still edit your application but we won't be able to judge it."
+        description: "You can still make changes to your application and we don't see it yet. Don't forget to submit once you are finished!"
     },
     "closed": {
         class: "is-warning",
