@@ -5,6 +5,8 @@ const suggestions_datasets = ["/data/countries.json",
                               "/data/marketing_types.json",
                               "/data/skills.json"];
 
+let COUNTRIES = null;
+
 //A smol trick so I don't have to write out everything out by hand
 //Null: get value, id of the input is the same
 const parts = [
@@ -108,6 +110,10 @@ window.onload = async function() {
 
                 var parent = document.createElement("datalist");
                 parent.id = suggestions.name;
+
+                if (dataset === "/data/countries.json") {
+                    COUNTRIES = suggestions.data
+                }
     
                 for (const item of suggestions.data) {
     
@@ -202,7 +208,11 @@ async function save_callback(progress, noRedirect = false) {
 
             if (!callback()) {
                 //Show error message
-                showError(progress_selector.fields[i]);
+                let errorMessage = "This field is required"
+                if (progress_selector.fields[i] === "skills")
+                    errorMessage = "Please choose at least 3 skills"
+
+                showError(progress_selector.fields[i], errorMessage);
                 requiredOk = false;
             } else {
                 hideError(progress_selector.fields[i]);
@@ -215,6 +225,13 @@ async function save_callback(progress, noRedirect = false) {
     }
 
     if (!requiredOk) return false;
+
+    if (body.application_progress === Number(2)) {
+        if (!COUNTRIES.includes($(["travel_from"]).value)) {
+            showError("travel_from", "Value not in the list")
+            return false;
+        }
+    }
 
     if (body.application_progress === Number(3)) {
         const fileId = await upload_cv();
@@ -245,9 +262,10 @@ async function save_callback(progress, noRedirect = false) {
     return true;
 }
 
-function showError(elementId) {
+function showError(elementId, errorMessage) {
     $(elementId).classList.add("is-danger")
     $(`${elementId}_error`).classList.remove("hidden");
+    $(`${elementId}_error`).textContent = errorMessage;
 }
 
 function hideError(elementId) {

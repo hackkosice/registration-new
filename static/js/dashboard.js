@@ -24,7 +24,7 @@ const reimbData = {
     "requested": {
         class: "is-warning",
         title: "Status: Requested",
-        description: "You have requested reimbursement. We are now going to judge, if you are allegeable to receive it."
+        description: "You have requested reimbursement. We are now going to judge if you are allegeable to receive it."
     }
     //add more
 };
@@ -103,9 +103,6 @@ window.onload = async function() {
                 },
                 body: JSON.stringify(body)
             });
-
-            const data_res = data.json();
-            console.log(data_res);
 
             await load_team();
         } catch(err) {
