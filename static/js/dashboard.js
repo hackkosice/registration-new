@@ -46,7 +46,7 @@ window.onload = async function() {
             $("description").textContent = status.description;
             $("status-card").classList.add(status.class);
 
-            let reimb = reimbData[formdata.reimbursement_status];
+            let reimb = reimbData[formdata.reimbursement_progress];
             $("reimb").textContent = reimb.title;
             $("reimb_description").textContent = reimb.description;
             $("reimb-card").classList.add(reimb.class);
