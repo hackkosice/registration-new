@@ -14,28 +14,37 @@ const parts = [
     },
 
     { //Part 2: Travel & etc
-        fields: ["reimbursement", "travel_from", "visa", "tshirt", "diet"],
+        fields: ["reimbursement", "travel_from", "visa"],
         functions: [() => { return $("reimbursement_y").checked ? "yes" : "no"; }, null,
-                    () => { return $("visa_y").checked ? "yes" : "no"; }, null, null]
+                    () => { return $("visa_y").checked ? "yes" : "no"; }, null, null],
+        requirements: [() => { return $("reimbursement_y").checked || $("reimbursement_n").checked; }, null, 
+                       () => { return $("visa_y").checked || $("visa_n").checked; }]
     },
 
     { //Part 3: Job
         fields: ["job_looking", "job_preference", "skills"],
         functions: [() => { return $("job_y").checked ? "yes" : "no"; }, null, 
-                    () => { return get_all_skills(); }]
+                    () => { return get_all_skills(); }],
+        requirements: [() => { return $("job_y").checked || $("job_n").checked; }, null, 
+                       () => { return $("skills_wrap").children.length > 0; }]
+
     },
 
     { //Part 4: what you've build
         fields: ["site", "github", "devpost", "linkedin", "cv_file_id"],
-        functions: [null, null, null, null, () => { return 0 }]
+        functions: [null, null, null, null, () => { return 0 }],
+        requirements:  [null, null, null, null, null] //null means input.value !== null || input.value !== ""
     },
 
     { //Part 5: get to know you
-        fields: ["excited_hk22", "hear_hk22", "first_hack_hk22", "spirit_animal", "pizza"],
+        fields: ["excited_hk22", "hear_hk22", "first_hack_hk22", "spirit_animal", "pizza", "tshirt", "diet"],
         functions: [null, null, () => { return $("firsthack_y").checked ? "yes" : "no"; }, 
-                    null, null]
+                    null, null, null, null],
+        requirements: [null, null, () => { return $("firsthack_y").checked || $("firsthack_n").checked; }, 
+                       null, null, null, null]
     }
-]
+];
+
 
 window.onload = async function() {
 
@@ -177,6 +186,22 @@ async function save_callback(progress) {
     
     //A bit of a hack, but overall saves space
     for (let i = 0; i < progress_selector.fields.length; i++) {
+
+        //Check, if the item is required and if it's filled in
+        if ($(progress_selector.fields[i]).required) {
+        
+            var callback;
+            if (progress_selector.requirements[i] == null)
+                callback = () => { return $(progress_selector.fields[i]).value.trim() !== ""; }
+            else 
+                callback = progress_selector.requirements[i];
+
+            if (!callback())
+                //Do stuff here
+                return;
+        }
+
+
         if (progress_selector.functions[i] == null)
             body[progress_selector.fields[i]] = $(progress_selector.fields[i]).value;
         else body[progress_selector.fields[i]] = progress_selector.functions[i]();

@@ -173,7 +173,7 @@ module.exports = class TeamsApiEndpoints {
 
         var result = [];
 
-        for (const user of users.data) {
+        for (const user of users) {
             for (var i = 0; i < 4; i++)
                 if(user.id === team_members[i].mymlh_uid) {
                     result.push({
