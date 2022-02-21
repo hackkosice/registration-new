@@ -7880,6 +7880,3 @@ a.has-text-danger-dark:hover, a.has-text-danger-dark:focus {
 .save_and_continue, #save_and_close {
   margin-top: 2em;
   width: 100%; }
-
-body {
-  min-height: 100vw; }
