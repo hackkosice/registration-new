@@ -80,7 +80,7 @@ module.exports = class TeamsApiEndpoints {
             const user = await this.#db.get("SELECT `team_id`, `application_progress` FROM applications WHERE `mymlh_uid`=?;", [verification.uid]);
                 
                 //Check if your application is finnished 
-                if (typeof user[0] === 'undefined' || user[0].application_progress < 5)
+                if (typeof user[0] === 'undefined' || user[0].application_progress < 6)
                     return error(res, 400, "Unable to join team! Error: Application not yet finnished or not existant!");
                 
                 //Check if you aren't in a team already
@@ -191,7 +191,7 @@ module.exports = class TeamsApiEndpoints {
 
         if (team_id[0].team_id === null)
             return res.status(200).send({});
-
+;
         const team_members = await this.#db.get("SELECT `mymlh_uid`, `application_status` FROM applications WHERE `team_id`=?;", [team_id[0].team_id]);
         const team_data = await this.#db.get("SELECT * FROM teams WHERE `team_id`=?;", [team_id[0].team_id])
 

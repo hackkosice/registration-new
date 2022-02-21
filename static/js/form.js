@@ -14,7 +14,8 @@ const MAX_CV_SIZE = 10 * 1024 * 1024;
 const parts = [
     { //Part 1: nothing (mymlh uid is obtained from verification token)
         fields: [],
-        functions: []
+        functions: [],
+        requirements: []
     },
 
     { //Part 2: Travel & etc
@@ -26,12 +27,12 @@ const parts = [
     },
 
     { //Part 3: Job
-        fields: ["job_preference", "skills", "cv_file_id"],
+        fields: ["job_preference", "skills", "cv_file_id", "achievements"],
         functions: [null,
                     () => { return get_all_skills(); },
-                    () => { return 0 }],
+                    () => { return 0 }, null],
         requirements: [null,
-                       () => { return $("skills_wrap").children.length > 2; }]
+                       () => { return $("skills_wrap").children.length >= 3; }, () => {}, null]
 
     },
 
@@ -47,7 +48,18 @@ const parts = [
                     null, null, null, null],
         requirements: [null, null, () => { return $("firsthack_y").checked || $("firsthack_n").checked; }, 
                        null, null, null, null]
+    },
+
+    { //Part 6: consents
+        fields: ["consent_hk_privacy", "consent_coc", "consent_cvs", "consent_mlh_privacy", "consent_photos"],
+        functions: [() => { return $("consent_hk_privacy").checked ? "true" : "false"; }, 
+                    () => { return $("consent_coc").checked ? "true" : "false"; }, () => { return $("consent_cvs").checked ? "true" : "false"; },
+                    () => { return $("consent_mlh_privacy").checked ? "true" : "false"; }, () => { return $("consent_photos").checked ? "true" : "false"; }],
+        requirements: [() => { return $("consent_hk_privacy").checked; }, 
+        () => { return $("consent_coc").checked; }, () => { return $("consent_cvs").checked; },
+        () => { return $("consent_mlh_privacy").checked; }, () => { return $("consent_photos").checked; }],
     }
+
 ];
 
 
@@ -57,7 +69,7 @@ window.onload = async function() {
         button.addEventListener('click', () => { save_callback(button.id) });
     $("save_and_close").addEventListener("click", () => { save_and_close_callback() })
     
-    for (let i = 1; i < 6; i++)
+    for (let i = 1; i < 7; i++)
         $("show_form-part" + i).addEventListener('click', () => { header_callback(i) });
 
     $("skills").addEventListener('change', () => {
@@ -90,6 +102,9 @@ window.onload = async function() {
                 $("cv-file-name").textContent = "";
             }
             $("cv-file-name").textContent = selectedFile.name;
+        } else {
+            hideError("cv_file_wrapper")
+            $("cv-file-name").textContent = "";
         }
     });
 
@@ -154,14 +169,14 @@ window.onload = async function() {
 
     if (typeof window.formdata.application_progress !== 'undefined') {
 
-        for (var i = 5; i > window.formdata.application_progress; i--)
+        for (var i = 6; i > window.formdata.application_progress; i--)
             $("show_form-part" + i).classList.add("hidden");
 
         $("form-part" + window.formdata.application_progress).classList.remove("hidden");
         $("show_form-part" + window.formdata.application_progress).classList.add("is-active");
     } else {
 
-        for (var i = 2; i < 6; i++)
+        for (var i = 2; i <= 6; i++)
             $("show_form-part" + i).classList.add("hidden");
 
         $("form-part1").classList.remove("hidden");
@@ -186,6 +201,7 @@ window.onload = async function() {
     //Application object has always application id. If application id is undefined, no not autofill anything
     if (typeof window.formdata.application_id === 'undefined')
         return;
+
 
     autofill_form();
 }
@@ -260,8 +276,8 @@ async function save_callback(progress, noRedirect = false) {
         //window.location = "/404.html";
     });
 
-    if (Number(progress) > 0 && Number(progress)  < 5) {
-        for (var i = 1; i < 6; i++){ 
+    if (Number(progress) > 0 && Number(progress)  < 6) {
+        for (var i = 1; i <= 6; i++){ 
             $("form-part" + i).classList.add("hidden");
             $("show_form-part" + i).classList.remove("is-active");
         }
@@ -271,7 +287,7 @@ async function save_callback(progress, noRedirect = false) {
         $("form-part" + (Number(progress) + 1)).classList.remove("hidden");
     }
 
-    if (Number(progress) === 5 && !noRedirect)
+    if (Number(progress) === 6 && !noRedirect)
         window.location = "/dashboard.html";
 
     return true;
@@ -286,11 +302,12 @@ function showError(elementId, errorMessage) {
 function hideError(elementId) {
     $(elementId).classList.remove("is-danger")
     $(`${elementId}_error`).classList.add("hidden");
+    console.log(elementId);
 }
 
 
 async function save_and_close_callback() {
-    if(!(await save_callback(Number(5), true))) return;
+    if(!(await save_callback(Number(6), true))) return;
 
     try {
         await fetch("/api/form-close", {method: 'POST', credentials: 'same-origin'});
@@ -333,7 +350,7 @@ async function upload_cv() {
 }
 
 async function header_callback(progress) {
-    for (var i = 1; i < 6; i++) {
+    for (var i = 1; i <= 6; i++) {
         $("show_form-part" + i).classList.remove("is-active");
         $("form-part" + i).classList.add("hidden");
     }
@@ -358,9 +375,18 @@ function autofill_form() {
     $(window.formdata.reimbursement === "yes" ? "reimbursement_y" : "reimbursement_n").checked = true;
     $(window.formdata.visa === "yes" ? "visa_y" : "visa_n").checked = true;
     $(window.formdata.first_hack_hk22 === "yes" ? "firsthack_y" : "firsthack_n").checked = true;
+
+    //Set consents
+    $("consent_hk_privacy").checked = window.formdata.consent_hk_privacy === "true";
+    $("consent_coc").checked = window.formdata.consent_coc === "true";
+    $("consent_cvs").checked = window.formdata.consent_cvs === "true";
+    $("consent_mlh_privacy").checked = window.formdata.consent_mlh_privacy === "true";
+    $("consent_photos").checked = window.formdata.consent_photos === "true";
+
    
     //Set textboxes
-    let whitelist = ["skills", "cv_file_id"]
+    let whitelist = ["skills", "cv_file_id", "consent_hk_privacy", "consent_coc",
+                     "consent_cvs", "consent_mlh_privacy" , "consent_photos"]
     for (const part of document.getElementsByTagName("input")) {
         if (whitelist.includes(part.id)) continue
 
@@ -373,6 +399,7 @@ function autofill_form() {
             part.value = window.formdata[part.id];
     }
         
+    $("achievements").value = window.formdata.achievements;
     $("excited_hk22").value = window.formdata.excited_hk22;
     $("spirit_animal").value = window.formdata.spirit_animal;
     $("pizza").value = window.formdata.pizza;
@@ -399,4 +426,30 @@ function autofill_form() {
     //Set cv filename
     $("cv-file-name").innerHTML = window.formdata.cv_file_name;
 
+}
+
+function isAdult(birthday){ //birthday is string YYYY-MM-DD (ISO format)
+    // adult is considered having the 18th birthday today or in the past
+    let d = new Date(birthday);
+    let now = new Date();
+    
+    if (now.getFullYear() - d.getFullYear() < 18){
+        return false;
+    } else if (now.getFullYear() - d.getFullYear() > 18){
+        return true;
+    }
+
+    // difference in years is exactly 18
+    if (now.getMonth() < d.getMonth()){
+        return false;
+    } else if (now.getMonth() > d.getMonth()){
+        return true;
+    }
+    
+    //months are the same, this is close
+    if (now.getDate() < d.getDate()){
+        return false;
+    } else {
+        return true;
+    }
 }
