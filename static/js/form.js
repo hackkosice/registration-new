@@ -97,14 +97,16 @@ window.onload = async function() {
             const selectedFile = $("cv_file_id").files[0];
             if (selectedFile.size > MAX_CV_SIZE) {
                 showError("cv_file_wrapper", "File is too big");
+            } else {
+                hideError("cv_file_wrapper")
+                $("cv-file-name").textContent = "";
             }
             $("cv-file-name").textContent = selectedFile.name;
         } else {
-            hideError("cv_file_wrapper");
+            hideError("cv_file_wrapper")
             $("cv-file-name").textContent = "";
         }
-
-    })
+    });
 
 
     var fetches = [];
