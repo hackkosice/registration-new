@@ -89,6 +89,8 @@ module.exports = class FormApiEndpoints {
             for (const key in req.body) {
                 if (key === "reimbursement" && req.body.reimbursement === "yes")
                     await this.#db.insert("UPDATE applications SET `reimbursement_progress`=? WHERE `mymlh_uid`=?;", ["requested", verification.uid]);
+                else 
+                    await this.#db.insert("UPDATE applications SET `reimbursement_progress`=? WHERE `mymlh_uid`=?;", ["requested", verification.uid]);
              
                 const result = await this.#db.insert("UPDATE applications SET " + whitelist[key] + "=? WHERE `mymlh_uid`=?;", [req.body[key], verification.uid]);
             }
