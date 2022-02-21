@@ -7,7 +7,7 @@ const suggestions_datasets = ["/data/countries.json",
                               "/data/diet.json"];
 
 let COUNTRIES = null;
-const MAX_CV_SIZE = 10000000;
+const MAX_CV_SIZE = 10 * 1024 * 1024;
 
 //A smol trick so I don't have to write out everything out by hand
 //Null: get value, id of the input is the same
@@ -84,7 +84,7 @@ window.onload = async function() {
         if ($("cv_file_id").files.length > 0) {
             const selectedFile = $("cv_file_id").files[0];
             if (selectedFile.size > MAX_CV_SIZE) {
-                showError("cv_file_wrapper", "File is too big");
+                showError("cv_file_wrapper", "File is too big. Max size is 10 MiB.");
             } else {
                 hideError("cv_file_wrapper")
                 $("cv-file-name").textContent = "";
