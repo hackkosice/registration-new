@@ -7882,4 +7882,19 @@ a.has-text-danger-dark:hover, a.has-text-danger-dark:focus {
   width: 100%; }
 
 body {
-  min-height: 100vw; }
+  min-height: 100vh;
+  position: relative; }
+
+body::after {
+  content: '';
+  display: block;
+  height: 80px; }
+
+.footer {
+  position: absolute;
+  width: 100%;
+  bottom: 0;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center; }

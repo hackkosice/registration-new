@@ -181,6 +181,10 @@ function load_team() {
             owner_header.textContent = "Team role";
             header.appendChild(owner_header);
 
+            let action_header = document.createElement("th");
+            action_header.textContent = "Actions";
+            header.appendChild(action_header);
+
 
             root.appendChild(header);
 
@@ -204,7 +208,9 @@ function load_team() {
 
                 row.appendChild(owner);
 
+
                 //If you are owner, add the ablility to kick memers
+                let action = document.createElement("td");
                 if (teamdata.data.owner === window.formdata.mymlh_uid &&
                     teamdata.data.owner !== member.mymlh_uid) {
 
@@ -225,10 +231,9 @@ function load_team() {
                     });
 
 
-                    let kick = document.createElement("td");
-                    kick.appendChild(kick_link);
-                    row.appendChild(kick);
+                    action.appendChild(kick_link);
                 }
+                row.appendChild(action);
 
                 root.appendChild(row);
             }
