@@ -19,6 +19,7 @@
 	<body>
 
 		<!--This div is INVISIBLE, contains all suggestions for form (js generated)-->
+		<!--Use temp.kotol.cloud-->
 		<div id = "datasets">
 		</div>
 
@@ -43,11 +44,12 @@
 					<a href = "javascript:void(0)" class = "header_nav" id = "show_form-part3">Skills</a>
 					<a href = "javascript:void(0)" class = "header_nav" id = "show_form-part4">Your projects</a>
 					<a href = "javascript:void(0)" class = "header_nav" id = "show_form-part5">Fun info</a>
+					<a href = "javascript:void(0)" class = "header_nav" id = "show_form-part6" style = "display: none;">Consent</a>
 				  </p>
 
 				<div class="panel-block p-5" style="flex-direction: column;">
 
-					<div id = "application"ß>
+					<div id = "application">
 			
 						<div class = "hidden" id = "form-part1">
 							<h1 class="title primary">Basic info</h1>
@@ -220,6 +222,14 @@
 								</div>
 							</div>
 
+							<div class="field">
+								<label class="label">Any achievements you are keen on sharing with us? <span class="help is-danger is-inline">*</span></label>
+								<div class="control">
+									<textarea required class="textarea" id = "achievements" cols = "30" rows = "5" placeholder="For example winning IOI, IMO or participating in a hackathon."></textarea>
+									<p id="achievements_error" class="help is-danger hidden"></p>
+								</div>
+							</div>
+
 
 
 
@@ -340,6 +350,67 @@
 								</div>
 							</div>
 
+							<button id = "5" class = "button is-primary is-light save_and_continue" style="margin-top: 0;">Save And Continue</button>
+			
+						</div>
+
+						<div class = "hidden" id = "form-part6">
+
+							<h1 class="title primary"> Consent </h1>
+
+							<div class="field">
+								<div class="control">
+									<span><input id = "consent_hk_privacy" type = "checkbox" required> <label> 
+										I have read and accept <a href = "https://hackkosice.com/privacy-policy/"> Hack Kosice Privacy Policy </a>. 
+									<span class="help is-danger is-inline">*</span></label></span>
+									<p id="consent_hk_privacy_error" class="help is-danger hidden"></p>
+								</div>
+							</div>
+
+							<div class="field">
+								<div class="control">
+									<span><input id = "consent_coc" type = "checkbox" required> <label> 
+										I have read and accept <a href = "https://static.mlh.io/docs/mlh-code-of-conduct.pdf"> MLH Code of Conduct </a>. 
+									<span class="help is-danger is-inline">*</span></label></span>
+									<p id="consent_coc_error" class="help is-danger hidden"></p>
+								</div>
+							</div>
+
+							<div class="field">
+								<div class="control">
+									<span><input id = "consent_cvs" type = "checkbox" required> <label>
+										authorize to share my application/registration information, including the CV, with partners of Hack Kosice. 
+										We, or our partners, may perform processing on and make use of the data in your application for recruiting purposes.
+									<span class="help is-danger is-inline">*</span></label></span>
+									<p id="consent_cvs_error" class="help is-danger hidden"></p>
+								</div>
+							</div>
+
+							<div class="field">
+								<div class="control">
+									<span><input id = "consent_mlh_privacy" type = "checkbox" required> <label> 
+										I authorize to share my application/registration information for event administration, ranking, MLH administration, pre- and post-event 
+										informational e-mails, and occasional messages about hackathons in-line with the  <a href = "https://mlh.io/privacy">MLH Privacy Policy</a>. 
+										I further agree to the terms of both the <a href = "https://mlh.io/terms"> MLH Contest Terms and Conditions</a> and the <a href = "https://mlh.io/privacy">MLH Privacy Policy</a>.
+									<span class="help is-danger is-inline">*</span></label></span>
+									<p id="consent_mlh_privacy_error" class="help is-danger hidden"></p>
+								</div>
+							</div>
+
+							<div class="field">
+								<div class="control">
+									<span><input id = "consent_photos" type = "checkbox" required> <label> 
+										Photos will be taken at the event by the Hack Kosice organisers and/or by an external party such as MLH. 
+										I agree that photos from the event can be taken, used for internal and marketing purposes, shared with our sponsors and partners, including MLH. 
+										I also grant Hack Kosice, MLH and other partners the permission to record and publish photos and video of the event and the exclusive right 
+										to produce commercial video content.
+									<span class="help is-danger is-inline">*</span></label></span>
+									<p id="consent_photos_error" class="help is-danger hidden"></p>
+								</div>
+							</div>
+
+							<!--Saving Application-->
+
 							<article class="message is-info">
 								<div class="message-header">
 									<p>Saving your application</p>
@@ -353,14 +424,11 @@
 									</ul>
 								</div>
 							</article>
-
-							<button id = "5" class = "button is-primary is-light save_and_continue" style="margin-top: 0;">Save And Continue Later</button> <br>
+							<button id = "6" class = "button is-primary is-light save_and_continue" style="margin-top: 0;">Save And Continue Later</button><br>
 							<button id = "save_and_close" class="button is-primary mt-2">Send For Review</button>
-			
 						</div>
 
-						<p class="help is-danger">* required field</p>
-
+						<p class="help is-danger">* Required field</p>
 					</div>
 
 				</div>
@@ -380,3 +448,7 @@
 
 	</body>
 </html>
+
+
+<!--Sussy Sus!-->
+<!--Well, Pokemon #591-->

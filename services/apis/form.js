@@ -74,7 +74,7 @@ module.exports = class FormApiEndpoints {
 
 
                 //Check if applicaton progress is within bounds
-                if (typeof req.body.application_progress === 'number' && req.body.application_progress > 5)
+                if (typeof req.body.application_progress === 'number' && req.body.application_progress > 6)
                     return error(res, 400, "Application update failed! Error: applicaton_progress invalid or out of bounds!"); 
                 
                 //A bit of a hack, but only write the application progress, if it's greater than the one already in the db
@@ -108,7 +108,7 @@ module.exports = class FormApiEndpoints {
             const status = await this.#db.get("SELECT `application_progress`, `application_status` FROM applications WHERE `mymlh_uid`=?;", verification.uid);
             
             //If application isn't finnished, you shouldn't be able to close it
-            if (typeof status[0].application_progress === 'undefined' || status[0].application_progress < 5)
+            if (typeof status[0].application_progress === 'undefined' || status[0].application_progress < 6)
                 return error(res, 400, "Server is unable to close the application! Error: Application non-existant or not yet finnished!");
             
             //If application has already been closed, you shouldn't be able to close it
@@ -185,5 +185,11 @@ const whitelist = {
 	"site": "site",
 	"github": "github",
 	"devpost": "devpost",
-	"linkedin": "linkedin"
+	"linkedin": "linkedin",
+    "consent_hk_privacy": "consent_hk_privacy",
+    "consent_coc": "consent_coc",
+    "consent_cvs": "consent_cvs",
+    "consent_mlh_privacy": "consent_mlh_privacy",
+    "consent_photos": "consent_photos",
+    "achievements": "achievements"
 }
