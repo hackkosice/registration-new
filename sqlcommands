@@ -18,6 +18,7 @@ CREATE TABLE "applications" (
 	"job_preference"	TEXT,
 	"cv_file_id"	INTEGER,
 	"skills"	TEXT,
+	"achievements" TEXT,
 	"excited_hk22"	TEXT,
 	"hear_hk22"	TEXT,
 	"first_hack_hk22"	TEXT,

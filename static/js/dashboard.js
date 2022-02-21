@@ -18,7 +18,7 @@ const statusData = {
 const reimbData = {
     "none": {
         class: "is-error",
-        title: "Status: None",
+        title: "Status: Not Requested",
         description: "You have not requested travel reimbursement in your application."
     },
     "requested": {
@@ -30,12 +30,8 @@ const reimbData = {
 };
 window.onload = async function() {
 
-    
-    var fetches = [];
-   
-    fetches.push(fetch("/api/form-data", {method: 'POST', credentials: 'same-origin'}).then(
-        async (response) => {
-            const formdata = await response.json(); 
+    await fetch("/api/form-data", {method: 'POST', credentials: 'same-origin'})
+    .then(res => res.json()).then((formdata) => {
             window.formdata = formdata;
 
             if (typeof window.formdata.application_status === 'undefined')
@@ -58,18 +54,11 @@ window.onload = async function() {
                 $("edit-application").classList.add("hidden");
                 $("close-application").classList.add("hidden");
             }
-        })
-    );
+        });
+
 
     //So we can ease the load on the server at least a bit 
-    fetches.push(load_team());
-
-    //Resolve all promises
-    try {
-        await Promise.all(fetches);
-    } catch (err) {
-
-    }
+    await load_team(); 
 
     //Add callback
     $("join").addEventListener('click', async () => {
@@ -165,10 +154,9 @@ window.onload = async function() {
 }
 
 
-async function load_team() {
-    return fetch("/api/team-info", {method: 'POST', credentials: 'same-origin', cache: 'force-cache'}).then(
-        async (response) => {
-            const teamdata = await response.json();
+function load_team() {
+    return fetch("/api/team-info", {method: 'POST', credentials: 'same-origin', cache: 'force-cache'})
+    .then(res => res.json()).then((teamdata) => {
             window.teamdata = teamdata;
 
             //If user isn't in the team, server is gonna return an empry objecet
@@ -176,22 +164,22 @@ async function load_team() {
                 return;
 
             let root = document.createElement("table");
-            root.classList.add("table", "is-fullwidth")
+            root.classList.add("table", "is-fullwidth");
             root.id = "team_table";
 
-            let header = document.createElement("tr")
+            let header = document.createElement("tr");
 
-            let name_header = document.createElement("th")
-            name_header.textContent = "Name"
-            header.appendChild(name_header)
+            let name_header = document.createElement("th");
+            name_header.textContent = "Name";
+            header.appendChild(name_header);
 
-            let status_header = document.createElement("th")
-            status_header.textContent = "Application status"
-            header.appendChild(status_header)
+            let status_header = document.createElement("th");
+            status_header.textContent = "Application status";
+            header.appendChild(status_header);
 
-            let owner_header = document.createElement("th")
-            owner_header.textContent = "Team role"
-            header.appendChild(owner_header)
+            let owner_header = document.createElement("th");
+            owner_header.textContent = "Team role";
+            header.appendChild(owner_header);
 
 
             root.appendChild(header);
@@ -215,6 +203,32 @@ async function load_team() {
                 }
 
                 row.appendChild(owner);
+
+                //If you are owner, add the ablility to kick memers
+                if (teamdata.data.owner === window.formdata.mymlh_uid &&
+                    teamdata.data.owner !== member.mymlh_uid) {
+
+                        
+                    let kick_link = document.createElement("a");
+                    kick_link.href = "javascript:void(0)";
+                    kick_link.textContent = "kick";
+                    kick_link.addEventListener('click', async () => {
+                        await fetch("/api/team-kick", {method: 'POST', credentials: 'same-origin',
+                            headers: {
+                                'Content-Type': 'application/json;charset=utf-8'
+                            }, 
+                            body: JSON.stringify({
+                                target: member.mymlh_uid
+                            })
+                        })
+                        window.location = window.location;
+                    });
+
+
+                    let kick = document.createElement("td");
+                    kick.appendChild(kick_link);
+                    row.appendChild(kick);
+                }
 
                 root.appendChild(row);
             }

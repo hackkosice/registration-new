@@ -149,7 +149,8 @@ module.exports = class TeamsApiEndpoints {
 
         try {
 
-            const owner = await this.#db.get("SELECT `owner` FROM teams WHERE `team_id`=?;", [req.body.team_id]);
+            const team = await this.#db.get("SELECT `team_id` FROM applications WHERE `mymlh_uid`=?;", [verification.uid]);
+            const owner = await this.#db.get("SELECT `owner` FROM teams WHERE `team_id`=?;", [team[0].team_id]);
 
             if (typeof owner[0] === 'undefined')
                 return error(res, 400, "Selected team does not exist!");
@@ -160,6 +161,14 @@ module.exports = class TeamsApiEndpoints {
             if (req.body.target === owner[0].owner)
                 return error(res, 400, "Error: Owner can't kick self!");
 
+            const target_team = await this.#db.get("SELECT `team_id` FROM applications WHERE `mymlh_uid`=?;", [req.body.target]);
+
+            if (typeof target_team[0] === 'undefined')
+                return error(res, 400, "Target user does not exist");
+            
+            if (target_team[0].team_id !== team[0].team_id)
+                return error(res, 400, "You are not on the same team!");
+                
             //Remove user from the team
             await this.#db.insert("UPDATE applications SET `team_id`=? WHERE `mymlh_uid`=?;", [null, req.body.target]);
             

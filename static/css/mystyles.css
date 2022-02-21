@@ -7843,8 +7843,8 @@ a.has-text-danger-dark:hover, a.has-text-danger-dark:focus {
         padding: 18rem 6rem; } }
 
 .footer {
-  background-color: #fafafa;
-  padding: 3rem 1.5rem 6rem; }
+  background-color: #5e2137;
+  padding: 1.5rem 1.5rem 1.5rem 1.5rem; }
 
 .loader-wrapper {
   position: absolute;
@@ -7880,3 +7880,6 @@ a.has-text-danger-dark:hover, a.has-text-danger-dark:focus {
 .save_and_continue, #save_and_close {
   margin-top: 2em;
   width: 100%; }
+
+body {
+  min-height: 100vw; }

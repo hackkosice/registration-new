@@ -10,6 +10,9 @@ $primary: $hkpurple;
 $link: $hkorange;
 $title-color: $hkpurple;
 
+$footer-background-color: #5e2137;
+$footer-padding: 1.5rem 1.5rem 1.5rem 1.5rem;
+
 @import "../node_modules/bulma/bulma.sass";
 
 //LOADER STYLES
@@ -57,4 +60,8 @@ $title-color: $hkpurple;
   margin-top: 2em;
 
   width: 100%;
+}
+
+body {
+  min-height: 100vw;
 }
