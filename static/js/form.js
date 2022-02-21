@@ -14,7 +14,8 @@ const MAX_CV_SIZE = 10000000;
 const parts = [
     { //Part 1: nothing (mymlh uid is obtained from verification token)
         fields: [],
-        functions: []
+        functions: [],
+        requirements: []
     },
 
     { //Part 2: Travel & etc
@@ -26,12 +27,12 @@ const parts = [
     },
 
     { //Part 3: Job
-        fields: ["job_preference", "skills", "cv_file_id"],
+        fields: ["job_preference", "skills", "cv_file_id", "achievements"],
         functions: [null,
                     () => { return get_all_skills(); },
-                    () => { return 0 }],
+                    () => { return 0 }, null],
         requirements: [null,
-                       () => { return $("skills_wrap").children.length > 2; }]
+                       () => { return $("skills_wrap").children.length >= 3; }, () => {}, null]
 
     },
 
@@ -50,11 +51,11 @@ const parts = [
     },
 
     { //Part 6: consents
-        fields: ["guardian_name", "guardian_birth", "consent_hk_privacy", "consent_coc", "consent_cvs", "consent_mlh_privacy", "consent_photos"],
-        functions: [null, null, () => { return $("consent_hk_privacy").checked ? "true" : "false"; }, 
+        fields: ["consent_hk_privacy", "consent_coc", "consent_cvs", "consent_mlh_privacy", "consent_photos"],
+        functions: [() => { return $("consent_hk_privacy").checked ? "true" : "false"; }, 
                     () => { return $("consent_coc").checked ? "true" : "false"; }, () => { return $("consent_cvs").checked ? "true" : "false"; },
                     () => { return $("consent_mlh_privacy").checked ? "true" : "false"; }, () => { return $("consent_photos").checked ? "true" : "false"; }],
-        requirements: [null, null, () => { return $("consent_hk_privacy").checked; }, 
+        requirements: [() => { return $("consent_hk_privacy").checked; }, 
         () => { return $("consent_coc").checked; }, () => { return $("consent_cvs").checked; },
         () => { return $("consent_mlh_privacy").checked; }, () => { return $("consent_photos").checked; }],
     }
@@ -200,15 +201,6 @@ window.onload = async function() {
         return;
 
 
-        
-    //Check, if user is older than 18
-    //If so, display two fields
-    if (!isAdult(window.userinfo.date_of_birth)) {
-        $("less_than_18").classList.remove("hidden");
-        $("guardian_name").required = true;
-        $("guardian_birth").required = true;
-    }
-
     autofill_form();
 }
 
@@ -272,10 +264,6 @@ async function save_callback(progress, noRedirect = false) {
         body["cv_file_id"] = await upload_cv();
     }
 
-    if (Number(progress) === 6) {
-
-    }
-
     fetch("/api/form-update", {method: 'POST', credentials: 'same-origin',
         headers: {
             'Content-Type': 'application/json;charset=utf-8'
@@ -312,6 +300,7 @@ function showError(elementId, errorMessage) {
 function hideError(elementId) {
     $(elementId).classList.remove("is-danger")
     $(`${elementId}_error`).classList.add("hidden");
+    console.log(elementId);
 }
 
 
@@ -408,6 +397,7 @@ function autofill_form() {
             part.value = window.formdata[part.id];
     }
         
+    $("achievements").value = window.formdata.achievements;
     $("excited_hk22").value = window.formdata.excited_hk22;
     $("spirit_animal").value = window.formdata.spirit_animal;
     $("pizza").value = window.formdata.pizza;

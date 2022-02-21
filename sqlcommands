@@ -28,8 +28,6 @@ CREATE TABLE "applications" (
 	"github"	TEXT,
 	"devpost"	TEXT,
 	"linkedin"	TEXT,
-	"guardian_name"	TEXT,
-	"guardian_birth"	TEXT,
 	"consent_hk_privacy"	TEXT,
 	"consent_coc"	TEXT,
 	"consent_cvs"	TEXT,
