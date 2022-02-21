@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang = "en">
+	
+	<head>
+
+		<title id = "title"> Hack Kosice registration </title>
+
+		<link rel = "icon" type = "image/png" sizes = "48x48" href = "images/favicon/favicon.png">
+		<link rel = "icon" type = "image/png" sizes = "192x192" href = "images/favicon/favicon-192.png">
+
+		<script async src = "/js/form.js"></script>
+		
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="/css/mystyles.css">
+
+	</head>
+
+	<body>
+
+		<!--This div is INVISIBLE, contains all suggestions for form (js generated)-->
+		<div id = "datasets">
+		</div>
+
+		<header style="padding: 0% 25%;">
+			<img src = "images/logo_oneline_purple.svg" alt = "Hack Kosice Logo"/>
+		</header>
+
+		<div class="container mb-6">
+			<nav class="panel">
+
+				<p class="panel-heading">
+					Hack Kosice 2022 Application
+				</p>
+
+				<div id="loader" class="loader-wrapper is-active">
+					<div class="loader is-loading"></div>
+				</div>
+
+				<p class="panel-tabs is-large">
+					<a href = "javascript:void(0)" class = "header_nav" id = "show_form-part1">Basic info</a>
+					<a href = "javascript:void(0)" class = "header_nav" id = "show_form-part2">Travel</a>
+					<a href = "javascript:void(0)" class = "header_nav" id = "show_form-part3">Skills</a>
+					<a href = "javascript:void(0)" class = "header_nav" id = "show_form-part4">Your projects</a>
+					<a href = "javascript:void(0)" class = "header_nav" id = "show_form-part5">Fun info</a>
+				  </p>
+
+				<div class="panel-block p-5" style="flex-direction: column;">
+
+					<div id = "application"ß>
+			
+						<div class = "hidden" id = "form-part1">
+							<h1 class="title primary">Basic info</h1>
+							<p class="mb-3">Here's the info we got from your MyMLH profile. Please, double check if it's accurate. If you wish to change it, do so in the settings of your MyMLH profile.</p>
+
+							<div class="field">
+								<label class="label">First Name <span class="help is-danger is-inline">*</span></label>
+								<div class="control">
+									<input class="input" type="text" placeholder="First name" id="firstname" disabled>
+								</div>
+							</div>
+							<div class="field">
+								<label class="label">Last Name <span class="help is-danger is-inline">*</span></label>
+								<div class="control">
+									<input class="input" type="text" placeholder="Last name" id="lastname" disabled>
+								</div>
+							</div>
+
+							<div class="field">
+								<label class="label">E-Mail <span class="help is-danger is-inline">*</span></label>
+								<div class="control">
+									<input class="input" type="text" placeholder="E-Mail" id="email" disabled>
+								</div>
+							</div>
+
+							<div class="field">
+								<label class="label">Phone Number <span class="help is-danger is-inline">*</span></label>
+								<div class="control">
+									<input class="input" type="text" placeholder="Last name" id="phone" disabled>
+								</div>
+							</div>
+
+							<div class="field">
+								<label class="label">Date of Birth (mm/dd/yyyy) <span class="help is-danger is-inline">*</span></label>
+								<div class="control">
+									<input class="input" type="date" placeholder="Last name" id="birth" disabled>
+								</div>
+							</div>
+			
+							<button id = "1" class = "button is-primary is-light save_and_continue">Save And Continue</button>
+						</div>
+
+						<div class = "hidden" id = "form-part2">
+							<h1 class="title primary"> Travel </h1>
+
+							<p class="mb-3">In this section we will ask you some questions regarding your travel to Košice.</p>
+
+							<div class="field">
+								<label class="label">From which country you would be traveling? <span class="help is-danger is-inline">*</span></label>
+								<div class="control">
+									<input class="input" placholder="Start typing country..." id = "travel_from" list = "countries" type = "text" required>
+									<p id="travel_from_error" class="help is-danger hidden"></p>
+								</div>
+							</div>
+
+							<div class="field">
+								<label class="label">Would you like to get travel reimbursement? <span class="help is-danger is-inline">*</span></label>
+								<div class="control" id = "reimbursement">
+									<label class="radio">
+									<input id = "reimbursement_y" name = "reimbursement" type="radio">
+									Yes
+									</label>
+									<label class="radio">
+									<input id = "reimbursement_n" name = "reimbursement" type="radio" checked>
+									No
+									</label>
+								</div>
+							</div>
+
+							<article class="message is-info">
+								<div class="message-header">
+									<p>Travel reimbursement info</p>
+								</div>
+								<div class="message-body content">
+									<ul class="mt-0">
+										<li>If you come from Slovakia, we sadly can not give you travel reimbursement.</li>
+										<li>If you come from neighbouring countries (i. e. Czechia, Poland, Ukraine, Hungary or Austria), you may receive travel reimbursement up to <b>20€.</b></li>
+										<li>If you don't come from countries listed above, you may receive travel reimbursement up to <b>50€.</b></li>
+									</ul>
+								</div>
+							</article>
+
+
+
+							<div class="field">
+								<label class="label">Do you need the invitation for travel visa? <span class="help is-danger is-inline">*</span></label>
+								<div class="control" id = "visa">
+									<label class="radio">
+									<input id = "visa_y" name = "visa" type="radio">
+									Yes
+									</label>
+									<label class="radio">
+									<input id = "visa_n" name = "visa" type="radio" checked>
+									No
+									</label>
+								</div>
+							</div>
+			
+							<button id = "2" class = "button is-primary is-light save_and_continue">Save And Continue</button>
+						</div>
+			
+						<div class = "hidden" id = "form-part3">
+			
+							<h1 class="title primary"> Skills & experience </h1>
+
+							<p class="mb-3">In this section we will ask you about your job experience and preferences. This info will be shared with our sponsors
+							which are looking for new talents. <b>We highly encourage you to upload your CV.</b> It increases your chance of being chosen to participate in our hackathon
+							as well as being noticed by our sponsors.</p>
+
+
+							<div class="field">
+								<label class="label">CV:</label>
+								<div class="control">
+									<div class="file has-name" id="cv_file_wrapper">
+										<label class="file-label">
+											<input class="file-input" id = "cv_file_id" type = "file" accept = ".pdf">
+											<span class="file-cta">
+											<span class="file-icon">
+											  <i class="fas fa-upload"></i>
+											</span>
+											<span class="file-label">
+											  Choose a file…
+											</span>
+										  </span>
+											<span id="cv-file-name" class="file-name">
+										  </span>
+										</label>
+									</div>
+									<p id="cv_file_wrapper_error" class="help is-danger hidden"></p>
+								</div>
+							</div>
+
+
+							<article class="message is-info">
+								<div class="message-header">
+									<p>Your skills and experience</p>
+								</div>
+								<div class="message-body content">
+									<ul class="mt-0">
+										<li>Although you've probably listed these in your CV, please use the textbox below to highlight your most interesting skills. This helps us to better
+										process your application.</li>
+										<li>To add a skill, either select the one from the drop-down menu or write your own and press
+											Enter. To remove the skill, simply click on the tag.</li>
+									</ul>
+								</div>
+							</article>
+
+							<div class="field">
+								<label class="label">Skills <span class="help is-danger is-inline">*</span></label>
+								<div class="control">
+									<div style="max-width: 400px;" id = "skills_wrap" class="is-flex is-justify-content-start is-flex-wrap-wrap"> 
+								
+									</div>
+									<input class="input" placholder="Start typing country..." id = "skills" type = "text" list = "skills_data" required>
+									<p id="skills_error" class="help is-danger hidden"></p>
+								</div>
+							</div>
+
+							<div class="field">
+								<label class="label">Are you open to work? Our sponsoring companies might reach out to you during or after the event.<span class="help is-danger is-inline">*</span></label>
+								<div class="control">
+									<div class="select">
+										<select id = "job_preference">
+											<option value = "none"> No, not Interested </option>
+											<option value = "internship"> Yes, I prefer Internship </option>
+											<option value = "part-time"> Yes, I prefer Part-time </option>
+											<option value = "full-time"> Yes, I prefer Full-time </option>
+										</select>
+									</div>
+								</div>
+							</div>
+
+
+
+
+							<button id = "3" class = "button is-primary is-light save_and_continue">Save And Continue</button>
+						</div>
+			
+						<div class = "hidden" id = "form-part4">
+
+							<h1 class="title primary"> Show us what you've built</h1>
+
+							<p class="mb-3">One project speaks 1000 words. Especially in the IT world. Use fields below to showcase examples of what you've already built.</p>
+
+							<div class="field">
+								<label class="label">Website</label>
+								<div class="control">
+									<input class="input" type="text" id = "site" placeholder = "https://mysite.com">
+								</div>
+							</div>
+
+							<div class="field">
+								<label class="label">GitHub</label>
+								<div class="control">
+									<input class="input" type="text" id = "github" placeholder = "https://github.com/hackkosice">
+								</div>
+							</div>
+
+							<div class="field">
+								<label class="label">Devpost</label>
+								<div class="control">
+									<input class="input" type="text" id = "devpost" placeholder = "https://devpost.com/user">
+								</div>
+							</div>
+
+							<div class="field">
+								<label class="label">LinkedIn</label>
+								<div class="control">
+									<input class="input" type="text" id = "linkedin" placeholder = "https://www.linkedin.com/in/user">
+								</div>
+							</div>
+
+
+
+							<button id = "4" class = "button is-primary is-light save_and_continue">Save And Continue</button>
+						</div>
+			
+						<div class = "hidden" id = "form-part5">
+							
+							<h1 class="title primary"> Let us know you better </h1>
+
+							<p class="mb-3">Here are some last informal questions for us to get to know you better. Hackathon is not only about coding but also about meeting new people and
+							having fun. Feel free to write anything you want in this final section of your application.</p>
+
+							<div class="field">
+								<label class="label">What are you excited about at Hack Kosice 2022? <span class="help is-danger is-inline">*</span></label>
+								<div class="control">
+									<textarea required class="textarea" id = "excited_hk22" cols = "30" rows = "5" placeholder="I am excited about free pizza!"></textarea>
+									<p id="excited_hk22_error" class="help is-danger hidden"></p>
+								</div>
+							</div>
+
+							<div class="field">
+								<label class="label">How did you hear about Hack Kosice? <span class="help is-danger is-inline">*</span></label>
+								<div class="control">
+									<input class="input" type="text" id = "hear_hk22" list = "marketing_types" required>
+									<p id="hear_hk22_error" class="help is-danger hidden"></p>
+								</div>
+							</div>
+
+							<div class="field">
+								<label class="label">Is Hack Kosice 2022 your first hackathon? <span class="help is-danger is-inline">*</span></label>
+								<div class="control" id = "first_hack_hk22">
+									<label class="radio">
+									<input id = "firsthack_y" name = "firsthack" type="radio">
+									Yes
+									</label>
+									<label class="radio">
+									<input id = "firsthack_n" name = "firsthack" type="radio" checked>
+									No
+									</label>
+								</div>
+							</div>
+
+							<div class="field">
+								<label class="label">What is your spirit animal and why?</label>
+								<div class="control">
+									<textarea class="textarea" id = "spirit_animal" cols = "30" rows = "5" placeholder=""></textarea>
+								</div>
+							</div>
+
+							<div class="field">
+								<label class="label">What kind of pizza is your favourite?</label>
+								<div class="control">
+									<textarea class="textarea" id = "pizza" cols = "30" rows = "5" placeholder=""></textarea>
+								</div>
+							</div>
+
+							<div class="field">
+								<label class="label">T-Shirt Size <span class="help is-danger is-inline">*</span></label>
+								<div class="control">
+								  <div class="select">
+									<select id = "tshirt">
+										<option value = "xs"> xs </option>
+										<option value = "s"> s </option>
+										<option value = "m"> m </option>
+										<option value = "l"> l </option>
+										<option value = "xl"> xl </option>
+										<option value = "xxl"> xxl </option>
+									</select>
+								  </div>
+								</div>
+							</div>
+
+							<div class="field">
+								<label class="label">Dietary requirements <span class="help is-danger is-inline">*</span></label>
+								<div class="control">
+									<input class = "input" id = "diet" type = "text" list = "dietary_requirements" required/>
+									<p id = "diet_error" class = "help is-danger hidden">This field is required</p>
+								</div>
+							</div>
+
+							<article class="message is-info">
+								<div class="message-header">
+									<p>Saving your application</p>
+								</div>
+								<div class="message-body content">
+									<ul class="mt-0">
+										<li>By clicking <b>Save And Continue Later</b> you will save your application and continue to the dashboard. You can
+										still <b>edit</b> the application later.</li>
+										<li>By clicking <b>Send For a Review</b> you will close your application and <b>lock</b> all your information in. Our team can now see it
+										and start <b>reviewing</b> it. You can still visit the dashboard to see your current status.</li>
+									</ul>
+								</div>
+							</article>
+
+							<button id = "5" class = "button is-primary is-light save_and_continue" style="margin-top: 0;">Save And Continue Later</button> <br>
+							<button id = "save_and_close" class="button is-primary mt-2">Send For Review</button>
+			
+						</div>
+
+						<p class="help is-danger">* required field</p>
+
+					</div>
+
+				</div>
+
+			</nav>
+	
+
+	</div>
+
+    <footer>
+		<div class = "footer">
+			<div class = "content has-text-centered">
+				<p class = "has-text-white">Made with ❤️ by Hack Kosice</p>
+			</div>
+		</div>
+	</footer>
+
+	</body>
+</html>

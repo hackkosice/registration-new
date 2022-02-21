@@ -1,0 +1,51 @@
+DROP TABLE "applications";
+DROP TABLE "teams";
+DROP TABLE "votes";
+DROP TABLE "files";
+
+CREATE TABLE "applications" (
+	"application_id"	INTEGER UNIQUE,
+	"application_status" TEXT,
+	"application_progress" INTEGER,
+	"team_id"	INTEGER,
+	"mymlh_uid"	INTEGER UNIQUE,
+	"reimbursement"	TEXT,
+	"reimbursement_progress" TEXT,
+	"travel_from"	TEXT,
+	"visa"	TEXT,
+	"diet"	TEXT,
+	"tshirt"	TEXT,
+	"job_preference"	TEXT,
+	"cv_file_id"	INTEGER,
+	"skills"	TEXT,
+	"achievements" TEXT,
+	"excited_hk22"	TEXT,
+	"hear_hk22"	TEXT,
+	"first_hack_hk22"	TEXT,
+	"spirit_animal"	TEXT,
+	"pizza"	TEXT,
+	"site"	TEXT,
+	"github"	TEXT,
+	"devpost"	TEXT,
+	"linkedin"	TEXT,
+	PRIMARY KEY("application_id" AUTOINCREMENT)
+);
+CREATE TABLE "teams" (
+	"team_id"	INTEGER UNIQUE,
+	"team_code"	TEXT UNIQUE,
+	"team_name" TEXT UNIQUE, 
+	"owner" INTEGER,
+	PRIMARY KEY("team_id" AUTOINCREMENT)
+);
+CREATE TABLE "votes" (
+	"voter_uid"	INTEGER,
+	"score"	INTEGER,
+	"application_id"	INTEGER,
+	PRIMARY KEY("application_id")
+);
+CREATE TABLE "files" (
+	"file_id" INTEGER,
+	"file_name" TEXT,
+	"file_code" TEXT,
+	PRIMARY KEY("file_id" AUTOINCREMENT)
+);

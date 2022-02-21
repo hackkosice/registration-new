@@ -1,0 +1,85 @@
+@charset "utf-8";
+
+// Set your brand colors
+$hkpurple: #5e2137;
+$hkorange: #ef601f;
+
+// Update Bulma's global variables
+$family-sans-serif: "League Spartan Bold",sans-serif;
+$primary: $hkpurple;
+$link: $hkorange;
+$title-color: $hkpurple;
+
+$footer-background-color: #5e2137;
+$footer-padding: 1.5rem 1.5rem 1.5rem 1.5rem;
+$footer-height: 80px;
+
+@import "../node_modules/bulma/bulma.sass";
+
+//LOADER STYLES
+.loader-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background: #fff;
+  opacity: 0;
+  z-index: -1;
+  transition: opacity .3s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 6px;
+
+  .loader {
+    height: 80px;
+    width: 80px;
+  }
+
+  &.is-active {
+    opacity: 1;
+    z-index: 1;
+  }
+}
+
+.is-loading {
+  position: relative;
+}
+
+.hidden {
+  display: none;
+}
+
+#application {
+  @media screen and (min-width: $tablet) {
+    max-width: 45%;
+  }
+}
+
+.save_and_continue, #save_and_close {
+  margin-top: 2em;
+
+  width: 100%;
+}
+
+body {
+  min-height: 100vh;
+  position: relative;
+}
+
+body::after {
+  content: '';
+  display: block;
+  height: $footer-height;
+}
+
+.footer {
+  position: absolute;
+  width: 100%;
+  bottom: 0;
+  height: $footer-height;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang = "en">
+	
+	<head>
+
+		<title id = "title"> Hack Kosice registration </title>
+
+		<link rel = "icon" type = "image/png" sizes = "48x48" href = "images/favicon/favicon.png">
+		<link rel = "icon" type = "image/png" sizes = "192x192" href = "images/favicon/favicon-192.png">
+
+		<script async src = "/js/dashboard.js"></script>
+		
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="/css/mystyles.css">
+
+	</head>
+
+	<body>
+		<header style="padding: 0% 25%;">
+			<img src = "images/logo_oneline_purple.svg" alt = "Hack Kosice Logo"/>
+		</header>
+
+		<div class="container mb-6">
+			<nav class="panel">
+
+				<p class="panel-heading">
+					Hack Kosice 2022 Application
+				</p>
+
+				<div id="loader" class="loader-wrapper is-active">
+					<div class="loader is-loading"></div>
+				</div>
+
+				<div class="panel-block p-5" style="flex-direction: column;">
+					<div id="application">
+					<h1 class="title primary">Application status</h1>
+					<div id = "state_wrap">
+						<article class="message" id="status-card">
+							<div class="message-header">
+								<p id="state"></p>
+							</div>
+							<div class="message-body" id="description">
+							</div>
+						</article>
+
+						<a href="/application.html" id="edit-application">
+							<button class="button is-link mr-3">Edit application</button>
+						</a>
+						<a href="javascript:void(0)" id="close-application">
+							<button class="button is-primary">Send to review</button>
+						</a>
+					</div>
+
+					<div id="reimbursement" class="mt-4">
+					<h1 class="title primary">Reimbursement status</h1>
+					<div id = "reimb_wrap">
+						<article class="message" id="reimb-card">
+							<div class="message-header">
+								<p id="reimb"></p>
+							</div>
+							<div class="message-body" id="reimb_description">
+							</div>
+						</article>
+					</div>
+					</div>
+
+					<div id = "team">
+						<h1 class="title primary mt-6">Your team</h1>
+
+						<div class="field" id="join_wrap">
+							<label class="label">Join a team</label>
+							<div class="is-flex is-flex-direction-row">
+								<div class="control" style="width: 100%;">
+									<input class="input" id = "team_code" placeholder = "Team code goes here" type = "text">
+									<p id="team_code_error" class="help is-danger hidden"></p>
+								</div>
+								<button id = "join" class="button is-light is-link ml-2">Join!</button>
+							</div>
+						</div>
+
+						<div class="field" id="create_wrap">
+							<label class="label">Or create one!</label>
+							<div class="is-flex is-flex-direction-row">
+								<div class="control" style="width: 100%;">
+									<input class="input" id = "team_name" placeholder = "Give your team a catchy name!"  type = "text">
+									<p id="team_name_error" class="help is-danger hidden"></p>
+								</div>
+								<button id = "create" class="button is-light is-success ml-2">Create!</button>
+							</div>
+						</div>
+
+						<div class="hidden" id="team_info_wrap">
+							<p class="subtitle is-5 p-0 m-0 mb-2" id="team_name_label">Team name:</p>
+							<div class="content mb-2">
+								<p class="subtitle is-5 is-primary">Team code: <code id="team_code_label"></code></p>
+							</div>
+							<p class="subtitle is-5 is-primary">Team members:</p>
+						</div>
+					</div>
+			</nav>
+		</div>
+
+		<footer>
+			<div class = "footer">
+				<div class = "content has-text-centered">
+					<p class = "has-text-white">Made with ❤️ by Hack Kosice</p>
+				</div>
+			</div>
+		</footer>
+	</body>
+</html>
