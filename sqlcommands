@@ -44,9 +44,9 @@ CREATE TABLE "teams" (
 );
 CREATE TABLE "votes" (
 	"voter_uid"	INTEGER,
-	"score"	INTEGER,
-	"application_id"	INTEGER,
-	PRIMARY KEY("application_id")
+	"score"	REAL,
+	"mymlh_uid"	INTEGER,
+	PRIMARY KEY("mymlh_uid")
 );
 CREATE TABLE "files" (
 	"file_id" INTEGER,

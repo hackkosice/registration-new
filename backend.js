@@ -5,13 +5,19 @@ const cookie_parser         = require('cookie-parser');
 const dotenv                = require('dotenv').config();
 const fileUpload            = require('express-fileupload');
 
-
 const MyMLH                 = require('./services/auth/mymlh.js');
 const Mailer                = require('./services/email/email.js');
 const Database              = require('./services/database/sqlite3.js'); //swap provider when needed
 
+//Implement caching
+const MyMLHUserCache        = require('./services/caching/mlh-usercache.js');
+
+//Implement API endpoints
 const FormApiEndpoints      = require('./services/apis/form.js');
 const TeamsApiEndpoints     = require('./services/apis/teams.js');
+const JudgeApiEndpoints     = require('./services/apis/judge.js');
+
+
 
 (async function main() {
     const app     = express();
@@ -34,7 +40,7 @@ const TeamsApiEndpoints     = require('./services/apis/teams.js');
     const mailer = new Mailer(key);
     
     // Database Connection
-    var db_connection = null;
+    let db_connection = null;
 
     if (Database.provider !== "sqlite")
         db_connection = new Database(process.env.SQL_UNAME, process.env.SQL_PASS);
@@ -42,11 +48,16 @@ const TeamsApiEndpoints     = require('./services/apis/teams.js');
         db_connection = new Database(); //sqlite connects to a file, no username and password needed
 
     //Start MLH api
-    var mlh_auth = new MyMLH(process.env.MLH_APP_ID, process.env.MLH_APP_SECRET, process.env.JWT_SECRET);    
-    
+    let mlh_auth = new MyMLH(process.env.MLH_APP_ID, process.env.MLH_APP_SECRET, process.env.JWT_SECRET);
+
+    //Set up cache
+    let mlh_cache = new MyMLHUserCache(mlh_auth);
+    await mlh_cache.build();
+
     //Start APIs
-    var form_api = new FormApiEndpoints(db_connection, process.env.JWT_SECRET, mailer, mlh_auth);
-    var team_api = new TeamsApiEndpoints(db_connection, process.env.JWT_SECRET, mlh_auth);
+    let form_api = new FormApiEndpoints(db_connection, process.env.JWT_SECRET, mailer, mlh_auth);
+    let team_api = new TeamsApiEndpoints(db_connection, process.env.JWT_SECRET, mlh_cache);
+    let judge_api = new JudgeApiEndpoints(db_connection, process.env.JWT_SECRET, mlh_cache);
 
     //Bind api calls
     router.get("/oauth", async (req, res) => { mlh_auth.auth_callback(req, res) });  //Node has a hella weird callback system
@@ -84,10 +95,18 @@ const TeamsApiEndpoints     = require('./services/apis/teams.js');
         async (req, res) => { team_api.team_kick_endpoint(req, res) }); 
     router.post("/api/team-info", 
         async (req, res, next) => { team_api.team_auth_middleware(req, res, next) },
-        async (req, res) => { team_api.team_info_endpoint(req, res) }); 
-    
-    router.post("/api/admin", async () => {});
-    router.post("/api/judge", async () => {});    
+        async (req, res) => { team_api.team_info_endpoint(req, res) });
+
+    router.post("/api/judge-vote",
+        async (req, res, next) => { judge_api.judge_auth_middleware(req, res, next) },
+        async (req, res) => {  });
+    router.post("/api/judge-scoreboard",
+        async (req, res, next) => { judge_api.judge_auth_middleware(req, res, next) },
+        async (req, res) => { judge_api.get_judge_scoreboard_endpoint(req, res) });
+    router.post("/api/judge-application-scoreboard",
+        async (req, res, next) => { judge_api.judge_auth_middleware(req, res, next) },
+        async (req, res) => { judge_api.get_applications_scoreboard_endpoint(req, res) });
+
 
     //Bind static content
     app.use("/", express.static("./static"));

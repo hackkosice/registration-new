@@ -13,11 +13,11 @@ function error(res, status, msg) {
 
 module.exports = class TeamsApiEndpoints {
 
-    constructor(database, jwt_key, mymlh_api) {
+    constructor(database, jwt_key, mlh_cache) {
 
         this.#db = database;
         this.#jwt_key = jwt_key;
-        this.#mymlh = mymlh_api;
+        this.#cache = mlh_cache;
     }
     
     async team_auth_middleware(req, res, next) {
@@ -182,8 +182,6 @@ module.exports = class TeamsApiEndpoints {
     async team_info_endpoint(req, res) {
 
         let verification = req.verification;
-
-        const users = await this.#mymlh.get_all_users();
         const team_id = await this.#db.get("SELECT `team_id` FROM applications WHERE `mymlh_uid`=?;", [verification.uid]); 
 
         if (typeof team_id[0] === 'undefined')
@@ -191,24 +189,26 @@ module.exports = class TeamsApiEndpoints {
 
         if (team_id[0].team_id === null)
             return res.status(200).send({});
-;
+
         const team_members = await this.#db.get("SELECT `mymlh_uid`, `application_status` FROM applications WHERE `team_id`=?;", [team_id[0].team_id]);
         const team_data = await this.#db.get("SELECT * FROM teams WHERE `team_id`=?;", [team_id[0].team_id])
 
-        var result = [];
+        let result = [];
 
-        for (const user of users) {
-            for (const member of team_members)
-                if(user.id === member.mymlh_uid) {
-                    result.push({
-                        mymlh_uid: member.mymlh_uid,
-                        application: member.application_status,
-                        name: (user.first_name + " " + user.last_name)
-                    });
-                    break;
-                }
+
+        for (const member of team_members){
+
+            const user = await this.#cache.get(member.mymlh_uid);
+            if (typeof user.error !== 'undefined')
+                continue;
+
+            result.push({
+                mymlh_uid: member.mymlh_uid,
+                application: member.application_status,
+                name: (user.first_name + " " + user.last_name)
+            });
+
         }
-
 
 
         res.status(200).send({
@@ -220,5 +220,5 @@ module.exports = class TeamsApiEndpoints {
 
     #db = null;
     #jwt_key = null;
-    #mymlh = null;
+    #cache = null;
 }
