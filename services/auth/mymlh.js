@@ -36,7 +36,7 @@ module.exports =  class MyMLH {
         let path = "./application.html";
 
         if (user.data.email.endsWith('@hackkosice.com'))
-            ;//path = "./judge/dashboard.html";
+            path = "./judge/dashboard.html";
 
         //Generate authentication token
         const usr_token = jwt.sign({
