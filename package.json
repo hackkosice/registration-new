@@ -4,6 +4,7 @@
   "description": "HK application portal",
   "main": "backend.js",
   "scripts": {
+    "copy-scripts": "cp ./node_modules/argon2-browser/dist/argon2-bundled.min.js ./static/js",
     "css-build": "node-sass --omit-source-map-url sass/mystyles.scss static/css/mystyles.css",
     "start": "NODE_ENV=development nodemon backend.js",
     "start:production": "NODE_ENV=production node backend.js"
@@ -20,6 +21,7 @@
   "homepage": "https://github.com/hackkosice/registration-new#readme",
   "dependencies": {
     "@mailchimp/mailchimp_transactional": "^1.0.47",
+    "argon2-browser": "^1.18.0",
     "better-sqlite3": "^7.5.0",
     "body-parser": "^1.19.1",
     "cookie-parser": "^1.4.6",

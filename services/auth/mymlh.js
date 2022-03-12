@@ -32,17 +32,12 @@ module.exports =  class MyMLH {
         const user_res = await fetch("https://my.mlh.io/api/v3/user.json?access_token=" + token.access_token, {method: 'GET'});
         const user = await user_res.json();
 
-        //If user is not from judging team, determine if he has already completed his application or not
-        let path = "./application.html";
-
-        if (user.data.email.endsWith('@hackkosice.com'))
-            path = "./judge/dashboard.html";
+        const path = "./application.html";
 
         //Generate authentication token
         const usr_token = jwt.sign({
             uid: user.data.id,
             token: token.access_token,
-            is_admin: user.data.email.endsWith('@hackkosice.com')
         }, this.#jwt_key, { expiresIn: '12h'});
     
         res.cookie('verification', usr_token, { 
