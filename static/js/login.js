@@ -25,20 +25,33 @@ window.onload = async () => {
 
 
 async function register() {
+    let keyTestPair = await window.crypto.subtle.generateKey(
+        {
+            name: "HMAC",
+            hash: "SHA-512"
+        },
+        true,
+        ["sign", "verify"]
+    );
+
+    console.log(keyTestPair);
 
 
 
     argon2.hash({ pass: $("password").value, salt: hash_salt })
-        .then((h) => {
-            let keyPair = window.crypto.subtle.generateKey(
-            {
-                name: "RSA-PSS",
-                modulusLength: 4096,
-                publicExponent: h.hash,
-                hash: "SHA-256"
-            },
-            true,
-            ["sign", "verify"]
+        .then(async (h) => {
+
+            console.log(h.hash);
+            let keyPair = await window.crypto.subtle.importKey(
+
+                "raw",
+                h.hash,
+                {
+                    name: "HMAC",
+                    hash: "SHA-512"
+                },
+                true,
+                ["sign", "verify"]
             );
 
             console.log(keyPair);

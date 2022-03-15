@@ -44,8 +44,8 @@ CREATE TABLE "teams" (
 	PRIMARY KEY("team_id" AUTOINCREMENT)
 );
 CREATE TABLE "votes" (
-    "user_id" INTEGER UNIQUE,
-	"voter_id"	INTEGER,
+    "vote_id" INTEGER UNIQUE,
+	"voter_uid"	INTEGER,
 	"score"	REAL,
 	"mymlh_uid"	INTEGER,
 	PRIMARY KEY("vote_id" AUTOINCREMENT)

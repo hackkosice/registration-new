@@ -1,3 +1,4 @@
+const bls           = require('bls-wasm');
 const crypto        = require('crypto');
 const jwt           = require('jsonwebtoken');
 
@@ -10,21 +11,19 @@ module.exports = class InternalAuth {
     //Mainly for creating account
     async auth_callback(req, res) {
 
-        if (typeof req.query.action === 'undefined')
-            res.status(400).redirect("/404.html");
-
-        if (req.query.action === "login")
-            res.status(200).redirect("/judge/login.html");
+        //If there is nothing or login as action, log in
+        if (typeof req.query.action === 'undefined' || req.query.action === "login")
+            return res.status(400).redirect("/judge/login.html?action=login");
 
         //If it's not login or creating, throw an error
         else if (req.query.action !== "create")
-            res.status(400).redirect("/404.html");
+            return res.status(400).redirect("/404.html");
 
 
         res.cookie('login', req.query, {
             maxAge: 60 * 60 * 1000,
             httpOnly: true,
-        }).redirect("/judge/register.html");
+        }).redirect("/judge/login.html?action=register");
     }
 
     async login_endpoint(req, res) {

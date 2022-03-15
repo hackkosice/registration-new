@@ -100,7 +100,10 @@ const JudgeApiEndpoints     = require('./services/apis/judge.js');
 
     router.post("/api/judge-vote",
         async (req, res, next) => { judge_api.judge_auth_middleware(req, res, next) },
-        async (req, res) => {  });
+        async (req, res) => { judge_api.cast_vote_endpoint(req, res) });
+    router.post("/api/judge-application",
+        async (req, res, next) => { judge_api.judge_auth_middleware(req, res, next) },
+        async (req, res) => { judge_api.get_application_endpoint(req, res) });
     router.post("/api/judge-scoreboard",
         async (req, res, next) => { judge_api.judge_auth_middleware(req, res, next) },
         async (req, res) => { judge_api.get_judge_scoreboard_endpoint(req, res) });

@@ -36,27 +36,63 @@ module.exports = class VotingApiEndpoints {
 
         req.verification = verification;
 
-        if (!verification.is_admin)
-        return error(res, 403, "Access denied!");
+        //if (!verification.is_admin)
+        //return error(res, 403, "Access denied!");
 
         next();
     }
 
     async get_application_endpoint(req, res) {
-        const rated = await this.#db.get("SELECT `application_id` FROM votes WHERE `voter_uid`=?;", [req.verification.uid]);
+        const rated = await this.#db.get("SELECT `mymlh_uid` FROM votes WHERE `voter_uid`=?;", [req.verification.uid]);
 
         //pick one that has not been rated
         let closed = await this.#db.get("SELECT * FROM applications WHERE `application_status`=?;", ["closed"]);
 
+        if (closed.length === 0 || rated.length === closed.length)
+            return res.status(200).send({
+                info: "All Done! There is nothing more to vote on!"
+            });
+
         //pick a random one
+        while (true) {
+            let picked = closed[Math.floor(Math.random() * closed.length)];
+
+            let was_rated = false;
+            for (const item of rated) {
+                if (item.application_id === picked.application_id) {
+                    was_rated = true;
+                    break;
+                }
+            }
+
+            if (!was_rated) {
+                const user = await this.#cache.get(picked.mymlh_uid);
+                return res.status(200).send({
+                    user: {
+                        name: `${user.first_name} ${user.last_name}`,
+                        school: `${user.school.name}`,
+                        level: `${user.level_of_study}`,
+                        major: `${user.major}`,
+                        birth: `${user.date_of_birth}`
+                    },
+                    form: picked
+                });
+            }
+        }
     }
 
     async cast_vote_endpoint(req, res) {
 
-    }
+        if (req.body.score < 0 || req.body.score > 10)
+            return error(res, 400, "Score must be between 0 and 10!");
 
-    async get_application_count_endpoint(req, res) {
+        const rating = await this.#db.get("SELECT * FROM votes WHERE `voter_uid`=? AND `mymlh_uid`=?;", [req.verification.uid, req.body.uid]);
 
+        if (typeof rating[0] !== 'undefined')
+            return error(res, 403, "Voter has already voted on this application!");
+
+        await this.#db.insert("INSERT INTO votes(`voter_uid`, `score`, `mymlh_uid`) VALUES (?, ?, ?);", [req.verification.uid, req.body.score, req.body.uid]);
+        res.status(200).send("ok");
     }
 
     //Probably the most expensive call

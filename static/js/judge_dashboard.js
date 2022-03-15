@@ -1,4 +1,4 @@
-
+$ = (element) => { return document.getElementById(element); };
 
 window.onload = async function () {
 
@@ -10,66 +10,8 @@ window.onload = async function () {
             if (typeof scoreboard.error !== 'undefined')
                 window.location = "/";
 
-            let root = document.createElement("table");
-            root.classList.add("table", "is-fullwidth");
-            root.id = "applications_table";
-
-            let header = document.createElement("tr");
-
-            let empty = document.createElement("th");
-            header.appendChild(empty);
-
-            let name_header = document.createElement("th");
-            name_header.textContent = "Name";
-            header.appendChild(name_header);
-
-            let score_header = document.createElement("th");
-            score_header.textContent = "Score";
-            header.appendChild(score_header);
-
-            let votes_header = document.createElement("th");
-            votes_header.textContent = "Votes";
-            header.appendChild(votes_header);
-
-            let status_header = document.createElement("th");
-            status_header.textContent = "Application status";
-            header.appendChild(status_header);
-
-            root.appendChild(header);
-
-            for (const user of scoreboard) {
-                let row = document.createElement("tr");
-
-                console.log(user);
-
-                let selector_chkbox = document.createElement("input");
-                selector_chkbox.type = "checkbox";
-                selector_chkbox.id = user.mymlh_uid; //User is MyMLH uid
-                selector_chkbox.class = "user_chkbox";
-
-                let selector = document.createElement("td");
-                selector.appendChild(selector_chkbox);
-
-                let name = document.createElement("td");
-                name.textContent = user.name;
-
-                let score = document.createElement("td");
-                score.textContent = Math.round(user.score * 100) / 100;
-
-                let votes = document.createElement("td");
-                votes.textContent = user.judged;
-
-                let status = document.createElement("td")
-                status.textContent = user.status;
-
-                row.appendChild(selector);
-                row.appendChild(name);
-                row.appendChild(score);
-                row.appendChild(votes);
-                row.appendChild(status);
-                root.appendChild(row);
-            }
-            document.getElementById("user_scoreboard").appendChild(root);
+            window.scoreboard = scoreboard;
+            sort_table();
         })
     );
 
@@ -83,7 +25,7 @@ window.onload = async function () {
                 else if (first.votes > second.votes)
                     return -1;
                 return 0;
-            } )
+            });
 
             if (typeof scoreboard.error !== 'undefined')
                 window.location = "/";
@@ -126,8 +68,120 @@ window.onload = async function () {
     } catch(err) {
         window.location = "/";
     }
+
+    $("sort").addEventListener('click', () => {
+        sort_table();
+    });
+
+    $("vote").addEventListener('click', () => {
+        window.location = "/judge/application.html"; 
+    });
 }
 
 async function sort_table() {
 
+    //Apply any sorting
+    window.scoreboard.sort((first, second) => {
+
+        switch ($("param_sort").value) {
+            case "des_score":
+                if (first.score < second.score)
+                    return 1;
+                else if (first.score > second.score)
+                    return -1;
+                return 0;
+
+            case "asc_score":
+                if (first.score > second.score)
+                    return 1;
+                else if (first.score < second.score)
+                    return -1;
+                return 0;
+
+            case "des_votes":
+                if (first.judged < second.judged)
+                    return 1;
+                else if (first.judged > second.judged)
+                    return -1;
+                return 0;
+
+            case "asc_votes":
+                if (first.judged < second.judged)
+                    return 1;
+                else if (first.judged > second.judged)
+                    return -1;
+                return 0;
+        }
+    });
+
+    //Remove old table
+    if ($("applications_table") !== null)
+        $("user_scoreboard").removeChild($("applications_table"));
+
+    //Build up new table
+    let root = document.createElement("table");
+    root.classList.add("table", "is-fullwidth");
+    root.id = "applications_table";
+
+    let header = document.createElement("tr");
+
+    let empty = document.createElement("th");
+    header.appendChild(empty);
+
+    let name_header = document.createElement("th");
+    name_header.textContent = "Name";
+    header.appendChild(name_header);
+
+    let score_header = document.createElement("th");
+    score_header.textContent = "Score";
+    header.appendChild(score_header);
+
+    let votes_header = document.createElement("th");
+    votes_header.textContent = "Votes";
+    header.appendChild(votes_header);
+
+    let status_header = document.createElement("th");
+    status_header.textContent = "Application status";
+    header.appendChild(status_header);
+
+    root.appendChild(header);
+
+    //Apply any filtering
+    for (const user of window.scoreboard) {
+
+        if ($("status_filter").value !== "all") {
+            if ($("status_filter").value !== user.status)
+                continue; //A bit of a hacky way to do it... but it works
+        }
+
+        let row = document.createElement("tr");
+
+        let selector_chkbox = document.createElement("input");
+        selector_chkbox.type = "checkbox";
+        selector_chkbox.id = user.mymlh_uid; //User is MyMLH uid
+        selector_chkbox.class = "user_chkbox";
+
+        let selector = document.createElement("td");
+        selector.appendChild(selector_chkbox);
+
+        let name = document.createElement("td");
+        name.textContent = user.name;
+
+        let score = document.createElement("td");
+        score.textContent = Math.round(user.score * 100) / 100;
+
+        let votes = document.createElement("td");
+        votes.textContent = user.judged;
+
+        let status = document.createElement("td")
+        status.textContent = user.status;
+
+        row.appendChild(selector);
+        row.appendChild(name);
+        row.appendChild(score);
+        row.appendChild(votes);
+        row.appendChild(status);
+        root.appendChild(row);
+    }
+    $("user_scoreboard").appendChild(root);
 }

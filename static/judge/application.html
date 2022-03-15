@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang = "en">
+
+<head>
+
+    <title id = "title"> Hack Kosice registration </title>
+
+    <link rel = "icon" type = "image/png" sizes = "48x48" href = "/images/favicon/favicon.png">
+    <link rel = "icon" type = "image/png" sizes = "192x192" href = "/images/favicon/favicon-192.png">
+
+    <script async src = "/js/judge_vote.js"></script>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/css/mystyles.css">
+
+</head>
+
+<body>
+
+<!--This div is INVISIBLE, contains all suggestions for form (js generated)-->
+<!--Use temp.kotol.cloud-->
+<div id = "datasets">
+</div>
+
+<header style="padding: 0% 25%;">
+    <img src = "/images/logo_oneline_purple.svg" alt = "Hack Kosice Logo"/>
+</header>
+
+<div class="voting-layout">
+
+    <div class = "columns is-fullwidth">
+        <div class="column is-three-fifths">
+
+            <p id = "box-title" class="panel-heading">
+                Application:
+            </p>
+
+            <div class="p-5 voting-application" style="flex-direction: column;">
+            <div id = "application_wrapper">
+                <div class = "field">
+                    <div class = "is-inline-flex">
+                        <label class="label">Name: </label>
+                        <p class = "ml-3" id = "name"></p>
+                    </div>
+                </div>
+
+                <div class = "field is-inline-flex">
+                    <div class = "is-inline-flex">
+                        <label class="label">Date of Birth: </label>
+                        <p class = "ml-3" id = "birth"></p>
+                    </div>
+                </div>
+
+                <div class = "field">
+                    <div class = "is-inline-flex">
+                        <label class="label">School: </label>
+                        <p class = "ml-3" id = "school"></p>
+                    </div>
+                </div>
+
+                <div class = "field is-inline-flex">
+                    <div class = "is-inline-flex">
+                        <label class="label">Major: </label>
+                        <p class = "ml-3" id = "major"></p>
+                    </div>
+                </div>
+
+                <div class = "field">
+                    <div class = "is-inline-flex">
+                        <label class="label">Level of education: </label>
+                        <p class = "ml-3" id = "grad"></p>
+                    </div>
+                </div>
+
+
+
+                <div class="field">
+                    <div class = "is-inline-flex">
+                        <label class="label">Country: </label>
+                        <p class = "ml-3" id = "travel_from"></p>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <div class = "is-inline-flex">
+                        <label class="label">Travel reimbursement:</label>
+                        <p class = "ml-3" id = "reimbursement"></p>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <div class = "is-inline-flex">
+                        <label class="label">Visa: </label>
+                        <p class = "ml-3" id = "visa"></p>
+                    </div>
+                </div>
+
+                    <div class="field">
+                        <label class="label">CV:</label>
+                        <div class="control">
+                            <div class="file has-name" id="cv_file_wrapper">
+                                <label class="file-label">
+                                    <input class="file-input" id = "cv_file_id" type = "file" accept = ".pdf">
+                                    <span class="file-cta">
+											<span class="file-icon">
+											  <i class="fas fa-upload"></i>
+											</span>
+											<span class="file-label">
+											  Choose a file…
+											</span>
+										  </span>
+                                    <span id="cv-file-name" class="file-name">
+										  </span>
+                                </label>
+                            </div>
+                            <p id="cv_file_wrapper_error" class="help is-danger hidden"></p>
+                        </div>
+                    </div>
+
+
+
+                <div class="field">
+                    <div class = "is-inline-flex">
+                        <label class="label">Skills: </label>
+                        <p class = "ml-3" id = "skills"></p>
+                    </div>
+                </div>
+
+                    <div class="field">
+                        <div class = "is-inline-flex">
+                            <label class="label">Job preference: </label>
+                            <p class = "ml-3" id = "job_preference"></p>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <div class = "is-inline-flex">
+                            <label class="label">Achievements: </label>
+                            <p class = "ml-3" id = "achievements"></p>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <div class = "is-inline-flex">
+                            <label class="label">Website: </label>
+                            <p class = "ml-3" id = "site"></p>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <div class = "is-inline-flex">
+                            <label class="label">GitHub: </label>
+                            <p class = "ml-3" id = "github"></p>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <div class = "is-inline-flex">
+                            <label class="label">Devpost: </label>
+                            <p class = "ml-3" id = "devpost"></p>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <div class = "is-inline-flex">
+                            <label class="label">LinkedIn: </label>
+                            <p class = "ml-3" id = "linkedin"></p>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label class="label">What are you excited about at Hack Kosice 2022?</label>
+                        <p id = "excited_hk22"></p>
+                    </div>
+
+                    <div class="field">
+                        <div class = "is-inline-flex">
+                            <label class="label">How did you hear about Hack Kosice?</label>
+                            <p class = "ml-3" id = "hear_hk22"></p>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <div class = "is-inline-flex">
+                            <label class="label">Is Hack Kosice 2022 your first hackathon?</label>
+                            <p class = "ml-3" id = "first_hack_hk22"></p>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label class="label">What is your spirit animal and why?</label>
+                        <p id = "spirit_animal"></p>
+                    </div>
+
+                    <div class="field">
+                        <label class="label">What kind of pizza is your favourite?</label>
+                        <p id = "pizza"></p>
+                    </div>
+
+                    <div class="field">
+                        <div class = "is-inline-flex">
+                            <label class="label">T-Shirt Size: </label>
+                            <p class = "ml-3" id = "tshirt"></p>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <div class = "is-inline-flex">
+                            <label class="label">Dietary requirements: </label>
+                            <p class = "ml-3" id = "diet"></p>
+                        </div>
+                    </div>
+                </div>
+        </div>
+        </div>
+
+        <div class="column">
+            <p class="panel-heading">
+                Scoring:
+            </p>
+            <div class = "p-3">
+                <div class = "columns">
+                    <div class = "field column">
+                        <label class="label">Tech skills: </label>
+                        <div class="control">
+                            <input type = "range" min = 0 max = 10 id = "tech">
+                        </div>
+                    </div>
+
+                    <div class = "field column">
+                        <label class="label">Effort: </label>
+                        <div class="control">
+                            <input type = "range" min = 0 max = 10 id = "effort">
+                        </div>
+                    </div>
+
+                    <div class = "field column">
+                        <label class="label">Bonus: </label>
+                        <div class="control">
+                            <input type = "range" min = 0 max = 10 id = "bonus">
+                        </div>
+                    </div>
+                </div>
+
+                <article class="message is-info">
+                    <div class="message-body content">
+                        <p>For more info on how to rate an application, visit here: </p>
+                        <a href = "https://www.notion.so/hackkosice/Reviewing-criteria-0147b3c66af34da48e7fe1cf6632e591"> https://www.notion.so/hackkosice/Reviewing-criteria-0147b3c66af34da48e7fe1cf6632e591</a>
+                    </div>
+                </article>
+
+                <button class = "button is-link is-fullwidth" id = "vote">Vote!</button>
+                <button class = "button is-primary is-fullwidth mt-2" id = "skip">Skip</button>
+                <button class = "button is-danger is-fullwidth mt-2" id = "exit">Exit</button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<footer>
+    <div class = "footer">
+        <div class = "content has-text-centered">
+            <p class = "has-text-white">Made with ❤️ by <a href = "https://hackkosice.com" target = "_blank"> Hack Kosice </a></p>
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>
+
+
+<!--Sussy Sus!-->
+<!--Well, Pokemon #591-->

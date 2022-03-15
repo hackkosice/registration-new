@@ -21,37 +21,54 @@
     <img src = "/images/logo_oneline_purple.svg" alt = "Hack Kosice Logo"/>
 </header>
 
-    <div class = "container mb-6">
-        <div class="field column">
-            <label class="label">Username: </label>
-            <div class="control">
-                <input id = "username" class="input" type="text"/>
+<div class="container mb-6">
+    <nav class="panel">
+
+        <p id = "heading" class="panel-heading">
+            Hack Kosice 2022 Judge Portal
+        </p>
+
+        <div class="panel-block p-5" style="flex-direction: column;">
+
+            <div class="field">
+                <label class="label">Username: </label>
+                <div class="control">
+                    <input id = "username" class="input" type="text"/>
+                </div>
             </div>
-        </div>
 
-        <div class="field column">
-            <label class="label">Password: </label>
-            <div class="control">
-                <input id = "password" class="input" type="password"/>
+            <div class="field">
+                <label class="label">Password: </label>
+                <div class="control">
+                    <input id = "password" class="input" type="password"/>
+                </div>
             </div>
-        </div>
 
-    </div>
-    <div id = "register" class="container mb-6 hidden">
-        <div class="field column">
-            <label class="label">Repeat the password: </label>
-            <div class="control">
-                <input id = "password_repeat" class="input" type="text"/>
+            <div id = "register" class="hidden">
+                <div class="field">
+                    <label class="label">Repeat the password: </label>
+                    <div class="control">
+                        <input id = "password_repeat" class="input" type="text"/>
+                    </div>
+                </div>
+                <button class = "button is-link is-fullwidth" id = "btn_register">Register</button>
             </div>
+
+            <div id = "login" class = "hidden">
+                <div class="field">
+                    <div class="control">
+                        <span><input id = "stay_logged" type = "checkbox" required> <label>
+				            Stay logged in
+				        </label></span>
+                    </div>
+                </div>
+
+                <button class = "button is-link is-fullwidth" id = "btn_login">Login</button>
+            </div>
+
         </div>
-
-        <button class = "button is-link" id = "btn_register">Register</button>
-    </div>
-
-    <div id = "login" class = "container mb-6 hidden">
-        <button class = "button is-link" id = "btn_login">Login</button>
-    </div>
-
+    </nav>
+</div>
 <footer>
     <div class = "footer">
         <div class = "content has-text-centered">
