@@ -1,4 +1,4 @@
-const jwt           = require("jsonwebtoken"); 
+const jwt           = require("jsonwebtoken");
 const crypto        = require("crypto");
 
 //For code pretification
@@ -28,7 +28,7 @@ module.exports = class FormApiEndpoints {
         try {
             verification = await jwt.verify(req.cookies['verification'], this.#jwt_key);
         } catch (err) {
-            return error(res, 401, "Authentification needed! Error: " + err);
+            return res.status(401).send("Authentication needed! Error: " + err);
         }
 
         req.verification = verification;
@@ -57,8 +57,8 @@ module.exports = class FormApiEndpoints {
             //Handle application creation
             if (req.body.application_progress === 1) {
                 const user = await this.#db.get("SELECT `application_id` FROM applications WHERE `mymlh_uid`=?;", [verification.uid]);
-                
-                if (typeof user[0] !== 'undefined')             
+
+                if (typeof user[0] !== 'undefined')
                     return res.status(200).send({ status: 'OK' });
 
                 await this.#db.insert("INSERT INTO applications(`application_progress`, `application_status`, `mymlh_uid`, `reimbursement_progress`) VALUES (?, ?, ?, ?);",
@@ -67,16 +67,16 @@ module.exports = class FormApiEndpoints {
             }
 
             const user = await this.#db.get("SELECT `application_id`, `application_progress` FROM applications WHERE `mymlh_uid`=?;", [verification.uid]);
-                
+
                 //Check if application exists
-                if (typeof user[0] === 'undefined')             
+                if (typeof user[0] === 'undefined')
                     return error(res, 400, "Application update failed! Error: Application does not exist!");
 
 
                 //Check if applicaton progress is within bounds
                 if (typeof req.body.application_progress === 'number' && req.body.application_progress > 6)
-                    return error(res, 400, "Application update failed! Error: applicaton_progress invalid or out of bounds!"); 
-                
+                    return error(res, 400, "Application update failed! Error: applicaton_progress invalid or out of bounds!");
+
                 //A bit of a hack, but only write the application progress, if it's greater than the one already in the db
                 if (req.body.application_progress <= user[0].application_progress)
                     delete req.body.application_progress;
@@ -89,9 +89,9 @@ module.exports = class FormApiEndpoints {
             for (const key in req.body) {
                 if (key === "reimbursement" && req.body.reimbursement === "yes")
                     await this.#db.insert("UPDATE applications SET `reimbursement_progress`=? WHERE `mymlh_uid`=?;", ["requested", verification.uid]);
-                else 
+                else
                     await this.#db.insert("UPDATE applications SET `reimbursement_progress`=? WHERE `mymlh_uid`=?;", ["requested", verification.uid]);
-             
+
                 const result = await this.#db.insert("UPDATE applications SET " + whitelist[key] + "=? WHERE `mymlh_uid`=?;", [req.body[key], verification.uid]);
             }
 
@@ -108,16 +108,16 @@ module.exports = class FormApiEndpoints {
 
         try {
             const status = await this.#db.get("SELECT `application_progress`, `application_status` FROM applications WHERE `mymlh_uid`=?;", verification.uid);
-            
+
             //If application isn't finnished, you shouldn't be able to close it
             if (typeof status[0].application_progress === 'undefined' || status[0].application_progress < 6)
                 return error(res, 400, "Server is unable to close the application! Error: Application non-existant or not yet finnished!");
-            
+
             //If application has already been closed, you shouldn't be able to close it
             if (typeof status[0].application_status === 'undefined' || status[0].application_status !== "open")
                 return error(res, 400, "Server is unable to close the application! Error: Application already closed!");
-            
-            
+
+
             //We do not need the return value of this, since if we got here, this query will always succeed (failing is caught by try/catch)
             await this.#db.insert("UPDATE applications SET `application_status`=? WHERE `mymlh_uid`=?;", ["closed", verification.uid]);
 
@@ -153,7 +153,7 @@ module.exports = class FormApiEndpoints {
         const resdb = await this.#db.insert("INSERT INTO files(`file_name`, `file_code`) VALUES (?, ?);", [file.name, fileCode])
         const fileId = resdb.lastInsertRowid
 
-        return res.status(200).send({ 
+        return res.status(200).send({
             fileId: fileId
         })
     }
@@ -173,7 +173,7 @@ const whitelist = {
 	"mymlh_uid": "mymlh_uid",
 	"reimbursement": "reimbursement",
 	"travel_from": "travel_from",
-	"visa": "visa", 
+	"visa": "visa",
 	"diet": "diet",
 	"tshirt": "tshirt",
 	"job_preference": "job_preference",
