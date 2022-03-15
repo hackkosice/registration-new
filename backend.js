@@ -8,6 +8,7 @@ const fileUpload            = require('express-fileupload');
 const MyMLH                 = require('./services/auth/mymlh.js');
 const Mailer                = require('./services/email/email.js');
 const Database              = require('./services/database/sqlite3.js'); //swap provider when needed
+const InternalAuth          = require('./services/auth/internal.js');
 
 //Implement caching
 const MyMLHUserCache        = require('./services/caching/mlh-usercache.js');
@@ -16,8 +17,6 @@ const MyMLHUserCache        = require('./services/caching/mlh-usercache.js');
 const FormApiEndpoints      = require('./services/apis/form.js');
 const TeamsApiEndpoints     = require('./services/apis/teams.js');
 const JudgeApiEndpoints     = require('./services/apis/judge.js');
-
-
 
 (async function main() {
     const app     = express();
@@ -49,7 +48,7 @@ const JudgeApiEndpoints     = require('./services/apis/judge.js');
 
     //Start MLH api
     let mlh_auth = new MyMLH(process.env.MLH_APP_ID, process.env.MLH_APP_SECRET, process.env.JWT_SECRET);
-
+    let admin_auth = new InternalAuth();
     //Set up cache
     let mlh_cache = new MyMLHUserCache(mlh_auth);
     await mlh_cache.build();
@@ -64,6 +63,8 @@ const JudgeApiEndpoints     = require('./services/apis/judge.js');
     router.get("/my-mlh-login", async (req, res) => { res.redirect("https://my.mlh.io/oauth/authorize?client_id=" + process.env.MLH_APP_ID +
                                                         "&redirect_uri=" + encodeURIComponent(process.env.MLH_REDIRECT_URI) +
                                                         "&response_type=code&scope=email+education+birthday+phone_number+demographics") }); //Auto-redirrect the user to mymlh
+    //Admin login API
+    router.get("/admin", async (req, res) => { admin_auth.auth_callback(req, res) });
 
     router.post("/api/user-info", async (req, res) => { mlh_auth.get_user_data_endpoint(req, res) });
 
@@ -99,7 +100,10 @@ const JudgeApiEndpoints     = require('./services/apis/judge.js');
 
     router.post("/api/judge-vote",
         async (req, res, next) => { judge_api.judge_auth_middleware(req, res, next) },
-        async (req, res) => {  });
+        async (req, res) => { judge_api.cast_vote_endpoint(req, res) });
+    router.post("/api/judge-application",
+        async (req, res, next) => { judge_api.judge_auth_middleware(req, res, next) },
+        async (req, res) => { judge_api.get_application_endpoint(req, res) });
     router.post("/api/judge-scoreboard",
         async (req, res, next) => { judge_api.judge_auth_middleware(req, res, next) },
         async (req, res) => { judge_api.get_judge_scoreboard_endpoint(req, res) });

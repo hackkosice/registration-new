@@ -5,14 +5,14 @@
 
     <title id = "title"> Hack Kosice registration </title>
 
-    <link rel = "icon" type = "image/png" sizes = "48x48" href = "../images/favicon/favicon.png">
-    <link rel = "icon" type = "image/png" sizes = "192x192" href = "../images/favicon/favicon-192.png">
+    <link rel = "icon" type = "image/png" sizes = "48x48" href = "/images/favicon/favicon.png">
+    <link rel = "icon" type = "image/png" sizes = "192x192" href = "/images/favicon/favicon-192.png">
 
     <script async src = "/js/judge_dashboard.js"></script>
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="/../css/mystyles.css">
+    <link rel="stylesheet" href="/css/mystyles.css">
 
 </head>
 
@@ -36,7 +36,6 @@
                         <option value = "asc_score"> Score, ascending </option>
                         <option value = "des_votes"> Number of votes, descending </option>
                         <option value = "asc_votes"> Number of votes, ascending</option>
-                        <option value = "status"> Application status </option>
                     </select>
                 </div>
             </div>
@@ -60,21 +59,29 @@
         <div class = "field column">
             <label class="label">And now... </label>
             <div class="control">
-                <button class = "column button is-primary">Sort!</button>
+                <button id = "sort" class = "column button is-primary">Sort!</button>
             </div>
         </div>
     </div>
 
     <div class = "columns">
         <div class = "column is-three-quarters">
-            <div id = "user_scoreboard">
+            <div id = "user_scoreboard" class = "table_height">
+            </div>
+            <div class = "columns is-mobile" style = "margin-top: 0.5em;">
+                <div class = "column is-half">
+                    <button class = "button is-fullwidth is-success" id = "accept">Accept selected</button>
+                </div>
+                <div class = "column">
+                    <button class = "button is-fullwidth is-danger" id = "reject">Reject selected</button>
+                </div>
             </div>
         </div>
 
         <div class = "column">
-            <div id = "voter_scoreboard">
+            <div id = "voter_scoreboard" class = "table_height-half">
             </div>
-            <button class = "button is-link is-fullwidth">Vote more!</button>
+            <button class = "button is-link is-fullwidth" style = "margin-top: 0.5em;" id = "vote">Vote more!</button>
         </div>
     </div>
 </div>

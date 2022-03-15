@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang = "en">
+
+<head>
+
+    <title id = "title"> Hack Kosice registration </title>
+
+    <link rel = "icon" type = "image/png" sizes = "48x48" href = "images/favicon/favicon.png">
+    <link rel = "icon" type = "image/png" sizes = "192x192" href = "images/favicon/favicon-192.png">
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/css/mystyles.css">
+
+    <script async src = "/js/login.js"></script>
+    <script async src = "/js/argon2-bundled.min.js"></script>
+</head>
+
+<body>
+<header style="padding: 0% 25%;">
+    <img src = "/images/logo_oneline_purple.svg" alt = "Hack Kosice Logo"/>
+</header>
+
+<div class="container mb-6">
+    <nav class="panel">
+
+        <p id = "heading" class="panel-heading">
+            Hack Kosice 2022 Judge Portal
+        </p>
+
+        <div class="panel-block p-5" style="flex-direction: column;">
+
+            <div class="field">
+                <label class="label">Username: </label>
+                <div class="control">
+                    <input id = "username" class="input" type="text"/>
+                </div>
+            </div>
+
+            <div class="field">
+                <label class="label">Password: </label>
+                <div class="control">
+                    <input id = "password" class="input" type="password"/>
+                </div>
+            </div>
+
+            <div id = "register" class="hidden">
+                <div class="field">
+                    <label class="label">Repeat the password: </label>
+                    <div class="control">
+                        <input id = "password_repeat" class="input" type="text"/>
+                    </div>
+                </div>
+                <button class = "button is-link is-fullwidth" id = "btn_register">Register</button>
+            </div>
+
+            <div id = "login" class = "hidden">
+                <div class="field">
+                    <div class="control">
+                        <span><input id = "stay_logged" type = "checkbox" required> <label>
+				            Stay logged in
+				        </label></span>
+                    </div>
+                </div>
+
+                <button class = "button is-link is-fullwidth" id = "btn_login">Login</button>
+            </div>
+
+        </div>
+    </nav>
+</div>
+<footer>
+    <div class = "footer">
+        <div class = "content has-text-centered">
+            <p class = "has-text-white">Made with ❤️ by <a href="hackkosice.com" target = "_blank">Hack Kosice</a></p>
+        </div>
+    </div>
+</footer>
+</body>
+</html>

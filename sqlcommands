@@ -1,6 +1,7 @@
 DROP TABLE "applications";
 DROP TABLE "teams";
 DROP TABLE "votes";
+DROP TABLE "voters";
 DROP TABLE "files";
 
 CREATE TABLE "applications" (
@@ -54,4 +55,10 @@ CREATE TABLE "files" (
 	"file_name" TEXT,
 	"file_code" TEXT,
 	PRIMARY KEY("file_id" AUTOINCREMENT)
+);
+CREATE TABLE "voters" (
+	"voter_uid"	INTEGER UNIQUE,
+	"username"	TEXT,
+	"permissions"	INTEGER,
+	"key"	TEXT
 );

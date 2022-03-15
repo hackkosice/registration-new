@@ -424,7 +424,7 @@ function autofill_form() {
     }
 
     //Set cv filename
-    $("cv-file-name").innerHTML = window.formdata.cv_file_name;
+    $("cv-file-name").textContent = window.formdata.cv_file_name;
 
 }
 

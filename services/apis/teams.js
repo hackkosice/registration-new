@@ -38,6 +38,7 @@ module.exports = class TeamsApiEndpoints {
 
         try {
             const team = await this.#db.get("SELECT `team_id` FROM teams WHERE `team_name`=?;", [req.body.team_name]);
+            
 
             if (typeof team[0] !== 'undefined')
                 return error(res, 409, "Team with the given name exists!");
