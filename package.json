@@ -23,6 +23,7 @@
     "@mailchimp/mailchimp_transactional": "^1.0.47",
     "argon2-browser": "^1.18.0",
     "better-sqlite3": "^7.5.0",
+    "bls-wasm": "^0.4.8",
     "body-parser": "^1.19.1",
     "cookie-parser": "^1.4.6",
     "dotenv": "^16.0.0",
