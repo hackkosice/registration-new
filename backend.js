@@ -99,9 +99,11 @@ const JudgeApiEndpoints     = require('./services/apis/judge.js');
         async (req, res, next) => { team_api.team_auth_middleware(req, res, next) },
         async (req, res) => { team_api.team_info_endpoint(req, res) });
 
-    //It's login so there is no need for auth middleware
+    //It's login and registration so there is no need for auth middleware
     router.post("/api/auth-login",
         async (req, res) => { admin_auth.login_endpoint(req, res) });
+    router.post("/api/auth-register",
+        async (req, res) => { admin_auth.register_endpoint(req, res) });
 
 
     router.post("/api/judge-vote",

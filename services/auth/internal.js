@@ -30,8 +30,10 @@ module.exports = class InternalAuth {
         else if (req.query.action !== "create")
             return res.status(400).redirect("/404.html");
 
+        if (typeof req.query.token === 'undefined')
+            return res.status(400).redirect("/404.html");
 
-        res.cookie('login', req.query, {
+        res.cookie('login', req.query.token, {
             maxAge: 60 * 60 * 1000,
             httpOnly: true,
         }).redirect("/judge/login.html?action=register");
@@ -52,7 +54,7 @@ module.exports = class InternalAuth {
         const password = await argon2.hash(req.body.password, {
             type: argon2.argon2id,
             raw: true,
-            salt: Buffer.from(key_object[0].salt, 'utf8'),
+            salt: Buffer.from(key_object[0].salt, 'hex'),
             hashLength: 32
         });
 
@@ -72,32 +74,60 @@ module.exports = class InternalAuth {
 
     async register_endpoint(req, res) {
 
-        //Token = userid, 64 bytes of random data
         let token = null;
         try {
             token = await jwt.verify(req.cookies['login'], this.#jwt_key);
         } catch (err) {
-            return res.status(400).send("Bad TOKEN! Auth Failed!");
+            return error(res, 400, err);
         }
 
+        if (typeof token.uid === 'undefined')
+            return error(res, 400, "Invalid token format!");
+
+        if (typeof req.body.user === 'undefined' || typeof req.body.password == 'undefined')
+            return error(res, 400, "User credentials not provided!");
+
         //Get user template from DB
-        const db_token = await this.#db.get("SELECT `key` FROM voters WHERE `voter_uid`=?;", [token.uid]);
+        const key = await this.#db.get("SELECT `key` FROM voters WHERE `voter_uid`=?;", [token.uid]);
 
-        if (typeof db_token[0] === 'undefined')
-            return res.status(400).send("Selected user DOES NOT EXIST!");
+        if (typeof key[0] === 'undefined')
+            return error(res, 403, "Requested user does not exist!");
 
-        if (!db_token[0].key.startsWith("create:"))
-            return res.status(403).send("User ALREADY CREATED!");
+        if (key[0].key !== null)
+            return error(res, 403, "User already registered!");
 
-        const key = db_token[0].key.split(':')[1];
+        const username_check = await this.#db.get("SELECT * FROM voters WHERE `username`=?;", [req.body.user]);
 
-        //Check if token matches one stored in database
-        if (key !== token.key)
-            return res.status(403).send("Invalid TOKEN!");
+        if(typeof username_check[0] !== 'undefined')
+            return error(res, 409, "Username already in use!");
+
+        //Generate user's salt
+        const salt = crypto.randomBytes(64);
+
+        const password = await argon2.hash(req.body.password, {
+            type: argon2.argon2id,
+            raw: true,
+            salt: salt,
+            hashLength: 32
+        });
+
+        console.log(req.body.user);
 
         //Register user's account
-        const query = await this.#db.set("UPDATE voters SET `username`=?, `permissions`=?, `key`=? WHERE `voter_uid`=?;", [req.body.username, 0, req.body.key, token.uid]);
-        res.status(200).send("Success!");
+        const query = await this.#db.insert("UPDATE voters SET `username`=?, `salt`=?, `key`=? WHERE `voter_uid`=?;",
+            [req.body.user, salt.toString('hex'), password.toString('base64'), token.uid]);
+
+        const voter_token = jwt.sign({
+            voter_uid: token.uid,
+            voter_name: req.body.user
+        }, this.#jwt_key, { expiresIn: '8h'});
+
+        res.cookie('voter_verification', voter_token, {
+            maxAge: 12 * 60 * 60 * 1000,
+            httpOnly: true,
+        }).status(200).send({ status: "success" });
+
+
     }
 
 

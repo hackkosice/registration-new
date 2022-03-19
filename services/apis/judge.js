@@ -140,7 +140,6 @@ module.exports = class VotingApiEndpoints {
 
         for (const voter in voters) {
 
-            console.log(voter);
             const name = await this.#db.get("SELECT `username` FROM voters WHERE `voter_uid`=?;", [voter]);
 
             results.push({
