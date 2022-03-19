@@ -21,44 +21,29 @@ window.onload = async () => {
 
     if (queryObject.action === "login") $("login").classList.remove("hidden");
     else $("register").classList.remove("hidden");
+
+    $("btn_login").addEventListener('click', () => { login() });
 }
 
 
-async function register() {
-    let keyTestPair = await window.crypto.subtle.generateKey(
-        {
-            name: "HMAC",
-            hash: "SHA-512"
+async function login() {
+
+    const username = $("username").value;
+    const password = $("password").value;
+
+     fetch("/api/auth-login", {
+        method: 'POST', credentials: 'same-origin',
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8'
         },
-        true,
-        ["sign", "verify"]
-    );
-
-    console.log(keyTestPair);
-
-
-
-    argon2.hash({ pass: $("password").value, salt: hash_salt })
-        .then(async (h) => {
-
-            console.log(h.hash);
-            let keyPair = await window.crypto.subtle.importKey(
-
-                "raw",
-                h.hash,
-                {
-                    name: "HMAC",
-                    hash: "SHA-512"
-                },
-                true,
-                ["sign", "verify"]
-            );
-
-            console.log(keyPair);
+        body: JSON.stringify({
+            user: username,
+            password: password
         })
-        .catch(e => console.error(e.message, e.code));
+    }).then(res => res.json()).then((result) => {
+        if (result.status === "error")
+            return $("login_error").classList.remove("hidden");
 
-
-
-
+        window.location = "/judge/dashboard.html";
+    });
 }

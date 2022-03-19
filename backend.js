@@ -48,7 +48,8 @@ const JudgeApiEndpoints     = require('./services/apis/judge.js');
 
     //Start MLH api
     let mlh_auth = new MyMLH(process.env.MLH_APP_ID, process.env.MLH_APP_SECRET, process.env.JWT_SECRET);
-    let admin_auth = new InternalAuth();
+    let admin_auth = new InternalAuth(db_connection, process.env.JWT_SECRET);
+
     //Set up cache
     let mlh_cache = new MyMLHUserCache(mlh_auth);
     await mlh_cache.build();
@@ -97,6 +98,11 @@ const JudgeApiEndpoints     = require('./services/apis/judge.js');
     router.post("/api/team-info", 
         async (req, res, next) => { team_api.team_auth_middleware(req, res, next) },
         async (req, res) => { team_api.team_info_endpoint(req, res) });
+
+    //It's login so there is no need for auth middleware
+    router.post("/api/auth-login",
+        async (req, res) => { admin_auth.login_endpoint(req, res) });
+
 
     router.post("/api/judge-vote",
         async (req, res, next) => { judge_api.judge_auth_middleware(req, res, next) },

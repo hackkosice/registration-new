@@ -59,6 +59,6 @@ CREATE TABLE "files" (
 CREATE TABLE "voters" (
 	"voter_uid"	INTEGER UNIQUE,
 	"username"	TEXT,
-	"permissions"	INTEGER,
+    "salt"  TEXT,
 	"key"	TEXT
 );

@@ -1,11 +1,22 @@
-const bls           = require('bls-wasm');
+const argon2        = require('argon2');
 const crypto        = require('crypto');
 const jwt           = require('jsonwebtoken');
 
+function error(res, status, msg) {
+    return res.status(status).send({
+        status: 'error',
+        error: {
+            code: status,
+            message: msg
+        }
+    });
+}
 
 module.exports = class InternalAuth {
 
-    constructor() {
+    constructor(db, jwt) {
+        this.#db = db;
+        this.#jwt_key = jwt;
     }
 
     //Mainly for creating account
@@ -28,6 +39,35 @@ module.exports = class InternalAuth {
 
     async login_endpoint(req, res) {
 
+        //Under cors, since you will be able to send requests directly
+        if (typeof req.body.user === 'undefined' || typeof req.body.password == 'undefined')
+            return error(res, 400, "User credentials not provided!");
+
+        const username = req.body.user;
+        const key_object = await this.#db.get("SELECT `voter_uid`, `salt`, `key` FROM voters WHERE `username`=?;", [username]);
+
+        if (typeof key_object[0] === 'undefined')
+            return error(res, 403, "Invalid credentials!");
+
+        const password = await argon2.hash(req.body.password, {
+            type: argon2.argon2id,
+            raw: true,
+            salt: Buffer.from(key_object[0].salt, 'utf8'),
+            hashLength: 32
+        });
+
+        if (key_object[0].key !== password.toString('base64'))
+            return error(res, 403, "Invalid credentials!");
+
+        const voter_token = jwt.sign({
+            voter_uid: key_object[0].voter_uid,
+            voter_name: username
+        }, this.#jwt_key, { expiresIn: '8h'});
+
+        res.cookie('voter_verification', voter_token, {
+            maxAge: 12 * 60 * 60 * 1000,
+            httpOnly: true,
+        }).status(200).send({ status: "success" });
     }
 
     async register_endpoint(req, res) {
