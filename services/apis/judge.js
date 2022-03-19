@@ -28,21 +28,18 @@ module.exports = class VotingApiEndpoints {
     async judge_auth_middleware(req, res, next) {
         let verification = null;
         try {
-            verification = await jwt.verify(req.cookies['verification'], this.#jwt_key);
+            verification = await jwt.verify(req.cookies['voter_verification'], this.#jwt_key);
         } catch (err) {
             return res.status(401).send("Authentication needed! Error: " + err);
         }
 
         req.verification = verification;
 
-        //if (!verification.is_admin)
-        //return error(res, 403, "Access denied!");
-
         next();
     }
 
     async get_application_endpoint(req, res) {
-        const rated = await this.#db.get("SELECT `mymlh_uid` FROM votes WHERE `voter_uid`=?;", [req.verification.uid]);
+        const rated = await this.#db.get("SELECT `mymlh_uid` FROM votes WHERE `voter_uid`=?;", [req.verification.voter_uid]);
 
         //pick one that has not been rated
         let closed = await this.#db.get("SELECT * FROM applications WHERE `application_status`=?;", ["closed"]);
@@ -80,17 +77,18 @@ module.exports = class VotingApiEndpoints {
         }
     }
 
+
     async cast_vote_endpoint(req, res) {
 
         if (req.body.score < 0 || req.body.score > 10)
             return error(res, 400, "Score must be between 0 and 10!");
 
-        const rating = await this.#db.get("SELECT * FROM votes WHERE `voter_uid`=? AND `mymlh_uid`=?;", [req.verification.uid, req.body.uid]);
+        const rating = await this.#db.get("SELECT * FROM votes WHERE `voter_uid`=? AND `mymlh_uid`=?;", [req.verification.voter_uid, req.body.uid]);
 
         if (typeof rating[0] !== 'undefined')
             return error(res, 403, "Voter has already voted on this application!");
 
-        await this.#db.insert("INSERT INTO votes(`voter_uid`, `score`, `mymlh_uid`) VALUES (?, ?, ?);", [req.verification.uid, req.body.score, req.body.uid]);
+        await this.#db.insert("INSERT INTO votes(`voter_uid`, `score`, `mymlh_uid`) VALUES (?, ?, ?);", [req.verification.voter_uid, req.body.score, req.body.uid]);
         res.status(200).send("ok");
     }
 
@@ -142,10 +140,11 @@ module.exports = class VotingApiEndpoints {
 
         for (const voter in voters) {
 
-            const name = await this.#cache.get(Number(voter));
+            console.log(voter);
+            const name = await this.#db.get("SELECT `username` FROM voters WHERE `voter_uid`=?;", [voter]);
 
             results.push({
-                voter: (name.first_name + " " + name.last_name),
+                voter: name[0].username,
                 votes: voters[voter]
             });
         }
