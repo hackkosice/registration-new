@@ -125,8 +125,8 @@ async function sort_table() {
 
     let header = document.createElement("tr");
 
-    let empty = document.createElement("th");
-    header.appendChild(empty);
+    let padding_front = document.createElement("th");
+    header.appendChild(padding_front);
 
     let name_header = document.createElement("th");
     name_header.textContent = "Name";
@@ -143,6 +143,9 @@ async function sort_table() {
     let status_header = document.createElement("th");
     status_header.textContent = "Application status";
     header.appendChild(status_header);
+
+    let padding_back = document.createElement("th");
+    header.appendChild(padding_back);
 
     root.appendChild(header);
 
@@ -176,11 +179,19 @@ async function sort_table() {
         let status = document.createElement("td")
         status.textContent = user.status;
 
+        let detail_link = document.createElement("a");
+        detail_link.href = `/judge/detail.html?uid=${user.mymlh_uid}`;
+        detail_link.textContent = "Details";
+
+        let detail_wrapper = document.createElement("td")
+        detail_wrapper.appendChild(detail_link);
+
         row.appendChild(selector);
         row.appendChild(name);
         row.appendChild(score);
         row.appendChild(votes);
         row.appendChild(status);
+        row.appendChild(detail_wrapper);
         root.appendChild(row);
     }
     $("user_scoreboard").appendChild(root);

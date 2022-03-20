@@ -8,7 +8,7 @@
     <link rel = "icon" type = "image/png" sizes = "48x48" href = "/images/favicon/favicon.png">
     <link rel = "icon" type = "image/png" sizes = "192x192" href = "/images/favicon/favicon-192.png">
 
-    <script async src = "/js/judge_vote.js"></script>
+    <script async src = "/js/judge_detail.js"></script>
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -23,14 +23,10 @@
 <header style="padding: 0% 25%;">
     <img src = "/images/logo_oneline_purple.svg" alt = "Hack Kosice Logo"/>
 </header>
-
-<div class="voting-layout">
-
-    <div class = "columns is-fullwidth">
-        <div class="column is-three-fifths">
-
+<div class="container mb-6">
+    <nav class = "panel">
             <p id = "box-title" class="panel-heading">
-                Application:
+                Application detail:
             </p>
 
             <div class="p-5 voting-application" style="flex-direction: column;">
@@ -210,54 +206,8 @@
                     </div>
                 </div>
         </div>
-        </div>
-
-        <div class="column">
-            <p class="panel-heading">
-                Scoring:
-            </p>
-            <div class = "p-3">
-                <div class = "columns">
-                    <div class = "field column">
-                        <label class="label">Tech skills: </label>
-                        <div class="control">
-                            <input type = "range" min = 0 max = 10 id = "tech">
-                        </div>
-                    </div>
-
-                    <div class = "field column">
-                        <label class="label">Effort: </label>
-                        <div class="control">
-                            <input type = "range" min = 0 max = 10 id = "effort">
-                        </div>
-                    </div>
-
-                    <div class = "field column">
-                        <label class="label">Bonus: </label>
-                        <div class="control">
-                            <input type = "range" min = 0 max = 10 id = "bonus">
-                        </div>
-                    </div>
-                </div>
-
-                <article class="message is-info">
-                    <div class="message-body content">
-                        <p>For more info on how to rate an application, visit here: </p>
-                        <a target="_blank" href = "https://www.notion.so/hackkosice/Reviewing-criteria-0147b3c66af34da48e7fe1cf6632e591">
-                            https://www.notion.so/hackkosice/Reviewing-criteria-0147b3c66af34da48e7fe1cf6632e591
-                        </a>
-                    </div>
-                </article>
-
-                <button class = "button is-link is-fullwidth" id = "vote">Vote!</button>
-                <button class = "button is-primary is-fullwidth mt-2" id = "skip">Skip</button>
-                <button class = "button is-danger is-fullwidth mt-2" id = "exit">Exit</button>
-            </div>
-        </div>
-    </div>
-
+    </nav>
 </div>
-
 <footer>
     <div class = "footer">
         <div class = "content has-text-centered">

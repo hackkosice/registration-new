@@ -77,6 +77,28 @@ module.exports = class VotingApiEndpoints {
         }
     }
 
+    async get_application_detail_endpoint(req, res) {
+
+        if (typeof req.body.uid === 'undefined')
+            return error(res, 400, "UID not provided!");
+
+        const form = await this.#db.get("SELECT * FROM applications WHERE `mymlh_uid`=?;", [req.body.uid]);
+
+        if (typeof form[0] === 'undefined')
+            return error(res, 400, "Requested application not found!");
+
+        const user = await this.#cache.get(form[0].mymlh_uid);
+        return res.status(200).send({
+            user: {
+                name: `${user.first_name} ${user.last_name}`,
+                school: `${user.school.name}`,
+                level: `${user.level_of_study}`,
+                major: `${user.major}`,
+                birth: `${user.date_of_birth}`
+            },
+            form: form[0]
+        });
+    }
 
     async cast_vote_endpoint(req, res) {
 
