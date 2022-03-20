@@ -42,6 +42,23 @@ window.onload = async function() {
     $("exit").addEventListener('click', () => {
         window.location = "/judge/dashboard.html";
     });
+
+    //Setup initial values
+    $("tech_value").textContent = `${Math.floor(($("tech").value * tech_constant) * 10) / 10} / 6`;
+    $("effort_value").textContent = `${Math.floor(($("effort").value * effort_constant) * 10) / 10} / 3`;
+    $("bonus_value").textContent = `${Math.floor(($("bonus").value * bonus_constant) * 10) / 10} / 1`;
+
+
+    $("tech").addEventListener('input', () => {
+        $("tech_value").textContent = `${Math.floor(($("tech").value * tech_constant) * 10) / 10} / 6`;
+    });
+    $("effort").addEventListener('input', () => {
+        $("effort_value").textContent = `${Math.floor(($("effort").value * effort_constant) * 10) / 10} / 3`;
+    });
+
+    $("bonus").addEventListener('input', () => {
+        $("bonus_value").textContent = `${Math.floor(($("bonus").value * bonus_constant) * 10) / 10} / 1`;
+    });
 }
 
 async function vote() {
