@@ -67,6 +67,11 @@ const JudgeApiEndpoints     = require('./services/apis/judge.js');
     //Admin login API
     router.get("/admin", async (req, res) => { admin_auth.auth_callback(req, res) });
 
+    //Application CSV info
+    router.get("/judge/applications.csv", async (req, res, next) => { judge_api.judge_auth_middleware(req, res, next) },
+        async (req, res) => { judge_api.get_applications_csv(req, res) })
+
+    //TODO: probably add auth
     router.post("/api/user-info", async (req, res) => { mlh_auth.get_user_data_endpoint(req, res) });
 
     router.post("/api/form-data",
@@ -121,7 +126,6 @@ const JudgeApiEndpoints     = require('./services/apis/judge.js');
     router.post("/api/judge-application-scoreboard",
         async (req, res, next) => { judge_api.judge_auth_middleware(req, res, next) },
         async (req, res) => { judge_api.get_applications_scoreboard_endpoint(req, res) });
-
 
     //Bind static content
     app.use("/", express.static("./static"));

@@ -117,14 +117,15 @@ module.exports = class VotingApiEndpoints {
     //Probably the most expensive call
     async get_applications_scoreboard_endpoint(req, res) {
 
-        let applications = {};
+        let voted_applications = {};
         let results = [];
         const votes = await this.#db.get("SELECT `mymlh_uid`, `score` FROM votes;", []);
+        const applications = await this.#db.get("SELECT `mymlh_uid` FROM applications;", []);
 
         for (const vote of votes) {
 
-            if (typeof applications[vote.mymlh_uid] === 'undefined')
-                applications[vote.mymlh_uid] = {
+            if (typeof voted_applications[vote.mymlh_uid] === 'undefined')
+                voted_applications[vote.mymlh_uid] = {
                     score: 0,
                     judged: 0,
                     name: (await this.#cache.get(vote.mymlh_uid)).first_name + " " + (await this.#cache.get(vote.mymlh_uid)).last_name,
@@ -132,15 +133,27 @@ module.exports = class VotingApiEndpoints {
                     mymlh_uid: vote.mymlh_uid
                 };
 
-            applications[vote.mymlh_uid].score += vote.score;
-            applications[vote.mymlh_uid].judged++;
+            voted_applications[vote.mymlh_uid].score += vote.score;
+            voted_applications[vote.mymlh_uid].judged++;
         }
 
-
         //Normalize average out the score
-        for (const application in applications) {
-            applications[application].score /= applications[application].judged;
-            results.push(applications[application]);
+        for (const application of applications) {
+
+            if (typeof voted_applications[application.mymlh_uid] === 'undefined') {
+                results.push({
+                    score: 0,
+                    judged: 0,
+                    name: (await this.#cache.get(application.mymlh_uid)).first_name + " " + (await this.#cache.get(application.mymlh_uid)).last_name,
+                    status: (await this.#db.get("SELECT `application_status` FROM applications WHERE `mymlh_uid`=?;", [application.mymlh_uid]))[0].application_status,
+                    mymlh_uid: vote.mymlh_uid
+                });
+            }
+
+            else {
+                voted_applications[application.mymlh_uid].score /= voted_applications[application.mymlh_uid].judged;
+                results.push(voted_applications[application.mymlh_uid]);
+            }
         }
 
         res.status(200).send(results);
@@ -171,6 +184,33 @@ module.exports = class VotingApiEndpoints {
         }
 
         res.status(200).send(results);
+    }
+
+    async get_applications_csv(req, res) {
+
+        const fields = ["application_status", "travel_from", "reimbursement", "skills", "job_preference",
+                        "achievements", "site", "github", "linkedin", "devpost", "hear_hk22",
+                        "first_hack_hk22", "tshirt", "diet"];
+
+
+        const applications = await this.#db.get("SELECT * FROM applications;", []);
+
+        //TODO: add yes/no for cv
+        let csv_content = "name|birth|school|major|education|status|country|reimbursement|skills|job|achievements|website|github|linkedin|devpost|hear_hk|hk_first|tshirt|diet\n";
+
+        for (const application of applications) {
+            const user = await this.#cache.get(application.mymlh_uid);
+
+            let line = `${user.first_name} ${user.last_name}|${user.date_of_birth}|${user.school.name}|${user.major}|${user.level_of_study}`;
+
+            for (const field of fields) {
+                line += `|${application[field]}`;
+            }
+            csv_content += `${line}\n`;
+        }
+
+        res.setHeader("Content-type", "application/octet-stream");
+        res.status(200).send(csv_content);
     }
 
     #cache = null;

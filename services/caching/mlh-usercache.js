@@ -29,7 +29,6 @@ module.exports = class MyMLHUserCache {
             return null;
         }
 
-        console.log(this.#cache);
     }
 
     async get(uid) {

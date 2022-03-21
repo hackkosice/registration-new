@@ -111,8 +111,6 @@ module.exports = class InternalAuth {
             hashLength: 32
         });
 
-        console.log(req.body.user);
-
         //Register user's account
         const query = await this.#db.insert("UPDATE voters SET `username`=?, `salt`=?, `key`=? WHERE `voter_uid`=?;",
             [req.body.user, salt.toString('hex'), password.toString('base64'), token.uid]);
