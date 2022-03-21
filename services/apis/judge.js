@@ -146,7 +146,7 @@ module.exports = class VotingApiEndpoints {
                     judged: 0,
                     name: (await this.#cache.get(application.mymlh_uid)).first_name + " " + (await this.#cache.get(application.mymlh_uid)).last_name,
                     status: (await this.#db.get("SELECT `application_status` FROM applications WHERE `mymlh_uid`=?;", [application.mymlh_uid]))[0].application_status,
-                    mymlh_uid: vote.mymlh_uid
+                    mymlh_uid: application.mymlh_uid
                 });
             }
 
@@ -196,12 +196,13 @@ module.exports = class VotingApiEndpoints {
         const applications = await this.#db.get("SELECT * FROM applications;", []);
 
         //TODO: add yes/no for cv
-        let csv_content = "name|birth|school|major|education|status|country|reimbursement|skills|job|achievements|website|github|linkedin|devpost|hear_hk|hk_first|tshirt|diet\n";
+        let csv_content = "name|birth|major|education|school|status|country|reimbursement|skills|job|achievements|website|github|linkedin|devpost|hear_hk|hk_first|tshirt|diet\n";
 
         for (const application of applications) {
             const user = await this.#cache.get(application.mymlh_uid);
 
-            let line = `${user.first_name} ${user.last_name}|${user.date_of_birth}|${user.school.name}|${user.major}|${user.level_of_study}`;
+            let line = `${user.first_name} ${user.last_name}|${user.date_of_birth}|${user.major}|${user.level_of_study}|`;
+            if (typeof user.school !== 'undefined') line += `${user.school.name}`;
 
             for (const field of fields) {
                 line += `|${application[field]}`;
