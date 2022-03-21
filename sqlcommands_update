@@ -1,0 +1,17 @@
+DROP TABLE "votes";
+DROP TABLE "voters";
+
+
+CREATE TABLE "voters" (
+	"voter_uid"	INTEGER UNIQUE,
+	"username"	TEXT,
+    "salt"  TEXT,
+	"key"	TEXT
+);
+CREATE TABLE "votes" (
+    "vote_id" INTEGER UNIQUE,
+	"voter_uid"	INTEGER,
+	"score"	REAL,
+	"mymlh_uid"	INTEGER,
+	PRIMARY KEY("vote_id" AUTOINCREMENT)
+);
