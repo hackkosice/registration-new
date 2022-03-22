@@ -69,12 +69,16 @@ window.onload = async function () {
         window.location = "/";
     }
 
-    $("sort").addEventListener('click', () => {
-        sort_table();
-    });
+    $("param_sort").addEventListener('change', () => {
+        sort_table()
+    })
+
+    $("status_filter").addEventListener('change', () => {
+        sort_table()
+    })
 
     $("vote").addEventListener('click', () => {
-        window.location = "/judge/application.html"; 
+        window.location = "/judge/application.html";
     });
 }
 
