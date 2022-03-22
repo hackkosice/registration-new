@@ -72,7 +72,7 @@ module.exports = class VotingApiEndpoints {
                             major: `${user.major}`,
                             birth: `${user.date_of_birth}`
                         },
-                        form: form[0],
+                        form: picked
                     });
                 }
 
