@@ -27,4 +27,12 @@ To start the application in production mode, run:
 ```
 npm run start:production
 ```
-  
+
+### Adding users as admins
+
+To add user as admin (allowing him/her to see, rate and invite applications) run
+```
+npm run useradd
+```
+
+This will give you a link you need to give the user to finish registration

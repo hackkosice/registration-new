@@ -7898,3 +7898,27 @@ body::after {
   display: flex;
   align-items: center;
   justify-content: center; }
+
+.table_height {
+  max-height: 35vh;
+  height: 35vh;
+  overflow-y: auto; }
+
+.table_height-half {
+  max-height: 17.5vh;
+  height: 17.5vh;
+  overflow-y: auto; }
+
+#application {
+  flex-direction: column; }
+
+.voting-layout {
+  flex-grow: 1;
+  margin: 0 auto;
+  position: relative;
+  width: auto;
+  max-width: 70vw; }
+
+.voting-application {
+  max-height: 60vh;
+  overflow: auto; }

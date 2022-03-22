@@ -32,19 +32,12 @@ module.exports =  class MyMLH {
         const user_res = await fetch("https://my.mlh.io/api/v3/user.json?access_token=" + token.access_token, {method: 'GET'});
         const user = await user_res.json();
 
-        //If user is not from judging team, determine wether he has already completed his application or not
-        var path = "./application.html";
+        const path = "./application.html";
 
-        if (user.data.email.endsWith('@hackkosice.com')) {
-
-
-        }
-
-        //Generate authentification token
+        //Generate authentication token
         const usr_token = jwt.sign({
             uid: user.data.id,
             token: token.access_token,
-            is_admin: user.data.email.endsWith('@hackkosice.com')
         }, this.#jwt_key, { expiresIn: '12h'});
     
         res.cookie('verification', usr_token, { 
@@ -83,30 +76,11 @@ module.exports =  class MyMLH {
         return await user_res.json();
     }
 
-    async get_all_users() {
-        return new Promise(async (resolve, reject) => {
-            const usercount_res = await fetch("https://my.mlh.io/api/v3/users.json?client_id=" + this.#id + "&secret=" + this.#secret + "&per_page=1", {method: 'GET'});
-            const usercount = await usercount_res.json();
-
-            var userdb = [];
-            var requests = []; 
-
-            for (let i = 0; i < Math.ceil(usercount.pagination.results_total / 250); i++) {
-                requests.push(fetch("https://my.mlh.io/api/v3/users.json?client_id=" + this.#id + "&secret=" + this.#secret + "&page=" + i, {method: 'GET'}).then(async (response) => {
-                        const users = await response.json();
-                        userdb = [].concat(userdb, users.data);
-                    })
-                );
-            }
-
-            try {
-                await Promise.all(requests);
-            } catch (err) {
-                reject("MyMLH Auth Error! Error: " + err);
-            }
-
-            resolve(userdb);
-        });
+    async get_users(page_size, page) {
+        const users_res = await fetch("https://my.mlh.io/api/v3/users.json?client_id=" + this.#id + "&secret=" +
+                                      this.#secret + "&per_page=" + page_size + "&page=" + page, {method: 'GET'});
+        const users = await users_res.json();
+        return users;
     }
 
     #id = "";

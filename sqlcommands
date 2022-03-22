@@ -1,6 +1,7 @@
 DROP TABLE "applications";
 DROP TABLE "teams";
 DROP TABLE "votes";
+DROP TABLE "voters";
 DROP TABLE "files";
 
 CREATE TABLE "applications" (
@@ -43,14 +44,21 @@ CREATE TABLE "teams" (
 	PRIMARY KEY("team_id" AUTOINCREMENT)
 );
 CREATE TABLE "votes" (
+    "vote_id" INTEGER UNIQUE,
 	"voter_uid"	INTEGER,
-	"score"	INTEGER,
-	"application_id"	INTEGER,
-	PRIMARY KEY("application_id")
+	"score"	REAL,
+	"mymlh_uid"	INTEGER,
+	PRIMARY KEY("vote_id" AUTOINCREMENT)
 );
 CREATE TABLE "files" (
 	"file_id" INTEGER,
 	"file_name" TEXT,
 	"file_code" TEXT,
 	PRIMARY KEY("file_id" AUTOINCREMENT)
+);
+CREATE TABLE "voters" (
+	"voter_uid"	INTEGER UNIQUE,
+	"username"	TEXT,
+    "salt"  TEXT,
+	"key"	TEXT
 );
