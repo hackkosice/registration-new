@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang = "en">
-	
+
 	<head>
 
 		<title id = "title"> Hack Kosice registration </title>
@@ -9,7 +9,7 @@
 		<link rel = "icon" type = "image/png" sizes = "192x192" href = "images/favicon/favicon-192.png">
 
 		<script async src = "/js/form.js"></script>
-		
+
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link rel="stylesheet" href="/css/mystyles.css">
@@ -50,7 +50,7 @@
 				<div class="panel-block p-5" style="flex-direction: column;">
 
 					<div id = "application">
-			
+
 						<div class = "hidden" id = "form-part1">
 							<h1 class="title primary">Basic info</h1>
 							<p class="mb-3">Here's the info we got from your MyMLH profile. Please, double check if it's accurate. If you wish to change it, do so in the settings of your MyMLH profile.</p>
@@ -88,7 +88,7 @@
 									<input class="input" type="date" placeholder="Last name" id="birth" disabled>
 								</div>
 							</div>
-			
+
 							<button id = "1" class = "button is-primary is-light save_and_continue">Save And Continue</button>
 						</div>
 
@@ -160,17 +160,19 @@
 									</label>
 								</div>
 							</div>
-			
+
 							<button id = "2" class = "button is-primary is-light save_and_continue">Save And Continue</button>
 						</div>
-			
+
 						<div class = "hidden" id = "form-part3">
-			
+
 							<h1 class="title primary"> Skills & experience </h1>
 
 							<p class="mb-3">In this section we will ask you about your job experience and preferences. This info will be shared with our sponsors
 							which are looking for new talents. <b>We highly encourage you to upload your CV.</b> It increases your chance of being chosen to participate in our hackathon
 							as well as being noticed by our sponsors.</p>
+							<p>But don't worry! Even though we try to get as much information about your skills as we can, we know that there are beginners coming to our hackathon, and we are a <b>beginner-friendly</b> event.
+							</p>
 
 							<div class="field">
 								<label class="label">CV:</label>
@@ -212,8 +214,8 @@
 							<div class="field">
 								<label class="label">Skills <span class="help is-danger is-inline">*</span></label>
 								<div class="control">
-									<div style="max-width: 400px;" id = "skills_wrap" class="is-flex is-justify-content-start is-flex-wrap-wrap"> 
-								
+									<div style="max-width: 400px;" id = "skills_wrap" class="is-flex is-justify-content-start is-flex-wrap-wrap">
+
 									</div>
 									<input class="input" placholder="Start typing country..." id = "skills" type = "text" list = "skills_data" required>
 									<p id="skills_error" class="help is-danger hidden"></p>
@@ -247,7 +249,7 @@
 
 							<button id = "3" class = "button is-primary is-light save_and_continue">Save And Continue</button>
 						</div>
-			
+
 						<div class = "hidden" id = "form-part4">
 
 							<h1 class="title primary"> Show us what you've built</h1>
@@ -286,9 +288,9 @@
 
 							<button id = "4" class = "button is-primary is-light save_and_continue">Save And Continue</button>
 						</div>
-			
+
 						<div class = "hidden" id = "form-part5">
-							
+
 							<h1 class="title primary"> Let us know you better </h1>
 
 							<p class="mb-3">Here are some last informal questions for us to get to know you better. Hackathon is not only about coding but also about meeting new people and
@@ -363,7 +365,7 @@
 							</div>
 
 							<button id = "5" class = "button is-primary is-light save_and_continue" style="margin-top: 0;">Save And Continue</button>
-			
+
 						</div>
 
 						<div class = "hidden" id = "form-part6">
@@ -372,8 +374,8 @@
 
 							<div class="field">
 								<div class="control">
-									<span><input id = "consent_hk_privacy" type = "checkbox" required> <label> 
-										I have read and accept <a href = "https://hackkosice.com/privacy-policy/"> Hack Kosice Privacy Policy </a>. 
+									<span><input id = "consent_hk_privacy" type = "checkbox" required> <label>
+										I have read and accept <a href = "https://hackkosice.com/privacy-policy/"> Hack Kosice Privacy Policy </a>.
 									<span class="help is-danger is-inline">*</span></label></span>
 									<p id="consent_hk_privacy_error" class="help is-danger hidden"></p>
 								</div>
@@ -381,8 +383,8 @@
 
 							<div class="field">
 								<div class="control">
-									<span><input id = "consent_coc" type = "checkbox" required> <label> 
-										I have read and accept <a href = "https://static.mlh.io/docs/mlh-code-of-conduct.pdf"> MLH Code of Conduct </a>. 
+									<span><input id = "consent_coc" type = "checkbox" required> <label>
+										I have read and accept <a href = "https://static.mlh.io/docs/mlh-code-of-conduct.pdf"> MLH Code of Conduct </a>.
 									<span class="help is-danger is-inline">*</span></label></span>
 									<p id="consent_coc_error" class="help is-danger hidden"></p>
 								</div>
@@ -391,7 +393,7 @@
 							<div class="field">
 								<div class="control">
 									<span><input id = "consent_cvs" type = "checkbox" required> <label>
-										I authorize to share my application/registration information, including the CV, with partners of Hack Kosice. 
+										I authorize to share my application/registration information, including the CV, with partners of Hack Kosice.
 										We, or our partners, may perform processing on and make use of the data in your application for recruiting purposes.
 									<span class="help is-danger is-inline">*</span></label></span>
 									<p id="consent_cvs_error" class="help is-danger hidden"></p>
@@ -400,9 +402,9 @@
 
 							<div class="field">
 								<div class="control">
-									<span><input id = "consent_mlh_privacy" type = "checkbox" required> <label> 
-										I authorize to share my application/registration information for event administration, ranking, MLH administration, pre- and post-event 
-										informational e-mails, and occasional messages about hackathons in-line with the  <a href = "https://mlh.io/privacy">MLH Privacy Policy</a>. 
+									<span><input id = "consent_mlh_privacy" type = "checkbox" required> <label>
+										I authorize to share my application/registration information for event administration, ranking, MLH administration, pre- and post-event
+										informational e-mails, and occasional messages about hackathons in-line with the  <a href = "https://mlh.io/privacy">MLH Privacy Policy</a>.
 										I further agree to the terms of both the <a href = "https://mlh.io/terms"> MLH Contest Terms and Conditions</a> and the <a href = "https://mlh.io/privacy">MLH Privacy Policy</a>.
 									<span class="help is-danger is-inline">*</span></label></span>
 									<p id="consent_mlh_privacy_error" class="help is-danger hidden"></p>
@@ -446,7 +448,7 @@
 				</div>
 
 			</nav>
-	
+
 
 	</div>
 
