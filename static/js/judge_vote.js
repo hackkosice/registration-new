@@ -1,9 +1,9 @@
 $ = (element) => { return document.getElementById(element); };
 
 //Multiplication constants
-const tech_constant = 0.6;
+const tech_constant = 0.5;
 const effort_constant = 0.3;
-const bonus_constant = 0.1;
+const bonus_constant = 0.2;
 
 
 
@@ -49,19 +49,19 @@ window.onload = async function() {
     });
 
     //Setup initial values
-    $("tech_value").textContent = `${Math.floor(($("tech").value * tech_constant) * 10) / 10} / 6`;
+    $("tech_value").textContent = `${Math.floor(($("tech").value * tech_constant) * 10) / 10} / 5`;
     $("effort_value").textContent = `${Math.floor(($("effort").value * effort_constant) * 10) / 10} / 3`;
-    $("bonus_value").textContent = `${Math.floor(($("bonus").value * bonus_constant) * 10) / 10} / 1`;
+    $("bonus_value").textContent = `${Math.floor(($("bonus").value * bonus_constant) * 10) / 10} / 2`;
 
     $("tech").addEventListener('input', () => {
-        $("tech_value").textContent = `${Math.floor(($("tech").value * tech_constant) * 10) / 10} / 6`;
+        $("tech_value").textContent = `${Math.floor(($("tech").value * tech_constant) * 10) / 10} / 5`;
     });
     $("effort").addEventListener('input', () => {
         $("effort_value").textContent = `${Math.floor(($("effort").value * effort_constant) * 10) / 10} / 3`;
     });
 
     $("bonus").addEventListener('input', () => {
-        $("bonus_value").textContent = `${Math.floor(($("bonus").value * bonus_constant) * 10) / 10} / 1`;
+        $("bonus_value").textContent = `${Math.floor(($("bonus").value * bonus_constant) * 10) / 10} / 2`;
     });
 }
 

@@ -67,7 +67,7 @@ module.exports = class VotingApiEndpoints {
                     return res.status(200).send({
                         user: {
                             name: `${user.first_name} ${user.last_name}`,
-                            school: `${user.school.name}`,
+                            school: `${user.school?.name || ""}`,
                             level: `${user.level_of_study}`,
                             major: `${user.major}`,
                             birth: `${user.date_of_birth}`
@@ -84,7 +84,7 @@ module.exports = class VotingApiEndpoints {
                 return res.status(200).send({
                     user: {
                         name: `${user.first_name} ${user.last_name}`,
-                        school: `${user.school.name}`,
+                        school: `${user.school?.name || ""}`,
                         level: `${user.level_of_study}`,
                         major: `${user.major}`,
                         birth: `${user.date_of_birth}`
@@ -111,7 +111,7 @@ module.exports = class VotingApiEndpoints {
             return res.status(200).send({
                 user: {
                     name: `${user.first_name} ${user.last_name}`,
-                    school: `${user.school.name}`,
+                    school: `${user.school?.name || ""}`,
                     level: `${user.level_of_study}`,
                     major: `${user.major}`,
                     birth: `${user.date_of_birth}`
@@ -129,7 +129,7 @@ module.exports = class VotingApiEndpoints {
         return res.status(200).send({
             user: {
                 name: `${user.first_name} ${user.last_name}`,
-                school: `${user.school.name}`,
+                school: `${user.school?.name || ""}`,
                 level: `${user.level_of_study}`,
                 major: `${user.major}`,
                 birth: `${user.date_of_birth}`
