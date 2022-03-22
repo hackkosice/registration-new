@@ -241,7 +241,7 @@ module.exports = class VotingApiEndpoints {
             const user = await this.#cache.get(application.mymlh_uid);
 
             let line = `"${user.first_name} ${user.last_name}","${user.date_of_birth}","${user.major}","${user.level_of_study}",`;
-            line += `"${user.school.name || ""}"`;
+            line += `"${user.school?.name || ""}"`;
 
             for (const field of fields) {
                 line += `,"${application[field]}"`;
