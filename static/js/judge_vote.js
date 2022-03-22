@@ -28,6 +28,11 @@ window.onload = async function() {
             $("school").textContent = application.user["school"];
             $("major").textContent = application.user["major"];
             $("grad").textContent = application.user["level"];
+
+            if (typeof application.cv !== 'undefined') {
+                $("cv").textContent = application.cv;
+                $("cv").href = `/judge/cvs/${application.cv}`;
+            }
         });
 
 
@@ -47,7 +52,6 @@ window.onload = async function() {
     $("tech_value").textContent = `${Math.floor(($("tech").value * tech_constant) * 10) / 10} / 6`;
     $("effort_value").textContent = `${Math.floor(($("effort").value * effort_constant) * 10) / 10} / 3`;
     $("bonus_value").textContent = `${Math.floor(($("bonus").value * bonus_constant) * 10) / 10} / 1`;
-
 
     $("tech").addEventListener('input', () => {
         $("tech_value").textContent = `${Math.floor(($("tech").value * tech_constant) * 10) / 10} / 6`;

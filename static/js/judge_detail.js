@@ -46,6 +46,11 @@ window.onload = async () => {
         $("school").textContent = application.user["school"];
         $("major").textContent = application.user["major"];
         $("grad").textContent = application.user["level"];
+
+        if (typeof application.cv !== 'undefined') {
+            $("cv").textContent = application.cv;
+            $("cv").href = `/judge/cvs/${application.cv}`;
+        }
     });
 
 }

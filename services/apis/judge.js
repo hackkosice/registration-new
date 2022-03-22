@@ -62,6 +62,24 @@ module.exports = class VotingApiEndpoints {
             }
 
             if (!was_rated) {
+                if (picked.cv_file_id === null) {
+                    const user = await this.#cache.get(picked.mymlh_uid);
+                    return res.status(200).send({
+                        user: {
+                            name: `${user.first_name} ${user.last_name}`,
+                            school: `${user.school.name}`,
+                            level: `${user.level_of_study}`,
+                            major: `${user.major}`,
+                            birth: `${user.date_of_birth}`
+                        },
+                        form: form[0],
+                    });
+                }
+
+                const cv_filename = await this.#db.get("SELECT `file_code` FROM files WHERE `file_id`=?;", [picked.cv_file_id]);
+                if (typeof cv_filename[0] === 'undefined')
+                    return error(res, 403, "Requested CV code not found!");
+
                 const user = await this.#cache.get(picked.mymlh_uid);
                 return res.status(200).send({
                     user: {
@@ -71,7 +89,8 @@ module.exports = class VotingApiEndpoints {
                         major: `${user.major}`,
                         birth: `${user.date_of_birth}`
                     },
-                    form: picked
+                    form: picked,
+                    cv: cv_filename[0].file_code
                 });
             }
         }
@@ -87,6 +106,25 @@ module.exports = class VotingApiEndpoints {
         if (typeof form[0] === 'undefined')
             return error(res, 400, "Requested application not found!");
 
+        if (form[0].cv_file_id === null) {
+            const user = await this.#cache.get(form[0].mymlh_uid);
+            return res.status(200).send({
+                user: {
+                    name: `${user.first_name} ${user.last_name}`,
+                    school: `${user.school.name}`,
+                    level: `${user.level_of_study}`,
+                    major: `${user.major}`,
+                    birth: `${user.date_of_birth}`
+                },
+                form: form[0]
+            });
+        }
+
+        const cv_filename = await this.#db.get("SELECT `file_code` FROM files WHERE `file_id`=?;", [form[0].cv_file_id]);
+
+        if (typeof cv_filename[0] === 'undefined')
+            return error(res, 403, "Requested CV code not found!");
+
         const user = await this.#cache.get(form[0].mymlh_uid);
         return res.status(200).send({
             user: {
@@ -96,7 +134,8 @@ module.exports = class VotingApiEndpoints {
                 major: `${user.major}`,
                 birth: `${user.date_of_birth}`
             },
-            form: form[0]
+            form: form[0],
+            cv: cv_filename[0].file_code
         });
     }
 

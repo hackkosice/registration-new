@@ -69,7 +69,7 @@ const JudgeApiEndpoints     = require('./services/apis/judge.js');
 
     //Application CSV info
     router.get("/judge/applications.csv", async (req, res, next) => { judge_api.judge_auth_middleware(req, res, next) },
-        async (req, res) => { judge_api.get_applications_csv(req, res) })
+        async (req, res) => { judge_api.get_applications_csv(req, res) });
 
     //TODO: probably add auth
     router.post("/api/user-info", async (req, res) => { mlh_auth.get_user_data_endpoint(req, res) });
@@ -131,12 +131,15 @@ const JudgeApiEndpoints     = require('./services/apis/judge.js');
     app.use("/", express.static("./static"));
     app.use("/", router);
 
+    //CVs
+    app.use('/judge/cvs/', async (req, res, next) => { judge_api.judge_auth_middleware(req, res, next) });
+    app.use('/judge/cvs/', express.static("./uploads/cvs/"));
+
     //404 handler
     app.use(function(req, res) {
         res.status(404);
         res.redirect("/404.html");
     });
-
 
     //Start the HTTP server
     const server = http.createServer(app);
