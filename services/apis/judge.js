@@ -272,12 +272,12 @@ module.exports = class VotingApiEndpoints {
         const applications = await this.#db.get(query, []);
 
         //TODO: add yes/no for cv
-        let csv_content = "name,birth,major,education,school,status,country,reimbursement,skills,job,achievements,website,github,linkedin,devpost,hear_hk,hk_first,tshirt,diet\n";
+        let csv_content = "name,email,birth,major,education,school,status,country,reimbursement,skills,job,achievements,website,github,linkedin,devpost,hear_hk,hk_first,tshirt,diet\n";
 
         for (const application of applications) {
             const user = await this.#cache.get(application.mymlh_uid);
 
-            let line = `"${user.first_name} ${user.last_name}","${user.date_of_birth}","${user.major}","${user.level_of_study}",`;
+            let line = `"${user.first_name} ${user.last_name}","${user.email}","${user.date_of_birth}","${user.major}","${user.level_of_study}",`;
             line += `"${user.school?.name || ""}"`;
 
             for (const field of fields) {
