@@ -11,6 +11,8 @@ window.onload = async function () {
                 window.location = "/";
 
             window.scoreboard = scoreboard;
+
+            set_numbers();
             sort_table();
         })
     );
@@ -80,6 +82,11 @@ window.onload = async function () {
     $("vote").addEventListener('click', () => {
         window.location = "/judge/application.html";
     });
+}
+
+async function set_numbers() {
+    $("applications_number").textContent = window.scoreboard.length
+    $("applications_number_closed").textContent = window.scoreboard.filter((app) => app.status === "closed").length
 }
 
 async function sort_table() {
