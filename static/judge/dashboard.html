@@ -23,7 +23,9 @@
 </header>
 
 <div class="container mb-6">
-
+    <h6 class="subtitle is-6">Number of applications: <span id="applications_number"></span></h6>
+    <h6 class="subtitle is-6">Number of closed applications: <span id="applications_number_closed"></span></h6>
+    <h6 class="subtitle is-6">Number of accepted applications: <span id="applications_number_accepted"></span></h6>
     <div class = "columns">
         <div class="field column is-one-quarter">
             <label class="label">Sort by: </label>
@@ -34,6 +36,7 @@
                         <option value = "asc_score"> Score, ascending </option>
                         <option value = "des_votes"> Number of votes, descending </option>
                         <option value = "asc_votes"> Number of votes, ascending</option>
+                        <option value = "teams"> Group by teams</option>
                     </select>
                 </div>
             </div>
@@ -46,7 +49,7 @@
                     <select id = "status_filter">
                         <option value = "all"> Show all applications </option>
                         <option value = "closed"> Show only applications pending review </option>
-                        <option value = "invited"> Show only invited applications </option>
+                        <option value = "accepted"> Show only accepted applications </option>
                         <option value = "rejected"> Show only rejected applications </option>
                     </select>
                 </div>
@@ -57,10 +60,11 @@
     <div class = "columns">
         <div class = "column is-three-quarters">
             <div id = "user_scoreboard" class = "table_height">
+                <table class="table is-fullwidth" id="user_scoreboard_table"></table>
             </div>
             <div class = "columns is-mobile" style = "margin-top: 0.5em;">
                 <div class = "column is-half">
-                    <button class = "button is-fullwidth is-success" id = "accept">Invite selected</button>
+                    <button class = "button is-fullwidth is-success" id = "accept">Accept selected</button>
                 </div>
                 <div class = "column">
                     <button class = "button is-fullwidth is-danger" id = "reject">Reject selected</button>
@@ -70,10 +74,15 @@
             <div class = "is-fullwidth">
                 <a class = "button is-link is-fullwidth" href = "/judge/applications.csv">Download applications as *.csv</a>
             </div>
+
+            <div class = "is-fullwidth mt-3">
+                <a class = "button is-link is-fullwidth" href = "/judge/applications_accepted.csv">Download accepted applications as *.csv</a>
+            </div>
         </div>
 
         <div class = "column">
             <div id = "voter_scoreboard" class = "table_height-half">
+                <table class="table is-fullwidth" id="voter_scoreboard_table"></table>
             </div>
             <button class = "button is-link is-fullwidth" style = "margin-top: 0.5em;" id = "vote">Vote more!</button>
         </div>

@@ -41,6 +41,13 @@ window.onload = async () => {
                 part.textContent = application.form[part.id];
         }
 
+        for (const part of document.getElementsByTagName("a")) {
+            if (typeof application.form[part.id] !== 'undefined') {
+                part.textContent = application.form[part.id];
+                part.href = application.form[part.id];
+            }
+        }
+
         $("name").textContent = application.user["name"];
         $("birth").textContent = application.user["birth"];
         $("school").textContent = application.user["school"];
