@@ -108,9 +108,11 @@ async function sort_table() {
                 return 0;
 
             case "teams":
-                if (first.team === second.team)
-                    return 0;
-                return 1;
+                if ((first.team === null ? "" : first.team) < (second.team === null ? "" : second.team))
+                    return 1;
+                else if ((first.team === null ? "" : first.team) > (second.team === null ? "" : second.team))
+                    return -1;
+                return 0;
         }
     });
 
