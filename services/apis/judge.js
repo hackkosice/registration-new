@@ -230,13 +230,46 @@ module.exports = class VotingApiEndpoints {
     }
 
     async get_applications_csv(req, res) {
+        const csv_content = await this.generate_csv_content_from_query("SELECT * FROM applications")
 
+        res.setHeader("Content-type", "application/octet-stream");
+        res.status(200).send(csv_content);
+    }
+
+    async get_accepted_applications_csv(req, res) {
+        const csv_content = await this.generate_csv_content_from_query("SELECT * FROM applications WHERE `application_status` = 'accepted'")
+
+        res.setHeader("Content-type", "application/octet-stream");
+        res.status(200).send(csv_content);
+    }
+
+    async accept_application_endpoint(req, res) {
+        req.body.accepted.forEach((mymlh_uid) => {
+            this.#db.insert("UPDATE applications SET `application_status` = 'accepted' WHERE `mymlh_uid` = ?;", [mymlh_uid])
+        })
+
+        res.status(200).send({
+            message: "OK"
+        });
+    }
+
+    async reject_application_endpoint(req, res) {
+        req.body.rejected.forEach((mymlh_uid) => {
+            this.#db.insert("UPDATE applications SET `application_status` = 'rejected' WHERE `mymlh_uid` = ?;", [mymlh_uid])
+        })
+
+        res.status(200).send({
+            message: "OK"
+        });
+    }
+
+    async generate_csv_content_from_query(query) {
         const fields = ["application_status", "travel_from", "reimbursement", "skills", "job_preference",
-                        "achievements", "site", "github", "linkedin", "devpost", "hear_hk22",
-                        "first_hack_hk22", "tshirt", "diet"];
+            "achievements", "site", "github", "linkedin", "devpost", "hear_hk22",
+            "first_hack_hk22", "tshirt", "diet"];
 
 
-        const applications = await this.#db.get("SELECT * FROM applications;", []);
+        const applications = await this.#db.get(query, []);
 
         //TODO: add yes/no for cv
         let csv_content = "name,birth,major,education,school,status,country,reimbursement,skills,job,achievements,website,github,linkedin,devpost,hear_hk,hk_first,tshirt,diet\n";
@@ -253,8 +286,7 @@ module.exports = class VotingApiEndpoints {
             csv_content += `${line}\n`;
         }
 
-        res.setHeader("Content-type", "application/octet-stream");
-        res.status(200).send(csv_content);
+        return csv_content;
     }
 
     #cache = null;

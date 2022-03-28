@@ -2,6 +2,30 @@ $ = (element) => { return document.getElementById(element); };
 
 window.onload = async function () {
 
+    fetch_all_data()
+
+    $("param_sort").addEventListener('change', () => {
+        sort_table()
+    })
+
+    $("status_filter").addEventListener('change', () => {
+        sort_table()
+    })
+
+    $("accept").addEventListener('click', () => {
+        accept_selected()
+    })
+
+    $("reject").addEventListener('click', () => {
+        reject_selected()
+    })
+
+    $("vote").addEventListener('click', () => {
+        window.location = "/judge/application.html";
+    });
+}
+
+async function fetch_all_data() {
     let fetches = [];
 
     fetches.push(fetch("/api/judge-application-scoreboard", {method: 'POST', credentials: 'same-origin', cache: 'force-cache'})
@@ -10,8 +34,7 @@ window.onload = async function () {
             if (typeof scoreboard.error !== 'undefined')
                 window.location = "/";
 
-            window.scoreboard = scoreboard;
-
+            window.user_scoreboard = scoreboard;
             set_numbers();
             sort_table();
         })
@@ -32,36 +55,9 @@ window.onload = async function () {
             if (typeof scoreboard.error !== 'undefined')
                 window.location = "/";
 
-            let root = document.createElement("table");
-            root.classList.add("table", "is-fullwidth");
-            root.id = "applications_table";
+            window.voter_scoreboard = scoreboard;
 
-            let header = document.createElement("tr");
-
-            let name_header = document.createElement("th");
-            name_header.textContent = "Voter";
-            header.appendChild(name_header);
-
-            let score_header = document.createElement("th");
-            score_header.textContent = "Votes";
-            header.appendChild(score_header);
-
-
-            root.appendChild(header);
-
-            for (const user of scoreboard) {
-                let row = document.createElement("tr");
-                let name = document.createElement("td");
-                name.textContent = user.voter;
-
-                let score = document.createElement("td");
-                score.textContent = user.votes;
-
-                row.appendChild(name);
-                row.appendChild(score);
-                root.appendChild(row);
-            }
-            document.getElementById("voter_scoreboard").appendChild(root);
+            build_voter_scoreboard()
         })
     );
 
@@ -70,18 +66,6 @@ window.onload = async function () {
     } catch(err) {
         window.location = "/";
     }
-
-    $("param_sort").addEventListener('change', () => {
-        sort_table()
-    })
-
-    $("status_filter").addEventListener('change', () => {
-        sort_table()
-    })
-
-    $("vote").addEventListener('click', () => {
-        window.location = "/judge/application.html";
-    });
 }
 
 async function set_numbers() {
@@ -92,7 +76,7 @@ async function set_numbers() {
 async function sort_table() {
 
     //Apply any sorting
-    window.scoreboard.sort((first, second) => {
+    window.user_scoreboard.sort((first, second) => {
 
         switch ($("param_sort").value) {
             case "des_score":
@@ -130,14 +114,13 @@ async function sort_table() {
         }
     });
 
-    //Remove old table
-    if ($("applications_table") !== null)
-        $("user_scoreboard").removeChild($("applications_table"));
+    build_user_scoreboard();
+}
 
+function build_user_scoreboard() {
     //Build up new table
-    let root = document.createElement("table");
-    root.classList.add("table", "is-fullwidth");
-    root.id = "applications_table";
+    let root = $("user_scoreboard_table")
+    root.innerHTML = ''
 
     let header = document.createElement("tr");
 
@@ -170,7 +153,7 @@ async function sort_table() {
     root.appendChild(header);
 
     //Apply any filtering
-    for (const user of window.scoreboard) {
+    for (const user of window.user_scoreboard) {
 
         if ($("status_filter").value !== "all") {
             if ($("status_filter").value !== user.status)
@@ -182,7 +165,7 @@ async function sort_table() {
         let selector_chkbox = document.createElement("input");
         selector_chkbox.type = "checkbox";
         selector_chkbox.id = user.mymlh_uid; //User is MyMLH uid
-        selector_chkbox.class = "user_chkbox";
+        selector_chkbox.classList.add("user_select_checkbox");
 
         let selector = document.createElement("td");
         selector.appendChild(selector_chkbox);
@@ -218,5 +201,73 @@ async function sort_table() {
         row.appendChild(detail_wrapper);
         root.appendChild(row);
     }
-    $("user_scoreboard").appendChild(root);
+}
+
+function build_voter_scoreboard() {
+    let root = $("voter_scoreboard_table")
+    root.innerHTML = '';
+
+    let header = document.createElement("tr");
+
+    let name_header = document.createElement("th");
+    name_header.textContent = "Voter";
+    header.appendChild(name_header);
+
+    let score_header = document.createElement("th");
+    score_header.textContent = "Votes";
+    header.appendChild(score_header);
+
+
+    root.appendChild(header);
+
+    for (const user of window.voter_scoreboard) {
+        let row = document.createElement("tr");
+        let name = document.createElement("td");
+        name.textContent = user.voter;
+
+        let score = document.createElement("td");
+        score.textContent = user.votes;
+
+        row.appendChild(name);
+        row.appendChild(score);
+        root.appendChild(row);
+    }
+}
+
+function get_selected() {
+    return Array.from(document.getElementsByClassName('user_select_checkbox'))
+        .filter((el) => el.checked)
+        .map((el) => parseInt(el.id))
+}
+
+async function accept_selected() {
+    const selected = get_selected()
+
+    await fetch("/api/judge-accept", {
+        method: 'POST', credentials: 'same-origin',
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+        },
+        body: JSON.stringify({
+            accepted: selected
+        })
+    });
+
+    fetch_all_data();
+}
+
+async function reject_selected() {
+    const selected = get_selected()
+
+    await fetch("/api/judge-reject", {
+        method: 'POST', credentials: 'same-origin',
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+        },
+        body: JSON.stringify({
+            rejected: selected
+        })
+    });
+
+    fetch_all_data();
 }
