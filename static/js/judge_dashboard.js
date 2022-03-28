@@ -122,6 +122,11 @@ async function sort_table() {
                 else if (first.judged > second.judged)
                     return -1;
                 return 0;
+
+            case "teams":
+                if (first.team === second.team)
+                    return 0;
+                return 1;
         }
     });
 
@@ -154,6 +159,10 @@ async function sort_table() {
     let status_header = document.createElement("th");
     status_header.textContent = "Application status";
     header.appendChild(status_header);
+
+    let team_header = document.createElement("th");
+    team_header.textContent = "Team";
+    header.appendChild(team_header);
 
     let padding_back = document.createElement("th");
     header.appendChild(padding_back);
@@ -190,6 +199,9 @@ async function sort_table() {
         let status = document.createElement("td")
         status.textContent = user.status;
 
+        let team = document.createElement("td");
+        team.textContent = user.team;
+
         let detail_link = document.createElement("a");
         detail_link.href = `/judge/detail.html?uid=${user.mymlh_uid}`;
         detail_link.textContent = "Details";
@@ -202,6 +214,7 @@ async function sort_table() {
         row.appendChild(score);
         row.appendChild(votes);
         row.appendChild(status);
+        row.appendChild(team);
         row.appendChild(detail_wrapper);
         root.appendChild(row);
     }
