@@ -22,7 +22,7 @@ const parts = [
         fields: ["reimbursement", "travel_from", "visa"],
         functions: [() => { return $("reimbursement_y").checked ? "yes" : "no"; }, null,
                     () => { return $("visa_y").checked ? "yes" : "no"; }, null, null],
-        requirements: [() => { return $("reimbursement_y").checked || $("reimbursement_n").checked; }, null, 
+        requirements: [() => { return $("reimbursement_y").checked || $("reimbursement_n").checked; }, null,
                        () => { return $("visa_y").checked || $("visa_n").checked; }]
     },
 
@@ -44,18 +44,18 @@ const parts = [
 
     { //Part 5: get to know you
         fields: ["excited_hk22", "hear_hk22", "first_hack_hk22", "spirit_animal", "pizza", "tshirt", "diet"],
-        functions: [null, null, () => { return $("firsthack_y").checked ? "yes" : "no"; }, 
+        functions: [null, null, () => { return $("firsthack_y").checked ? "yes" : "no"; },
                     null, null, null, null],
-        requirements: [null, null, () => { return $("firsthack_y").checked || $("firsthack_n").checked; }, 
+        requirements: [null, null, () => { return $("firsthack_y").checked || $("firsthack_n").checked; },
                        null, null, null, null]
     },
 
     { //Part 6: consents
         fields: ["consent_hk_privacy", "consent_coc", "consent_cvs", "consent_mlh_privacy", "consent_photos"],
-        functions: [() => { return $("consent_hk_privacy").checked ? "true" : "false"; }, 
+        functions: [() => { return $("consent_hk_privacy").checked ? "true" : "false"; },
                     () => { return $("consent_coc").checked ? "true" : "false"; }, () => { return $("consent_cvs").checked ? "true" : "false"; },
                     () => { return $("consent_mlh_privacy").checked ? "true" : "false"; }, () => { return $("consent_photos").checked ? "true" : "false"; }],
-        requirements: [() => { return $("consent_hk_privacy").checked; }, 
+        requirements: [() => { return $("consent_hk_privacy").checked; },
         () => { return $("consent_coc").checked; }, () => { return $("consent_cvs").checked; },
         () => { return $("consent_mlh_privacy").checked; }, () => { return $("consent_photos").checked; }],
     }
@@ -68,13 +68,13 @@ window.onload = async function() {
     for (const button of document.getElementsByClassName("save_and_continue"))
         button.addEventListener('click', () => { save_callback(button.id) });
     $("save_and_close").addEventListener("click", () => { save_and_close_callback() })
-    
+
     for (let i = 1; i < 7; i++)
         $("show_form-part" + i).addEventListener('click', () => { header_callback(i) });
 
     $("skills").addEventListener('change', () => {
-        
-        for(const child of $("skills_wrap").children) 
+
+        for(const child of $("skills_wrap").children)
             if (child.value === $("skills").value)
                 return ($("skills").value = "");
 
@@ -110,26 +110,26 @@ window.onload = async function() {
 
 
     var fetches = [];
-   
+
     fetches.push(fetch("/api/user-info", {method: 'POST', credentials: 'same-origin'}).then(
         async (response) => {
-            const userinfo = await response.json(); 
+            const userinfo = await response.json();
             window.userinfo = userinfo.data;
         })
     );
 
     fetches.push(fetch("/api/form-data", {method: 'POST', credentials: 'same-origin'}).then(
         async (response) => {
-            const formdata = await response.json(); 
+            const formdata = await response.json();
             window.formdata = formdata;
         })
     );
 
-    
+
     for (const dataset of suggestions_datasets) {
 
         //Load the dataset
-        fetches.push(fetch(dataset, {method: 'GET'}).then( 
+        fetches.push(fetch(dataset, {method: 'GET'}).then(
             async (response) => {
                 const suggestions = await response.json();
 
@@ -139,13 +139,13 @@ window.onload = async function() {
                 if (dataset === "/data/countries.json") {
                     COUNTRIES = suggestions.data
                 }
-    
+
                 for (const item of suggestions.data) {
-    
+
                     var option = document.createElement("option");
                     option.value = item;
                     option.textContent = item;
-    
+
                     parent.appendChild(option);
                 }
                 $("datasets").appendChild(parent);
@@ -163,7 +163,7 @@ window.onload = async function() {
     }
 
 
-    if (typeof window.formdata.application_status !== 'undefined' 
+    if (typeof window.formdata.application_status !== 'undefined'
         && window.formdata.application_status !== "open")
         window.location = "/dashboard.html";
 
@@ -188,7 +188,7 @@ window.onload = async function() {
     //Autofill boxes with info form MyMLH
     $("firstname").value = window.userinfo.first_name;
     $("lastname").value = window.userinfo.last_name;
-    
+
     $("email").value = window.userinfo.email;
     $("phone").value = window.userinfo.phone_number;
     $("birth").value = window.userinfo.date_of_birth;
@@ -197,7 +197,7 @@ window.onload = async function() {
     $("loader").classList.remove("is-active");
 
     //Autofill the form
-    
+
     //Application object has always application id. If application id is undefined, no not autofill anything
     if (typeof window.formdata.application_id === 'undefined')
         return;
@@ -211,9 +211,9 @@ async function save_callback(progress, noRedirect = false) {
     var body = {
         application_progress: Number(progress)
     };
-    
+
     //Bump local application status variable
-    window.formdata.application_progress = window.formdata.application_progress >= Number(progress) ? 
+    window.formdata.application_progress = window.formdata.application_progress >= Number(progress) ?
                                            window.formdata.application_progress : Number(progress);
 
     const progress_selector = parts[Number(progress) - 1]; //Convert to zero-index
@@ -229,7 +229,7 @@ async function save_callback(progress, noRedirect = false) {
             var callback;
             if (progress_selector.requirements[i] == null)
                 callback = () => { return $(progress_selector.fields[i]).value.trim() !== ""; }
-            else 
+            else
                 callback = progress_selector.requirements[i];
 
             if (!callback()) {
@@ -277,11 +277,11 @@ async function save_callback(progress, noRedirect = false) {
     });
 
     if (Number(progress) > 0 && Number(progress)  < 6) {
-        for (var i = 1; i <= 6; i++){ 
+        for (var i = 1; i <= 6; i++){
             $("form-part" + i).classList.add("hidden");
             $("show_form-part" + i).classList.remove("is-active");
         }
-    
+
         $("show_form-part" + (Number(progress) + 1)).classList.remove("hidden");
         $("show_form-part" + (Number(progress) + 1)).classList.add("is-active");
         $("form-part" + (Number(progress) + 1)).classList.remove("hidden");
@@ -302,7 +302,6 @@ function showError(elementId, errorMessage) {
 function hideError(elementId) {
     $(elementId).classList.remove("is-danger")
     $(`${elementId}_error`).classList.add("hidden");
-    console.log(elementId);
 }
 
 
@@ -329,7 +328,7 @@ function cv_is_ok() {
 }
 
 async function upload_cv() {
-    
+
     try {
         const selectedFile = $("cv_file_id").files[0];
         if (selectedFile) {
@@ -370,7 +369,7 @@ function get_all_skills() {
 }
 
 function autofill_form() {
-   
+
     //Set checkboxes
     $(window.formdata.reimbursement === "yes" ? "reimbursement_y" : "reimbursement_n").checked = true;
     $(window.formdata.visa === "yes" ? "visa_y" : "visa_n").checked = true;
@@ -383,7 +382,7 @@ function autofill_form() {
     $("consent_mlh_privacy").checked = window.formdata.consent_mlh_privacy === "true";
     $("consent_photos").checked = window.formdata.consent_photos === "true";
 
-   
+
     //Set textboxes
     let whitelist = ["skills", "cv_file_id", "consent_hk_privacy", "consent_coc",
                      "consent_cvs", "consent_mlh_privacy" , "consent_photos"]
@@ -398,7 +397,7 @@ function autofill_form() {
         if (typeof window.formdata[part.id] !== 'undefined' && window.formdata[part.id] !== null)
             part.value = window.formdata[part.id];
     }
-        
+
     $("achievements").value = window.formdata.achievements;
     $("excited_hk22").value = window.formdata.excited_hk22;
     $("spirit_animal").value = window.formdata.spirit_animal;
@@ -432,7 +431,7 @@ function isAdult(birthday){ //birthday is string YYYY-MM-DD (ISO format)
     // adult is considered having the 18th birthday today or in the past
     let d = new Date(birthday);
     let now = new Date();
-    
+
     if (now.getFullYear() - d.getFullYear() < 18){
         return false;
     } else if (now.getFullYear() - d.getFullYear() > 18){
@@ -445,7 +444,7 @@ function isAdult(birthday){ //birthday is string YYYY-MM-DD (ISO format)
     } else if (now.getMonth() > d.getMonth()){
         return true;
     }
-    
+
     //months are the same, this is close
     if (now.getDate() < d.getDate()){
         return false;

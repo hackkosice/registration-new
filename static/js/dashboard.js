@@ -145,7 +145,6 @@ window.onload = async function() {
         } catch(err) {
             //Display error message
             $("create").classList.remove("is-loading")
-            console.log(err);
         }
     });
 
