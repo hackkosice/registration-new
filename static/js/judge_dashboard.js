@@ -69,8 +69,8 @@ async function fetch_all_data() {
 }
 
 async function set_numbers() {
-    $("applications_number").textContent = window.scoreboard.length
-    $("applications_number_closed").textContent = window.scoreboard.filter((app) => app.status === "closed").length
+    $("applications_number").textContent = window.user_scoreboard.length
+    $("applications_number_closed").textContent = window.user_scoreboard.filter((app) => app.status === "closed").length
 }
 
 async function sort_table() {
