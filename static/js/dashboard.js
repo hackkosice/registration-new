@@ -10,6 +10,16 @@ const statusData = {
         class: "is-warning",
         title: "Status: Closed",
         description: "You can no longer edit your application, as it's being reviewed by our staff."
+    },
+    "accepted": {
+        class: "is-success",
+        title: "Status: Accepted",
+        description: "Congratulations! You have been officially invited to join us at Hack Kosice. Look for more emails with information coming soon."
+    },
+    "rejected": {
+        class: "is-danger",
+        title: "Status: Rejected",
+        description: "We are sorry but we can't offer you place at our hackathon this year. But don't worry, you can have a change to participate next year."
     }
     //add more
 };
@@ -46,7 +56,7 @@ window.onload = async function() {
             $("reimb").textContent = reimb.title;
             $("reimb_description").textContent = reimb.description;
             $("reimb-card").classList.add(reimb.class);
-        
+
             if (formdata.application_status === "open") {
                 $("edit-application").classList.remove("hidden");
                 $("close-application").classList.remove("hidden");
@@ -57,8 +67,8 @@ window.onload = async function() {
         });
 
 
-    //So we can ease the load on the server at least a bit 
-    await load_team(); 
+    //So we can ease the load on the server at least a bit
+    await load_team();
 
     //Add callback
     $("join").addEventListener('click', async () => {
@@ -77,7 +87,7 @@ window.onload = async function() {
 
             $("join").classList.add("is-loading")
 
-            await fetch("/api/team-join", {method: 'POST', credentials: 'same-origin', 
+            await fetch("/api/team-join", {method: 'POST', credentials: 'same-origin',
                 headers: {
                     'Content-Type': 'application/json;charset=utf-8'
                 },
@@ -116,7 +126,7 @@ window.onload = async function() {
 
             $("create").classList.add("is-loading")
 
-            const data = await fetch("/api/team-create", {method: 'POST', credentials: 'same-origin', 
+            const data = await fetch("/api/team-create", {method: 'POST', credentials: 'same-origin',
                 headers: {
                     'Content-Type': 'application/json;charset=utf-8'
                 },
@@ -140,7 +150,7 @@ window.onload = async function() {
     });
 
     $("close-application").addEventListener('click', async () => {
-        
+
         try {
             await fetch("/api/form-close", {method: 'POST', credentials: 'same-origin'});
             window.location = window.location;
@@ -196,7 +206,7 @@ function load_team() {
 
                 let status = document.createElement("td");
                 status.textContent = member.application;
-                
+
                 row.appendChild(name);
                 row.appendChild(status);
 
@@ -214,7 +224,7 @@ function load_team() {
                 if (teamdata.data.owner === window.formdata.mymlh_uid &&
                     teamdata.data.owner !== member.mymlh_uid) {
 
-                        
+
                     let kick_link = document.createElement("a");
                     kick_link.href = "javascript:void(0)";
                     kick_link.textContent = "kick";
@@ -222,7 +232,7 @@ function load_team() {
                         await fetch("/api/team-kick", {method: 'POST', credentials: 'same-origin',
                             headers: {
                                 'Content-Type': 'application/json;charset=utf-8'
-                            }, 
+                            },
                             body: JSON.stringify({
                                 target: member.mymlh_uid
                             })
@@ -245,13 +255,13 @@ function load_team() {
             leave_button.textContent = "Leave team";
             leave_button.classList.add("button", "is-primary", "is-light")
             leave_button.addEventListener('click', async () => {
-                
+
                 fetch("/api/team-leave", {method: 'POST', credentials: 'same-origin'}).then(
                     async (response) => {
                         if (response.status == 200)
                             window.location = window.location;
                     }
-                )     
+                )
             });
 
             team.appendChild(root);

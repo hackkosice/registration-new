@@ -37,13 +37,13 @@ const JudgeApiEndpoints     = require('./services/apis/judge.js');
     // Email setup
     const key = require('./credentials.json');
     const mailer = new Mailer(key);
-    
+
     // Database Connection
     let db_connection = null;
 
     if (Database.provider !== "sqlite")
         db_connection = new Database(process.env.SQL_UNAME, process.env.SQL_PASS);
-    else 
+    else
         db_connection = new Database(); //sqlite connects to a file, no username and password needed
 
     //Start MLH api
@@ -71,6 +71,9 @@ const JudgeApiEndpoints     = require('./services/apis/judge.js');
     router.get("/judge/applications.csv", async (req, res, next) => { judge_api.judge_auth_middleware(req, res, next) },
         async (req, res) => { judge_api.get_applications_csv(req, res) });
 
+    router.get("/judge/applications_accepted.csv", async (req, res, next) => { judge_api.judge_auth_middleware(req, res, next) },
+        async (req, res) => { judge_api.get_accepted_applications_csv(req, res) });
+
     //TODO: probably add auth
     router.post("/api/user-info", async (req, res) => { mlh_auth.get_user_data_endpoint(req, res) });
 
@@ -88,19 +91,19 @@ const JudgeApiEndpoints     = require('./services/apis/judge.js');
         async (req, res) => { form_api.form_upload_file(req, res) });
 
 
-    router.post("/api/team-create", 
+    router.post("/api/team-create",
         async (req, res, next) => { team_api.team_auth_middleware(req, res, next) },
-        async (req, res) => { team_api.team_create_endpoint(req, res) }); 
-    router.post("/api/team-join", 
+        async (req, res) => { team_api.team_create_endpoint(req, res) });
+    router.post("/api/team-join",
         async (req, res, next) => { team_api.team_auth_middleware(req, res, next) },
-        async (req, res) => { team_api.team_join_endpoint(req, res) }); 
-    router.post("/api/team-leave", 
+        async (req, res) => { team_api.team_join_endpoint(req, res) });
+    router.post("/api/team-leave",
         async (req, res, next) => { team_api.team_auth_middleware(req, res, next) },
-        async (req, res) => { team_api.team_leave_endpoint(req, res) }); 
-    router.post("/api/team-kick", 
+        async (req, res) => { team_api.team_leave_endpoint(req, res) });
+    router.post("/api/team-kick",
         async (req, res, next) => { team_api.team_auth_middleware(req, res, next) },
-        async (req, res) => { team_api.team_kick_endpoint(req, res) }); 
-    router.post("/api/team-info", 
+        async (req, res) => { team_api.team_kick_endpoint(req, res) });
+    router.post("/api/team-info",
         async (req, res, next) => { team_api.team_auth_middleware(req, res, next) },
         async (req, res) => { team_api.team_info_endpoint(req, res) });
 
@@ -126,6 +129,12 @@ const JudgeApiEndpoints     = require('./services/apis/judge.js');
     router.post("/api/judge-application-scoreboard",
         async (req, res, next) => { judge_api.judge_auth_middleware(req, res, next) },
         async (req, res) => { judge_api.get_applications_scoreboard_endpoint(req, res) });
+    router.post("/api/judge-accept",
+        async (req, res, next) => { judge_api.judge_auth_middleware(req, res, next) },
+        async (req, res) => { judge_api.accept_application_endpoint(req, res) });
+    router.post("/api/judge-reject",
+        async (req, res, next) => { judge_api.judge_auth_middleware(req, res, next) },
+        async (req, res) => { judge_api.reject_application_endpoint(req, res) });
 
     //Bind static content
     app.use("/", express.static("./static"));
