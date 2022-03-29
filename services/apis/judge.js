@@ -1,9 +1,5 @@
 const jwt           = require("jsonwebtoken");
 
-const score_constants = {
-
-};
-
 //For code pretification
 function error(res, status, msg) {
     return res.status(status).send({
@@ -39,61 +35,47 @@ module.exports = class VotingApiEndpoints {
     }
 
     async get_application_endpoint(req, res) {
-        const rated = await this.#db.get("SELECT `mymlh_uid` FROM votes WHERE `voter_uid`=?;", [req.verification.voter_uid]);
-
-        //pick one that has not been rated
-        let closed = await this.#db.get("SELECT * FROM applications WHERE `application_status`=?;", ["closed"]);
-
-        if (closed.length === 0 || rated.length === closed.length)
+        const not_rated_uids = await this.#db.get("SELECT mymlh_uid FROM applications WHERE application_status = 'closed' EXCEPT SELECT mymlh_uid FROM votes WHERE voter_uid = ?;", [req.verification.voter_uid])
+        if (not_rated_uids.length === 0) {
             return res.status(200).send({
                 info: "All Done! There is nothing more to vote on!"
             });
-
-        //pick a random one
-        while (true) {
-            let picked = closed[Math.floor(Math.random() * closed.length)];
-
-            let was_rated = false;
-            for (const item of rated) {
-                if (item.application_id === picked.application_id) {
-                    was_rated = true;
-                    break;
-                }
-            }
-
-            if (!was_rated) {
-                if (picked.cv_file_id === null) {
-                    const user = await this.#cache.get(picked.mymlh_uid);
-                    return res.status(200).send({
-                        user: {
-                            name: `${user.first_name} ${user.last_name}`,
-                            school: `${user.school?.name || ""}`,
-                            level: `${user.level_of_study}`,
-                            major: `${user.major}`,
-                            birth: `${user.date_of_birth}`
-                        },
-                        form: picked
-                    });
-                }
-
-                const cv_filename = await this.#db.get("SELECT `file_code` FROM files WHERE `file_id`=?;", [picked.cv_file_id]);
-                if (typeof cv_filename[0] === 'undefined')
-                    return error(res, 403, "Requested CV code not found!");
-
-                const user = await this.#cache.get(picked.mymlh_uid);
-                return res.status(200).send({
-                    user: {
-                        name: `${user.first_name} ${user.last_name}`,
-                        school: `${user.school?.name || ""}`,
-                        level: `${user.level_of_study}`,
-                        major: `${user.major}`,
-                        birth: `${user.date_of_birth}`
-                    },
-                    form: picked,
-                    cv: cv_filename[0].file_code
-                });
-            }
         }
+
+        const picked_uid = not_rated_uids[Math.floor(Math.random() * not_rated_uids.length)].mymlh_uid;
+        const pickedQuery = await this.#db.get("SELECT * FROM applications WHERE mymlh_uid=?", [picked_uid])
+        const picked = pickedQuery[0];
+
+        if (picked.cv_file_id === null) {
+            const user = await this.#cache.get(picked.mymlh_uid);
+            return res.status(200).send({
+                user: {
+                    name: `${user.first_name} ${user.last_name}`,
+                    school: `${user.school?.name || ""}`,
+                    level: `${user.level_of_study}`,
+                    major: `${user.major}`,
+                    birth: `${user.date_of_birth}`
+                },
+                form: picked
+            });
+        }
+
+        const cv_filename = await this.#db.get("SELECT `file_code` FROM files WHERE `file_id`=?;", [picked.cv_file_id]);
+        if (typeof cv_filename[0] === 'undefined')
+            return error(res, 403, "Requested CV code not found!");
+
+        const user = await this.#cache.get(picked.mymlh_uid);
+        return res.status(200).send({
+            user: {
+                name: `${user.first_name} ${user.last_name}`,
+                school: `${user.school?.name || ""}`,
+                level: `${user.level_of_study}`,
+                major: `${user.major}`,
+                birth: `${user.date_of_birth}`
+            },
+            form: picked,
+            cv: cv_filename[0].file_code
+        });
     }
 
     async get_application_detail_endpoint(req, res) {
@@ -177,6 +159,7 @@ module.exports = class VotingApiEndpoints {
 
             voted_applications[vote.mymlh_uid].score += vote.score;
             voted_applications[vote.mymlh_uid].judged++;
+
         }
 
         //Normalize average out the score
@@ -236,16 +219,16 @@ module.exports = class VotingApiEndpoints {
         res.status(200).send(csv_content);
     }
 
-    async get_accepted_applications_csv(req, res) {
-        const csv_content = await this.generate_csv_content_from_query("SELECT * FROM applications WHERE `application_status` = 'accepted'")
+    async get_invited_applications_csv(req, res) {
+        const csv_content = await this.generate_csv_content_from_query("SELECT * FROM applications WHERE `application_status` = 'invited'")
 
         res.setHeader("Content-type", "application/octet-stream");
         res.status(200).send(csv_content);
     }
 
-    async accept_application_endpoint(req, res) {
+    async invite_application_endpoint(req, res) {
         req.body.accepted.forEach((mymlh_uid) => {
-            this.#db.insert("UPDATE applications SET `application_status` = 'accepted' WHERE `mymlh_uid` = ?;", [mymlh_uid])
+            this.#db.insert("UPDATE applications SET `application_status` = 'invited' WHERE `mymlh_uid` = ?;", [mymlh_uid])
         })
 
         res.status(200).send({

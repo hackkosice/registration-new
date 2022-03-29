@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang = "en">
-	
+
 	<head>
 
 		<title id = "title"> Hack Kosice registration </title>
@@ -9,7 +9,7 @@
 		<link rel = "icon" type = "image/png" sizes = "192x192" href = "images/favicon/favicon-192.png">
 
 		<script async src = "/js/dashboard.js"></script>
-		
+
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link rel="stylesheet" href="/css/mystyles.css">
@@ -42,6 +42,7 @@
 							</div>
 							<div class="message-body" id="description">
 							</div>
+							<button class="button is-success ml-5 mb-4" id="message-button"></button>
 						</article>
 
 						<a href="/application.html" id="edit-application">
@@ -96,8 +97,12 @@
 								<p class="subtitle is-5 is-primary">Team code: <code id="team_code_label"></code></p>
 							</div>
 							<p class="subtitle is-5 is-primary">Team members:</p>
+							<table class="table is-fullwidth" id="team_table"></table>
+							<button class="button is-primary is-light" id="leave_team_button">Leave team</button>
+						</div>
 						</div>
 					</div>
+				</div>
 			</nav>
 		</div>
 

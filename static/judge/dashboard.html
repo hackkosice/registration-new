@@ -25,6 +25,7 @@
 <div class="container mb-6">
     <h6 class="subtitle is-6">Number of applications: <span id="applications_number"></span></h6>
     <h6 class="subtitle is-6">Number of closed applications: <span id="applications_number_closed"></span></h6>
+    <h6 class="subtitle is-6">Number of invited applications: <span id="applications_number_invited"></span></h6>
     <h6 class="subtitle is-6">Number of accepted applications: <span id="applications_number_accepted"></span></h6>
     <div class = "columns">
         <div class="field column is-one-quarter">
@@ -49,8 +50,9 @@
                     <select id = "status_filter">
                         <option value = "all"> Show all applications </option>
                         <option value = "closed"> Show only applications pending review </option>
-                        <option value = "accepted"> Show only accepted applications </option>
+                        <option value = "invited"> Show only invited applications </option>
                         <option value = "rejected"> Show only rejected applications </option>
+                        <option value = "accepted"> Show only accepted applications </option>
                     </select>
                 </div>
             </div>
@@ -64,7 +66,7 @@
             </div>
             <div class = "columns is-mobile" style = "margin-top: 0.5em;">
                 <div class = "column is-half">
-                    <button class = "button is-fullwidth is-success" id = "accept">Accept selected</button>
+                    <button class = "button is-fullwidth is-success" id = "accept">Invite selected</button>
                 </div>
                 <div class = "column">
                     <button class = "button is-fullwidth is-danger" id = "reject">Reject selected</button>
@@ -76,7 +78,7 @@
             </div>
 
             <div class = "is-fullwidth mt-3">
-                <a class = "button is-link is-fullwidth" href = "/judge/applications_accepted.csv">Download accepted applications as *.csv</a>
+                <a class = "button is-link is-fullwidth" href = "/judge/applications_invited.csv">Download invited applications as *.csv</a>
             </div>
         </div>
 
