@@ -160,7 +160,6 @@ module.exports = class VotingApiEndpoints {
             voted_applications[vote.mymlh_uid].score += vote.score;
             voted_applications[vote.mymlh_uid].judged++;
 
-            console.log(vote);
         }
 
         //Normalize average out the score
@@ -181,7 +180,6 @@ module.exports = class VotingApiEndpoints {
                 voted_applications[application.mymlh_uid].score /= voted_applications[application.mymlh_uid].judged;
                 results.push(voted_applications[application.mymlh_uid]);
             }
-            console.log(application)
         }
 
         res.status(200).send(results);
