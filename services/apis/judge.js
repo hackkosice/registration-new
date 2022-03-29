@@ -35,7 +35,7 @@ module.exports = class VotingApiEndpoints {
     }
 
     async get_application_endpoint(req, res) {
-        const not_rated_uids = await this.#db.get("SELECT A.mymlh_uid FROM applications AS A LEFT JOIN votes AS V ON A.mymlh_uid = V.mymlh_uid WHERE A.application_status = 'closed' AND (V.voter_uid IS NULL OR V.voter_uid <> ?) GROUP BY A.mymlh_uid;", [req.verification.voter_uid])
+        const not_rated_uids = await this.#db.get("SELECT mymlh_uid FROM applications WHERE application_status = 'closed' EXCEPT SELECT mymlh_uid FROM votes WHERE voter_uid = ?;", [req.verification.voter_uid])
         if (not_rated_uids.length === 0) {
             return res.status(200).send({
                 info: "All Done! There is nothing more to vote on!"
