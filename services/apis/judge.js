@@ -1,9 +1,5 @@
 const jwt           = require("jsonwebtoken");
 
-const score_constants = {
-
-};
-
 //For code pretification
 function error(res, status, msg) {
     return res.status(status).send({
@@ -47,7 +43,8 @@ module.exports = class VotingApiEndpoints {
         }
 
         const picked_uid = not_rated_uids[Math.floor(Math.random() * not_rated_uids.length)].mymlh_uid;
-        const picked = await this.#db.get("SELECT * FROM applications WHERE mymlh_uid=?", [picked_uid])
+        const pickedQuery = await this.#db.get("SELECT * FROM applications WHERE mymlh_uid=?", [picked_uid])
+        const picked = pickedQuery[0];
 
         if (picked.cv_file_id === null) {
             const user = await this.#cache.get(picked.mymlh_uid);
