@@ -40,12 +40,12 @@ const statusData = {
 
 
 const reimbData = {
-    "none": {
+    "no": {
         class: "is-error",
         title: "Status: Not Requested",
         description: "You have not requested travel reimbursement in your application."
     },
-    "requested": {
+    "yes": {
         class: "is-warning",
         title: "Status: Requested",
         description: "You have requested reimbursement. We are now going to judge if you are allegeable to receive it."
@@ -186,7 +186,7 @@ async function load_user_data() {
                 messageButton.addEventListener('click', status.button.callback)
             }
 
-            let reimb = reimbData[formdata.reimbursement_progress];
+            let reimb = reimbData[formdata.reimbursement];
             $("reimb").textContent = reimb.title;
             $("reimb_description").textContent = reimb.description;
             $("reimb-card").classList.add(reimb.class);
