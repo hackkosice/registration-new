@@ -71,6 +71,7 @@ async function fetch_all_data() {
 async function set_numbers() {
     $("applications_number").textContent = window.user_scoreboard.length
     $("applications_number_closed").textContent = window.user_scoreboard.filter((app) => app.status === "closed").length
+    $("applications_number_invited").textContent = window.user_scoreboard.filter((app) => app.status === "invited").length
     $("applications_number_accepted").textContent = window.user_scoreboard.filter((app) => app.status === "accepted").length
 }
 
@@ -246,7 +247,7 @@ function get_selected() {
 async function accept_selected() {
     const selected = get_selected()
 
-    await fetch("/api/judge-accept", {
+    await fetch("/api/judge-invite", {
         method: 'POST', credentials: 'same-origin',
         headers: {
             'Content-Type': 'application/json;charset=utf-8'

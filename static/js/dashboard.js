@@ -4,23 +4,37 @@ const statusData = {
     "open": {
         class: "is-info",
         title: "Status: Open",
-        description: "You can still make changes to your application and we don't see it yet. Don't forget to submit once you are finished!"
+        description: "You can still make changes to your application and we don't see it yet. Don't forget to submit once you are finished!",
+        button: null
     },
     "closed": {
         class: "is-warning",
         title: "Status: Closed",
-        description: "You can no longer edit your application, as it's being reviewed by our staff."
+        description: "You can no longer edit your application, as it's being reviewed by our staff.",
+        button: null
     },
-    "accepted": {
+    "invited": {
         class: "is-success",
-        title: "Status: Accepted",
-        description: "Congratulations! You have been officially invited to join us at Hack Kosice. Look for more emails with information coming soon."
+        title: "Status: Invited",
+        description: "Congratulations! You have been officially invited to join us at Hack Kosice. To accept this invitation and confirm that you will come to the hackathon click on the button below:",
+        button: {
+            text: "Accept invitation",
+            class: "is-success",
+            callback: acceptInvitation
+        }
     },
     "rejected": {
         class: "is-danger",
         title: "Status: Rejected",
-        description: "We are sorry but we can't offer you place at our hackathon this year. But don't worry, you can have a change to participate next year."
-    }
+        description: "We are sorry but we can't offer you place at our hackathon this year. But don't worry, you can have a change to participate next year.",
+        button: null
+    },
+    "accepted": {
+        class: "is-success",
+        title: "Status: Accepted",
+        description: "Thanks for choosing to come to Hack Kosice! We are looking forward to seeing you in Kosice at 23rd and 24th of April.",
+        button: null
+    },
     //add more
 };
 
@@ -40,35 +54,7 @@ const reimbData = {
 };
 window.onload = async function() {
 
-    await fetch("/api/form-data", {method: 'POST', credentials: 'same-origin'})
-    .then(res => res.json()).then((formdata) => {
-            window.formdata = formdata;
-
-            if (typeof window.formdata.application_status === 'undefined')
-                window.location = "/application.html";
-
-            let status = statusData[formdata.application_status];
-            $("state").textContent = status.title;
-            $("description").textContent = status.description;
-            $("status-card").classList.add(status.class);
-
-            let reimb = reimbData[formdata.reimbursement_progress];
-            $("reimb").textContent = reimb.title;
-            $("reimb_description").textContent = reimb.description;
-            $("reimb-card").classList.add(reimb.class);
-
-            if (formdata.application_status === "open") {
-                $("edit-application").classList.remove("hidden");
-                $("close-application").classList.remove("hidden");
-            } else {
-                $("edit-application").classList.add("hidden");
-                $("close-application").classList.add("hidden");
-            }
-        });
-
-
-    //So we can ease the load on the server at least a bit
-    await load_team();
+    fetch_all_data()
 
     //Add callback
     $("join").addEventListener('click', async () => {
@@ -158,8 +144,61 @@ window.onload = async function() {
         }
     });
 
+    $("leave_team_button").addEventListener('click', async() => {
+        fetch("/api/team-leave", {method: 'POST', credentials: 'same-origin'}).then(
+            async (response) => {
+                if (response.status == 200)
+                    window.location = window.location;
+            }
+        )
+    })
+
     // Remove loader
     $("loader").classList.remove("is-active");
+}
+
+async function fetch_all_data() {
+    await load_user_data()
+
+    //So we can ease the load on the server at least a bit
+    await load_team();
+}
+
+async function load_user_data() {
+    await fetch("/api/form-data", {method: 'POST', credentials: 'same-origin'})
+        .then(res => res.json()).then((formdata) => {
+            window.formdata = formdata;
+
+            if (typeof window.formdata.application_status === 'undefined')
+                window.location = "/application.html";
+
+            let status = statusData[formdata.application_status];
+            $("state").textContent = status.title;
+            $("description").textContent = status.description;
+            $("status-card").classList.add(status.class);
+
+            let messageButton = $("message-button")
+            if (status.button === null) {
+                messageButton.classList.add("is-hidden");
+            } else {
+                messageButton.classList.remove("is-hidden");
+                messageButton.textContent = status.button.text;
+                messageButton.addEventListener('click', status.button.callback)
+            }
+
+            let reimb = reimbData[formdata.reimbursement_progress];
+            $("reimb").textContent = reimb.title;
+            $("reimb_description").textContent = reimb.description;
+            $("reimb-card").classList.add(reimb.class);
+
+            if (formdata.application_status === "open") {
+                $("edit-application").classList.remove("hidden");
+                $("close-application").classList.remove("hidden");
+            } else {
+                $("edit-application").classList.add("hidden");
+                $("close-application").classList.add("hidden");
+            }
+        });
 }
 
 
@@ -172,9 +211,8 @@ function load_team() {
             if (typeof teamdata.members === 'undefined')
                 return;
 
-            let root = document.createElement("table");
-            root.classList.add("table", "is-fullwidth");
-            root.id = "team_table";
+            let root = $("team_table");
+            root.innerHTML = ''; // Clear content of table
 
             let header = document.createElement("tr");
 
@@ -250,21 +288,6 @@ function load_team() {
             $("team_code_label").textContent = teamdata.data.team_code;
             $("team_name_label").textContent = "Team name: " + teamdata.data.team_name;
 
-            let leave_button = document.createElement("button");
-            leave_button.textContent = "Leave team";
-            leave_button.classList.add("button", "is-primary", "is-light")
-            leave_button.addEventListener('click', async () => {
-
-                fetch("/api/team-leave", {method: 'POST', credentials: 'same-origin'}).then(
-                    async (response) => {
-                        if (response.status == 200)
-                            window.location = window.location;
-                    }
-                )
-            });
-
-            team.appendChild(root);
-            team.appendChild(leave_button);
             $("join_wrap").classList.add("hidden");
             $("create_wrap").classList.add("hidden");
             $("team_info_wrap").classList.remove("hidden");
@@ -275,4 +298,14 @@ function showError(elementId, errorMessage) {
     $(elementId).classList.add("is-danger")
     $(`${elementId}_error`).classList.remove("hidden");
     $(`${elementId}_error`).textContent = errorMessage;
+}
+
+async function acceptInvitation() {
+    try {
+        await fetch("/api/accept-invite", {method: 'POST', credentials: 'same-origin'});
+        fetch_all_data();
+    } catch(e) {
+        console.error(e)
+    }
+
 }

@@ -71,8 +71,8 @@ const JudgeApiEndpoints     = require('./services/apis/judge.js');
     router.get("/judge/applications.csv", async (req, res, next) => { judge_api.judge_auth_middleware(req, res, next) },
         async (req, res) => { judge_api.get_applications_csv(req, res) });
 
-    router.get("/judge/applications_accepted.csv", async (req, res, next) => { judge_api.judge_auth_middleware(req, res, next) },
-        async (req, res) => { judge_api.get_accepted_applications_csv(req, res) });
+    router.get("/judge/applications_invited.csv", async (req, res, next) => { judge_api.judge_auth_middleware(req, res, next) },
+        async (req, res) => { judge_api.get_invited_applications_csv(req, res) });
 
     //TODO: probably add auth
     router.post("/api/user-info", async (req, res) => { mlh_auth.get_user_data_endpoint(req, res) });
@@ -89,6 +89,9 @@ const JudgeApiEndpoints     = require('./services/apis/judge.js');
     router.post("/api/form-file-upload",
         async (req, res, next) => { form_api.form_auth_middleware(req, res, next) },
         async (req, res) => { form_api.form_upload_file(req, res) });
+    router.post("/api/accept-invite",
+        async (req, res, next) => { form_api.form_auth_middleware(req, res, next) },
+        async (req, res) => { form_api.accept_invitation(req, res) });
 
 
     router.post("/api/team-create",
@@ -129,9 +132,9 @@ const JudgeApiEndpoints     = require('./services/apis/judge.js');
     router.post("/api/judge-application-scoreboard",
         async (req, res, next) => { judge_api.judge_auth_middleware(req, res, next) },
         async (req, res) => { judge_api.get_applications_scoreboard_endpoint(req, res) });
-    router.post("/api/judge-accept",
+    router.post("/api/judge-invite",
         async (req, res, next) => { judge_api.judge_auth_middleware(req, res, next) },
-        async (req, res) => { judge_api.accept_application_endpoint(req, res) });
+        async (req, res) => { judge_api.invite_application_endpoint(req, res) });
     router.post("/api/judge-reject",
         async (req, res, next) => { judge_api.judge_auth_middleware(req, res, next) },
         async (req, res) => { judge_api.reject_application_endpoint(req, res) });
