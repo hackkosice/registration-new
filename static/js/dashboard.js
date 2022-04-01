@@ -171,12 +171,14 @@ async function load_user_data() {
                 if (res.status === 200) {
                     return res.json()
                 } else {
-                    if (res.statusText === "Unauthorized") {
-                        window.location.href = "/my-mlh-login"
-                    }
+                    return null
                 }
             })
             .then((formdata) => {
+                if (formdata === null) {
+                    window.location.href = "/my-mlh-login"
+                }
+
                 window.formdata = formdata;
 
                 if (typeof window.formdata.application_status === 'undefined')
