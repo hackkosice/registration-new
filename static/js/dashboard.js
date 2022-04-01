@@ -154,7 +154,6 @@ window.onload = async function() {
     })
 
     // Remove loader
-    $("loader").classList.remove("is-active");
 }
 
 async function fetch_all_data() {
@@ -162,43 +161,57 @@ async function fetch_all_data() {
 
     //So we can ease the load on the server at least a bit
     await load_team();
+    $("loader").classList.remove("is-active");
 }
 
 async function load_user_data() {
-    await fetch("/api/form-data", {method: 'POST', credentials: 'same-origin'})
-        .then(res => res.json()).then((formdata) => {
-            window.formdata = formdata;
+    try {
+        await fetch("/api/form-data", {method: 'POST', credentials: 'same-origin'})
+            .then(res => {
+                if (res.status === 200) {
+                    return res.json()
+                } else {
+                    if (res.statusText === "Unauthorized") {
+                        window.location.href = "/my-mlh-login"
+                    }
+                }
+            })
+            .then((formdata) => {
+                window.formdata = formdata;
 
-            if (typeof window.formdata.application_status === 'undefined')
-                window.location = "/application.html";
+                if (typeof window.formdata.application_status === 'undefined')
+                    window.location = "/application.html";
 
-            let status = statusData[formdata.application_status];
-            $("state").textContent = status.title;
-            $("description").textContent = status.description;
-            $("status-card").classList.add(status.class);
+                let status = statusData[formdata.application_status];
+                $("state").textContent = status.title;
+                $("description").textContent = status.description;
+                $("status-card").classList.add(status.class);
 
-            let messageButton = $("message-button")
-            if (status.button === null) {
-                messageButton.classList.add("is-hidden");
-            } else {
-                messageButton.classList.remove("is-hidden");
-                messageButton.textContent = status.button.text;
-                messageButton.addEventListener('click', status.button.callback)
-            }
+                let messageButton = $("message-button")
+                if (status.button === null) {
+                    messageButton.classList.add("is-hidden");
+                } else {
+                    messageButton.classList.remove("is-hidden");
+                    messageButton.textContent = status.button.text;
+                    messageButton.addEventListener('click', status.button.callback)
+                }
 
-            let reimb = reimbData[formdata.reimbursement];
-            $("reimb").textContent = reimb.title;
-            $("reimb_description").textContent = reimb.description;
-            $("reimb-card").classList.add(reimb.class);
+                let reimb = reimbData[formdata.reimbursement];
+                $("reimb").textContent = reimb.title;
+                $("reimb_description").textContent = reimb.description;
+                $("reimb-card").classList.add(reimb.class);
 
-            if (formdata.application_status === "open") {
-                $("edit-application").classList.remove("hidden");
-                $("close-application").classList.remove("hidden");
-            } else {
-                $("edit-application").classList.add("hidden");
-                $("close-application").classList.add("hidden");
-            }
-        });
+                if (formdata.application_status === "open") {
+                    $("edit-application").classList.remove("hidden");
+                    $("close-application").classList.remove("hidden");
+                } else {
+                    $("edit-application").classList.add("hidden");
+                    $("close-application").classList.add("hidden");
+                }
+            });
+    } catch (e) {
+        console.error(e)
+    }
 }
 
 
