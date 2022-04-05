@@ -147,13 +147,11 @@ module.exports = class VotingApiEndpoints {
         for (const vote of votes) {
 
             if (typeof voted_applications[vote.mymlh_uid] === 'undefined')
-                team_result = await this.#db.get("SELECT T.team_name FROM applications AS A LEFT JOIN teams AS T ON A.team_id = T.team_id WHERE A.`mymlh_uid` = ?;", [vote.mymlh_uid])
                 voted_applications[vote.mymlh_uid] = {
                     score: 0,
                     judged: 0,
                     name: (await this.#cache.get(vote.mymlh_uid)).first_name + " " + (await this.#cache.get(vote.mymlh_uid)).last_name,
                     status: (await this.#db.get("SELECT `application_status` FROM applications WHERE `mymlh_uid`=?;", [vote.mymlh_uid]))[0].application_status,
-                    team: team_result && team_result.length > 0 ? team_result[0].team_name : "",
                     mymlh_uid: vote.mymlh_uid
                 };
 
@@ -164,21 +162,23 @@ module.exports = class VotingApiEndpoints {
 
         //Normalize average out the score
         for (const application of applications) {
-
+            team_result = await this.#db.get("SELECT T.team_name FROM applications AS A LEFT JOIN teams AS T ON A.team_id = T.team_id WHERE A.`mymlh_uid` = ?;", [application.mymlh_uid])
             if (typeof voted_applications[application.mymlh_uid] === 'undefined') {
                 results.push({
                     score: 0,
                     judged: 0,
                     name: (await this.#cache.get(application.mymlh_uid)).first_name + " " + (await this.#cache.get(application.mymlh_uid)).last_name,
                     status: (await this.#db.get("SELECT `application_status` FROM applications WHERE `mymlh_uid`=?;", [application.mymlh_uid]))[0].application_status,
-                    team: (await this.#db.get("SELECT T.team_name FROM applications AS A LEFT JOIN teams AS T ON A.team_id = T.team_id WHERE A.`mymlh_uid` = ?;", [application.mymlh_uid]))[0].team_name,
+                    team: team_result && team_result.length > 0 ? team_result[0].team_name : "",
                     mymlh_uid: application.mymlh_uid
                 });
             }
-
             else {
                 voted_applications[application.mymlh_uid].score /= voted_applications[application.mymlh_uid].judged;
-                results.push(voted_applications[application.mymlh_uid]);
+                results.push({
+                    ...voted_applications[application.mymlh_uid],
+                    team: team_result && team_result.length > 0 ? team_result[0].team_name : "",
+                });
             }
         }
 
