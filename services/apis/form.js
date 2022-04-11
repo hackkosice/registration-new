@@ -180,6 +180,38 @@ module.exports = class FormApiEndpoints {
         })
     }
 
+    async decline_invitation(req, res) {
+        const verification = req.verification;
+
+        const statusQuery = await this.#db.get("SELECT `application_status` FROM applications WHERE `mymlh_uid` = ?", [verification.uid])
+
+        if (!statusQuery || statusQuery.length === 0) {
+            return error(res, 400, "Server is unable to accept the invite! Error: User not found!");
+        }
+
+        const status = statusQuery[0].application_status
+
+        if (status !== 'invited' && status !== 'accepted') {
+            return error(res, 400, "Server is unable to close the application! Error: User was not yet invited!");
+        }
+
+        this.#db.insert("UPDATE applications SET `application_status` = 'declined' WHERE `mymlh_uid` = ?;", [verification.uid])
+
+        return res.status(200).send({
+            message: "OK"
+        })
+    }
+
+    async update_cv_file_id(req, res) {
+        const verification = req.verification;
+
+        await this.#db.insert("UPDATE applications SET `cv_file_id` = ? WHERE `mymlh_uid` = ?;", [req.body.cv_file_id, verification.uid])
+
+        return res.status(200).send({
+            message: "OK"
+        })
+    }
+
     #db = null;
     #jwt_key = null;
     #mailer = null;
