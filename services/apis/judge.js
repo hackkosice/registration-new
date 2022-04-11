@@ -1,4 +1,5 @@
 const jwt           = require("jsonwebtoken");
+const mlhUserData = require("../caching/mlh-user-data")
 
 //For code pretification
 function error(res, status, msg) {
@@ -47,7 +48,7 @@ module.exports = class VotingApiEndpoints {
         const picked = pickedQuery[0];
 
         if (picked.cv_file_id === null) {
-            const user = await this.#cache.get(picked.mymlh_uid);
+            const user = await mlhUserData(picked.mymlh_uid);
             return res.status(200).send({
                 user: {
                     name: `${user.first_name} ${user.last_name}`,
@@ -64,7 +65,7 @@ module.exports = class VotingApiEndpoints {
         if (typeof cv_filename[0] === 'undefined')
             return error(res, 403, "Requested CV code not found!");
 
-        const user = await this.#cache.get(picked.mymlh_uid);
+        const user = (picked.mymlh_uid);
         return res.status(200).send({
             user: {
                 name: `${user.first_name} ${user.last_name}`,
@@ -89,7 +90,7 @@ module.exports = class VotingApiEndpoints {
             return error(res, 400, "Requested application not found!");
 
         if (form[0].cv_file_id === null) {
-            const user = await this.#cache.get(form[0].mymlh_uid);
+            const user = await mlhUserData(form[0].mymlh_uid);
             return res.status(200).send({
                 user: {
                     name: `${user.first_name} ${user.last_name}`,
@@ -107,7 +108,7 @@ module.exports = class VotingApiEndpoints {
         if (typeof cv_filename[0] === 'undefined')
             return error(res, 403, "Requested CV code not found!");
 
-        const user = await this.#cache.get(form[0].mymlh_uid);
+        const user = await mlhUserData(form[0].mymlh_uid);
         return res.status(200).send({
             user: {
                 name: `${user.first_name} ${user.last_name}`,
@@ -143,15 +144,13 @@ module.exports = class VotingApiEndpoints {
         const votes = await this.#db.get("SELECT `mymlh_uid`, `score` FROM votes;", []);
         const applications = await this.#db.get("SELECT `mymlh_uid` FROM applications;", []);
         let team_result;
+        let myMlhUser;
 
         for (const vote of votes) {
-
             if (typeof voted_applications[vote.mymlh_uid] === 'undefined')
                 voted_applications[vote.mymlh_uid] = {
                     score: 0,
                     judged: 0,
-                    name: (await this.#cache.get(vote.mymlh_uid)).first_name + " " + (await this.#cache.get(vote.mymlh_uid)).last_name,
-                    status: (await this.#db.get("SELECT `application_status` FROM applications WHERE `mymlh_uid`=?;", [vote.mymlh_uid]))[0].application_status,
                     mymlh_uid: vote.mymlh_uid
                 };
 
@@ -163,11 +162,12 @@ module.exports = class VotingApiEndpoints {
         //Normalize average out the score
         for (const application of applications) {
             team_result = await this.#db.get("SELECT T.team_name FROM applications AS A LEFT JOIN teams AS T ON A.team_id = T.team_id WHERE A.`mymlh_uid` = ?;", [application.mymlh_uid])
+            myMlhUser = await mlhUserData(application.mymlh_uid)
             if (typeof voted_applications[application.mymlh_uid] === 'undefined') {
                 results.push({
                     score: 0,
                     judged: 0,
-                    name: (await this.#cache.get(application.mymlh_uid)).first_name + " " + (await this.#cache.get(application.mymlh_uid)).last_name,
+                    name: myMlhUser.first_name + " " + myMlhUser.last_name,
                     status: (await this.#db.get("SELECT `application_status` FROM applications WHERE `mymlh_uid`=?;", [application.mymlh_uid]))[0].application_status,
                     team: team_result && team_result.length > 0 ? team_result[0].team_name : "",
                     mymlh_uid: application.mymlh_uid
@@ -178,6 +178,8 @@ module.exports = class VotingApiEndpoints {
                 results.push({
                     ...voted_applications[application.mymlh_uid],
                     team: team_result && team_result.length > 0 ? team_result[0].team_name : "",
+                    status: (await this.#db.get("SELECT `application_status` FROM applications WHERE `mymlh_uid`=?;", [application.mymlh_uid]))[0].application_status,
+                    name: myMlhUser.first_name + " " + myMlhUser.last_name,
                 });
             }
         }
@@ -258,7 +260,7 @@ module.exports = class VotingApiEndpoints {
         let csv_content = "name,email,birth,major,education,school,status,country,reimbursement,skills,job,achievements,website,github,linkedin,devpost,hear_hk,hk_first,tshirt,diet\n";
 
         for (const application of applications) {
-            const user = await this.#cache.get(application.mymlh_uid);
+            const user = await mlhUserData(application.mymlh_uid);
 
             let line = `"${user.first_name} ${user.last_name}","${user.email}","${user.date_of_birth}","${user.major}","${user.level_of_study}",`;
             line += `"${user.school?.name || ""}"`;
