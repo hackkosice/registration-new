@@ -65,7 +65,7 @@ module.exports = class VotingApiEndpoints {
         if (typeof cv_filename[0] === 'undefined')
             return error(res, 403, "Requested CV code not found!");
 
-        const user = (picked.mymlh_uid);
+        const user = await mlhUserData(picked.mymlh_uid);
         return res.status(200).send({
             user: {
                 name: `${user.first_name} ${user.last_name}`,
