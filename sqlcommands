@@ -3,6 +3,7 @@ DROP TABLE "teams";
 DROP TABLE "votes";
 DROP TABLE "voters";
 DROP TABLE "files";
+DROP TABLE "checkins";
 
 CREATE TABLE "applications" (
 	"application_id"	INTEGER UNIQUE,
@@ -61,4 +62,9 @@ CREATE TABLE "voters" (
 	"username"	TEXT,
     "salt"  TEXT,
 	"key"	TEXT
+);
+CREATE TABLE "checkins" (
+    "mlh_uid"   INTEGER UNIQUE,
+    "checkin_type"  TEXT,
+    "checker_uid"   INTEGER
 );

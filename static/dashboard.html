@@ -9,6 +9,8 @@
 		<link rel = "icon" type = "image/png" sizes = "192x192" href = "images/favicon/favicon-192.png">
 
 		<script async src = "/js/dashboard.js"></script>
+		<script async src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" integrity="sha512-CNgIRecGo7nphbeZ04Sc13ka07paqdeTu0WR1IM4kNcpmBAUSHSQX0FslNhTDadL4O5SAGapGt4FodqL8My0mA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+		<script async src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.8.0/html2pdf.bundle.min.js" integrity="sha512-w3u9q/DeneCSwUDjhiMNibTRh/1i/gScBVp2imNVAMCt6cUHIw6xzhzcPFIaL3Q1EbI2l+nu17q2aLJJLo4ZYg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -51,6 +53,25 @@
 						<a href="javascript:void(0)" id="close-application">
 							<button class="button is-primary">Send to review</button>
 						</a>
+					</div>
+					<div id = "checkin-data" class = "mt-4">
+							<article class="message is-info">
+								<div class="message-header">
+									<p>Checkin data</p>
+								</div>
+								<div class="message-body">
+									<div id = "qrcode"></div>
+									<div class = "is-inline">
+										<p><b>UID: </b></p>
+										<p id = "checkin-uid"></p>
+									</div>
+									<div class = "is-inline">
+										<p><b>Name: </b></p>
+										<p id = "checkin-name"></p>
+									</div>
+								</div>
+								<button id = "checkin-save" class = "button is-link is-center">Save as PDF</button>
+							</article>
 					</div>
 
 					<div id="reimbursement" class="mt-4">

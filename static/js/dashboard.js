@@ -54,7 +54,7 @@ const reimbData = {
 };
 window.onload = async function() {
 
-    fetch_all_data()
+    await fetch_all_data()
 
     //Add callback
     $("join").addEventListener('click', async () => {
@@ -153,7 +153,31 @@ window.onload = async function() {
         )
     })
 
+    if (window.formdata.application_status === "accepted") {
+        await fetch("/api/checkin-info", {method: 'POST', credentials: 'same-origin'}).then(
+            async (response) => {
+                if (response.status != 200)
+                    return;
+
+                const content = await response.json();
+                var qrc = new QRCode($("qrcode"), content.invite_token);
+                $("checkin-uid").textContent = content.name;
+                $("checkin-name").textContent = content.uid;
+            }
+        );
+        $("checkin-data").classList.remove("hidden");
+        $("checkin-save").addEventListener("click", async () => {
+            const pdf_data = $("checkin-data");
+            const worker = html2pdf(pdf_data).set({
+                filename: 'invitation.pdf',
+                margin: 2
+            });
+        });
+
+    }
+
     // Remove loader
+
 }
 
 async function fetch_all_data() {
