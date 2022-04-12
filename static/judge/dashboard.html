@@ -23,10 +23,17 @@
 </header>
 
 <div class="container mb-6">
-    <h6 class="subtitle is-6">Number of applications: <span id="applications_number"></span></h6>
-    <h6 class="subtitle is-6">Number of closed applications: <span id="applications_number_closed"></span></h6>
-    <h6 class="subtitle is-6">Number of invited applications: <span id="applications_number_invited"></span></h6>
-    <h6 class="subtitle is-6">Number of accepted applications: <span id="applications_number_accepted"></span></h6>
+    <div class="is-flex is-flex-direction-row mb-5">
+        <div class="mr-5">
+            <h6 class="subtitle is-6">Number of applications: <span id="applications_number"></span></h6>
+            <h6 class="subtitle is-6">Number of closed applications: <span id="applications_number_closed"></span></h6>
+            <h6 class="subtitle is-6">Number of invited applications: <span id="applications_number_invited"></span></h6>
+        </div>
+        <div>
+            <h6 class="subtitle is-6">Number of accepted applications: <span id="applications_number_accepted"></span></h6>
+            <h6 class="subtitle is-6">Number of declined applications: <span id="applications_number_declined"></span></h6>
+        </div>
+    </div>
     <div class = "columns">
         <div class="field column is-one-quarter">
             <label class="label">Sort by: </label>
@@ -53,6 +60,7 @@
                         <option value = "invited"> Show only invited applications </option>
                         <option value = "rejected"> Show only rejected applications </option>
                         <option value = "accepted"> Show only accepted applications </option>
+                        <option value = "declined"> Show only declined applications </option>
                     </select>
                 </div>
             </div>
