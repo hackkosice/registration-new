@@ -17,6 +17,7 @@ const MyMLHUserCache        = require('./services/caching/mlh-usercache.js');
 const FormApiEndpoints      = require('./services/apis/form.js');
 const TeamsApiEndpoints     = require('./services/apis/teams.js');
 const JudgeApiEndpoints     = require('./services/apis/judge.js');
+const CheckinApiEndpoints   = require('./services/apis/checkin.js');
 
 (async function main() {
     const app     = express();
@@ -58,6 +59,7 @@ const JudgeApiEndpoints     = require('./services/apis/judge.js');
     let form_api = new FormApiEndpoints(db_connection, process.env.JWT_SECRET, mailer, mlh_auth);
     let team_api = new TeamsApiEndpoints(db_connection, process.env.JWT_SECRET, mlh_cache);
     let judge_api = new JudgeApiEndpoints(db_connection, process.env.JWT_SECRET, mlh_cache);
+    let checkin_api = new CheckinApiEndpoints(db_connection, process.env.JWT_SECRET, mlh_cache);
 
     //Bind api calls
     router.get("/oauth", async (req, res) => { mlh_auth.auth_callback(req, res) });  //Node has a hella weird callback system
@@ -144,6 +146,10 @@ const JudgeApiEndpoints     = require('./services/apis/judge.js');
     router.post("/api/judge-reject",
         async (req, res, next) => { judge_api.judge_auth_middleware(req, res, next) },
         async (req, res) => { judge_api.reject_application_endpoint(req, res) });
+
+    router.post("/api/checkin-info",
+        async (req, res, next) => { checkin_api.user_auth_middleware(req, res, next) },
+        async (req, res) => { checkin_api.create_checkin_info_endpoint(req, res) });
 
     //Bind static content
     app.use("/", express.static("./static"));

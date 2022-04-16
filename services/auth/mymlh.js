@@ -32,7 +32,7 @@ module.exports =  class MyMLH {
         const user_res = await fetch("https://my.mlh.io/api/v3/user.json?access_token=" + token.access_token, {method: 'GET'});
         const user = await user_res.json();
 
-        const path = "./application.html";
+        const path = "./dashboard.html";
 
         //Generate authentication token
         const usr_token = jwt.sign({
