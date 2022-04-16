@@ -1,5 +1,6 @@
 const jwt           = require("jsonwebtoken");
 const crypto        = require("crypto");
+const mlhUserData = require("../caching/mlh-user-data");
 
 function error(res, status, msg) {
     return res.status(status).send({
@@ -199,7 +200,7 @@ module.exports = class TeamsApiEndpoints {
 
         for (const member of team_members){
 
-            const user = await this.#cache.get(member.mymlh_uid);
+            const user = await mlhUserData(member.mymlh_uid);
             if (typeof user.error !== 'undefined')
                 continue;
 

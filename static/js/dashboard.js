@@ -1,39 +1,59 @@
 $ = (element) => { return document.getElementById(element); };
+const MAX_CV_SIZE = 10 * 1024 * 1024;
 
 const statusData = {
     "open": {
         class: "is-info",
         title: "Status: Open",
         description: "You can still make changes to your application and we don't see it yet. Don't forget to submit once you are finished!",
-        button: null
+        buttons: []
     },
     "closed": {
         class: "is-warning",
         title: "Status: Closed",
         description: "You can no longer edit your application, as it's being reviewed by our staff.",
-        button: null
+        buttons: []
     },
     "invited": {
         class: "is-success",
         title: "Status: Invited",
-        description: "Congratulations! You have been officially invited to join us at Hack Kosice. To accept this invitation and confirm that you will come to the hackathon click on the button below:",
-        button: {
-            text: "Accept invitation",
-            class: "is-success",
-            callback: acceptInvitation
-        }
+        description: "Congratulations! You have been officially invited to join us at Hack Kosice. Please let us know if you are coming as soon as possible:",
+        buttons: [
+            {
+                text: "Confirm participation",
+                class: "is-success",
+                callback: acceptInvitation
+            },
+            {
+                text: "Decline invitation",
+                class: "is-danger",
+                callback: declineInvitation
+            }
+        ]
     },
     "rejected": {
         class: "is-danger",
         title: "Status: Rejected",
-        description: "We are sorry but we can't offer you place at our hackathon this year. But don't worry, you can have a change to participate next year.",
-        button: null
+        description: "We are sorry but we can't offer you place at our hackathon this year. But don't worry, you can have a chance to participate next year.",
+        buttons: []
     },
     "accepted": {
         class: "is-success",
         title: "Status: Accepted",
-        description: "Thanks for choosing to come to Hack Kosice! We are looking forward to seeing you in Kosice at 23rd and 24th of April.",
-        button: null
+        description: "We are looking forward to seeing you at Hack Kosice 2022. You can find an updated schedule on our website. If you no longer plan to attend please let us know by declining the invitation.",
+        buttons: [
+            {
+                text: "Decline invitation",
+                class: "is-danger",
+                callback: declineInvitation
+            },
+        ]
+    },
+    "declined": {
+        class: "is-danger",
+        title: "Status: Declined",
+        description: "We are sorry to hear that you can't make it this year and hope to see you next time! If you change your mind please email us at contact@hackkosice.com.",
+        buttons: []
     },
     //add more
 };
@@ -176,6 +196,51 @@ window.onload = async function() {
         });
 
     }
+  
+    $("cv-button").addEventListener("click", async() => {
+        if ($("cv_file_id").files.length === 0) {
+            showError("cv_file_wrapper", "Please choose a file");
+            return
+        }
+        const selectedFile = $("cv_file_id").files[0];
+        if (selectedFile.size > MAX_CV_SIZE) {
+            showError("cv_file_wrapper", "File is too big. Max size is 10 MiB.");
+            return
+        }
+        hideError("cv_file_wrapper")
+        const fileId = await upload_cv()
+        if (fileId === 0) {
+            showError("cv_file_wrapper", "Error uploading file to server");
+            return
+        }
+        const body = {
+            cv_file_id: fileId
+        }
+        await fetch("/api/update-cv-file-id", {method: 'POST', credentials: 'same-origin',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: JSON.stringify(body)
+        })
+        fetch_all_data();
+    })
+
+
+    $("cv_file_id").addEventListener("change", () => {
+        if ($("cv_file_id").files.length > 0) {
+            const selectedFile = $("cv_file_id").files[0];
+            if (selectedFile.size > MAX_CV_SIZE) {
+                showError("cv_file_wrapper", "File is too big. Max size is 10 MiB.");
+            } else {
+                hideError("cv_file_wrapper")
+                $("cv-file-name").textContent = "";
+            }
+            $("cv-file-name").textContent = selectedFile.name;
+        } else {
+            hideError("cv_file_wrapper")
+            $("cv-file-name").textContent = "";
+        }
+    });
 
     // Remove loader
 
@@ -214,14 +279,17 @@ async function load_user_data() {
                 $("description").textContent = status.description;
                 $("status-card").classList.add(status.class);
 
-                let messageButton = $("message-button")
-                if (status.button === null) {
-                    messageButton.classList.add("is-hidden");
-                } else {
-                    messageButton.classList.remove("is-hidden");
-                    messageButton.textContent = status.button.text;
-                    messageButton.addEventListener('click', status.button.callback)
-                }
+                let messageButtonWrapper = $("status-button-wrapper")
+                messageButtonWrapper.textContent = ""
+                status.buttons.forEach(buttonData => {
+                    // <button class="button is-success ml-5 mb-4" id="message-button"></button>
+                    let button = document.createElement("button");
+                    button.classList.add("button", "ml-5", "mb-4")
+                    button.classList.add(buttonData.class)
+                    button.textContent = buttonData.text
+                    button.addEventListener('click', buttonData.callback)
+                    messageButtonWrapper.appendChild(button)
+                })
 
                 let reimb = reimbData[formdata.reimbursement];
                 $("reimb").textContent = reimb.title;
@@ -234,6 +302,12 @@ async function load_user_data() {
                 } else {
                     $("edit-application").classList.add("hidden");
                     $("close-application").classList.add("hidden");
+                }
+
+                if (window.formdata.cv_file_id || formdata.application_status === "rejected" || formdata.application_status === "declined") {
+                    $("cv-card").classList.add("is-hidden")
+                } else {
+                    $("cv-card").classList.remove("is-hidden")
                 }
             });
     } catch (e) {
@@ -340,6 +414,11 @@ function showError(elementId, errorMessage) {
     $(`${elementId}_error`).textContent = errorMessage;
 }
 
+function hideError(elementId) {
+    $(elementId).classList.remove("is-danger")
+    $(`${elementId}_error`).classList.add("hidden");
+}
+
 async function acceptInvitation() {
     try {
         await fetch("/api/accept-invite", {method: 'POST', credentials: 'same-origin'});
@@ -348,4 +427,35 @@ async function acceptInvitation() {
         console.error(e)
     }
 
+}
+
+
+async function declineInvitation() {
+    try {
+        await fetch("/api/decline-invite", {method: 'POST', credentials: 'same-origin'});
+        fetch_all_data();
+    } catch(e) {
+        console.error(e)
+    }
+
+}
+
+async function upload_cv() {
+    try {
+        const selectedFile = $("cv_file_id").files[0];
+        if (selectedFile) {
+            const data = new FormData();
+            data.append("cv", selectedFile);
+            const res = await fetch("/api/form-file-upload", {method: 'POST', credentials: 'same-origin',
+                body: data
+            });
+            const resData = await res.json();
+            return resData.fileId;
+        } else {
+            return 0;
+        }
+    }
+    catch (err) {
+        window.location = "/404.html";
+    }
 }

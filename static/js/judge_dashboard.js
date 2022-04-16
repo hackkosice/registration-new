@@ -73,6 +73,7 @@ async function set_numbers() {
     $("applications_number_closed").textContent = window.user_scoreboard.filter((app) => app.status === "closed").length
     $("applications_number_invited").textContent = window.user_scoreboard.filter((app) => app.status === "invited").length
     $("applications_number_accepted").textContent = window.user_scoreboard.filter((app) => app.status === "accepted").length
+    $("applications_number_declined").textContent = window.user_scoreboard.filter((app) => app.status === "declined").length
 }
 
 async function sort_table() {

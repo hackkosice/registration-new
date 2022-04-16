@@ -94,6 +94,12 @@ const CheckinApiEndpoints   = require('./services/apis/checkin.js');
     router.post("/api/accept-invite",
         async (req, res, next) => { form_api.form_auth_middleware(req, res, next) },
         async (req, res) => { form_api.accept_invitation(req, res) });
+    router.post("/api/decline-invite",
+        async (req, res, next) => { form_api.form_auth_middleware(req, res, next) },
+        async (req, res) => { form_api.decline_invitation(req, res) });
+    router.post("/api/update-cv-file-id",
+        async (req, res, next) => { form_api.form_auth_middleware(req, res, next) },
+        async (req, res) => { form_api.update_cv_file_id(req, res) });
 
 
     router.post("/api/team-create",
