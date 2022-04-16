@@ -59,18 +59,20 @@
 								<div class="message-header">
 									<p>Checkin data</p>
 								</div>
-								<div class="message-body">
-									<div id = "qrcode"></div>
-									<div class = "is-inline">
-										<p><b>UID: </b></p>
-										<p id = "checkin-uid"></p>
-									</div>
-									<div class = "is-inline">
-										<p><b>Name: </b></p>
-										<p id = "checkin-name"></p>
-									</div>
+								<div class="message-body" id="to_pdf">
+									<div class = "is-flex is-justify-content-center mb-5" id = "qrcode"></div>
+
+									<p><b class = "mt-5">User ID: </b><span id = "checkin-uid"></span></p>
+									<p><b>Name: </b><span id = "checkin-name"></span></p>
+									<p class = "mt-4">
+										This is your entry pass for Hack Kosice 2022. You'll need it to enter the venue
+										on the day of the event. You'll also need an official identification document (ID card
+										or passport). Registration begins on saturday at 9 AM.
+									</p>
 								</div>
-								<button id = "checkin-save" class = "button is-link is-center">Save as PDF</button>
+								<div class = "buttons is-centered">
+									<button id = "checkin-save" class = "button is-link">Save as PDF</button>
+								</div>
 							</article>
 					</div>
 

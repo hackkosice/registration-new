@@ -163,11 +163,12 @@ window.onload = async function() {
                 var qrc = new QRCode($("qrcode"), content.invite_token);
                 $("checkin-uid").textContent = content.name;
                 $("checkin-name").textContent = content.uid;
+                $("qrcode").title = "";
             }
         );
         $("checkin-data").classList.remove("hidden");
         $("checkin-save").addEventListener("click", async () => {
-            const pdf_data = $("checkin-data");
+            const pdf_data = $("to_pdf");
             const worker = html2pdf(pdf_data).set({
                 filename: 'invitation.pdf',
                 margin: 2
