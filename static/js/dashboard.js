@@ -186,7 +186,7 @@ window.onload = async function() {
                 $("qrcode").title = "";
             }
         );
-        $("checkin-data").classList.remove("hidden");
+        $("checkin-data").classList.remove("is-hidden");
         $("checkin-save").addEventListener("click", async () => {
             const pdf_data = $("to_pdf");
             const worker = html2pdf(pdf_data).set({
