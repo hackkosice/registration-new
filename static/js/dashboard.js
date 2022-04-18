@@ -15,20 +15,20 @@ const statusData = {
         buttons: []
     },
     "invited": {
-        class: "is-success",
-        title: "Status: Invited",
-        description: "Congratulations! You have been officially invited to join us at Hack Kosice. Please let us know if you are coming as soon as possible:",
+        class: "is-danger",
+        title: "Status: Rejected",
+        description: "We are sorry but we can't offer you place at our hackathon this year. But don't worry, you can have a chance to participate next year.",
         buttons: [
-            {
+           /* {
                 text: "Confirm participation",
                 class: "is-success",
                 callback: acceptInvitation
-            },
-            {
+            },*/
+           /* {
                 text: "Decline invitation",
                 class: "is-danger",
                 callback: declineInvitation
-            }
+            }*/
         ]
     },
     "rejected": {
@@ -181,8 +181,8 @@ window.onload = async function() {
 
                 const content = await response.json();
                 var qrc = new QRCode($("qrcode"), content.invite_token);
-                $("checkin-uid").textContent = content.name;
-                $("checkin-name").textContent = content.uid;
+                $("checkin-uid").textContent = content.uid;
+                $("checkin-name").textContent = content.name;
                 $("qrcode").title = "";
             }
         );
