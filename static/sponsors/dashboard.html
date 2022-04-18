@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang = "en">
+
+<head>
+
+    <title id = "title"> Hack Kosice Sponsors portal </title>
+
+    <link rel = "icon" type = "image/png" sizes = "48x48" href = "/images/favicon/favicon.png">
+    <link rel = "icon" type = "image/png" sizes = "192x192" href = "/images/favicon/favicon-192.png">
+
+    <script async src = "/js/sponsors_dashboard.js"></script>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/css/mystyles.css">
+
+</head>
+
+<body>
+
+<header style="padding: 0% 25%;">
+    <img src = "../images/logo_oneline_purple.svg" alt = "Hack Kosice Logo"/>
+</header>
+
+<div class="container mb-6">
+    <h2 class="title is-3 mb-5">Welcome to Hack Kosice 2022 Sponsors portal!</h2>
+    <p class="subtitle mt-5 mb-5">Below you can find list of hackers that are accepted to Hack Kosice. You can view details of each application and also download all aplications as csv.</p>
+    <h6 class="subtitle is-6 mt-5">Number of applications: <span id="applications_number"></span></h6>
+    <div class = "columns">
+
+        <div class = "field column is-one-quarter">
+            <label class="label">Filters: </label>
+            <h6>Coming soon ...</h6>
+        </div>
+    </div>
+
+    <div class = "columns">
+        <div class = "column">
+            <div id = "user_scoreboard" class = "sponsors_table_height">
+                <table class="table is-fullwidth" id="sponsors_applications_table"></table>
+            </div>
+
+            <div class = "is-fullwidth">
+                <a class = "button is-link is-fullwidth" href = "/sponsors/applications.csv">Download applications as *.csv</a>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<footer>
+    <div class = "footer">
+        <div class = "content has-text-centered">
+            <p class = "has-text-white">Made with ❤️ by Hack Kosice</p>
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>

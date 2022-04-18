@@ -4,6 +4,7 @@ DROP TABLE "votes";
 DROP TABLE "voters";
 DROP TABLE "files";
 DROP TABLE "checkins";
+DROP TABLE "sponsors";
 
 CREATE TABLE "applications" (
 	"application_id"	INTEGER UNIQUE,
@@ -40,7 +41,7 @@ CREATE TABLE "applications" (
 CREATE TABLE "teams" (
 	"team_id"	INTEGER UNIQUE,
 	"team_code"	TEXT UNIQUE,
-	"team_name" TEXT UNIQUE, 
+	"team_name" TEXT UNIQUE,
 	"owner" INTEGER,
 	PRIMARY KEY("team_id" AUTOINCREMENT)
 );
@@ -67,4 +68,10 @@ CREATE TABLE "checkins" (
     "mlh_uid"   INTEGER UNIQUE,
     "checkin_type"  TEXT,
     "checker_uid"   INTEGER
+);
+CREATE TABLE "sponsors" (
+	"sponsor_uid"	INTEGER UNIQUE,
+	"username"	TEXT,
+    "salt"  TEXT,
+	"key"	TEXT
 );
