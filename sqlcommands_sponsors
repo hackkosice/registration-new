@@ -1,0 +1,8 @@
+DROP TABLE "sponsors";
+
+CREATE TABLE "sponsors" (
+	"sponsor_uid"	INTEGER UNIQUE,
+	"username"	TEXT,
+    "salt"  TEXT,
+	"key"	TEXT
+);
