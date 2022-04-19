@@ -58,6 +58,7 @@ window.onload = async () => {
         $("school").textContent = application.user["school"];
         $("major").textContent = application.user["major"];
         $("grad").textContent = application.user["level"];
+        $("team").textContent = application.user["team_name"];
 
         if (typeof application.cv !== 'undefined') {
             $("cv").textContent = application.cv;

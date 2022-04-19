@@ -153,6 +153,8 @@ async function set_numbers() {
 }
 
 function build_table() {
+    sort_table()
+
     //Build up new table
     let root = $("sponsors_applications_table")
     root.innerHTML = ''
@@ -166,6 +168,7 @@ function build_table() {
     add_header(header, "Major");
     add_header(header, "Level");
     add_header(header, "Job preference");
+    add_header(header, "Team");
 
     let padding_back = document.createElement("th");
     header.appendChild(padding_back);
@@ -187,6 +190,7 @@ function build_table() {
         add_table_data(row, user.major);
         add_table_data(row, user.level);
         add_table_data(row, user.job_preference);
+        add_table_data(row, user.team_name);
 
         let detail_link = document.createElement("a");
         detail_link.href = `/sponsors/detail.html?uid=${user.mymlh_uid}`;
@@ -277,4 +281,24 @@ function get_all_skills() {
         skills.push(child.value)
 
     return skills;
+}
+
+function sort_table() {
+
+    //Apply any sorting
+    window.sponsors_applications.sort((first, second) => {
+        if (first.team_name === null && second.team_name !== null) {
+            return 1
+        }
+
+        if (second.team_name === null && first.team_name !== null) {
+            return -1
+        }
+
+        if ((first.team_name === null ? "" : first.team_name) < (second.team_name === null ? "" : second.team_name))
+            return -1;
+        else if ((first.team_name === null ? "" : first.team_name) > (second.team_name === null ? "" : second.team_name))
+            return 1;
+        return 0;
+    });
 }

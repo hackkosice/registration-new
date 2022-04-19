@@ -41,6 +41,11 @@ module.exports = class SponsorsApiEndpoints {
             return error(res, 400, "UID not provided!");
 
         const form = await this.#db.get("SELECT * FROM applications WHERE `mymlh_uid`=?;", [req.body.uid]);
+        const team = await this.#db.get("SELECT T.`team_name` FROM applications AS A LEFT JOIN teams AS T ON A.`team_id` = T.`team_id` WHERE A.`mymlh_uid`=?;", [req.body.uid])
+        let team_name = ""
+        if (team.length > 0) {
+            team_name = team[0].team_name || ""
+        }
 
         if (typeof form[0] === 'undefined')
             return error(res, 400, "Requested application not found!");
@@ -54,7 +59,8 @@ module.exports = class SponsorsApiEndpoints {
                     school: `${user.school?.name || ""}`,
                     level: `${user.level_of_study}`,
                     major: `${user.major}`,
-                    birth: `${user.date_of_birth}`
+                    birth: `${user.date_of_birth}`,
+                    team_name: `${team_name}`
                 },
                 form: form[0]
             });
@@ -73,7 +79,8 @@ module.exports = class SponsorsApiEndpoints {
                 school: `${user.school?.name || ""}`,
                 level: `${user.level_of_study}`,
                 major: `${user.major}`,
-                birth: `${user.date_of_birth}`
+                birth: `${user.date_of_birth}`,
+                team_name: `${team_name}`
             },
             form: form[0],
             cv: cv_filename[0].file_code
@@ -84,7 +91,7 @@ module.exports = class SponsorsApiEndpoints {
     async get_applications_endpoint(req, res) {
 
         let results = [];
-        const applications = await this.#db.get("SELECT * FROM applications WHERE `application_status` = 'accepted';", []);
+        const applications = await this.#db.get("SELECT A.*, T.`team_name` FROM applications AS A LEFT JOIN teams AS T ON A.`team_id` = T.`team_id` WHERE A.`application_status` = 'accepted';", []);
         let myMlhUser;
 
         //Normalize average out the score
@@ -99,7 +106,8 @@ module.exports = class SponsorsApiEndpoints {
                 school: `${myMlhUser.school?.name || ""}`,
                 level: `${myMlhUser.level_of_study}`,
                 major: `${myMlhUser.major}`,
-                skills: application.skills
+                skills: application.skills,
+                team_name: application.team_name
             });
         }
 
