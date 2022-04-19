@@ -189,10 +189,10 @@ window.onload = async function() {
         $("checkin-data").classList.remove("is-hidden");
         $("checkin-save").addEventListener("click", async () => {
             const pdf_data = $("to_pdf");
-            const worker = html2pdf(pdf_data).set({
+            const worker = html2pdf(pdf_data)/*.set({
                 filename: 'invitation.pdf',
                 margin: 2
-            });
+            }).from(`<html>${pdf_data.innerHTML}</html>`);*/
         });
 
     }

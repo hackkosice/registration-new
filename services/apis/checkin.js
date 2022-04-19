@@ -25,7 +25,7 @@ module.exports = class CheckinApiEndpoints {
         try {
             verification = await jwt.verify(req.cookies['voter_verification'], this.#jwt_key);
         } catch (err) {
-            return res.status(401).send("Authentication needed! Error: " + err);
+            return error(res, 401, "Authentication needed! Error: " + err);
         }
 
         req.verification = verification;
@@ -38,7 +38,7 @@ module.exports = class CheckinApiEndpoints {
         try {
             verification = await jwt.verify(req.cookies['verification'], this.#jwt_key);
         } catch (err) {
-            return res.status(401).send("Authentication needed! Error: " + err);
+            return error(res, 401, "Authentication needed! Error: " + err);
         }
 
         req.verification = verification;
@@ -72,6 +72,25 @@ module.exports = class CheckinApiEndpoints {
         res.status(200).send(token);
     }
 
+
+    async get_checkin_user(req, res) {
+
+        let user_uid;
+        try {
+            user_uid = await jwt.verify(req.body.token, this.#jwt_key);
+            console.log(user_uid);
+        } catch(err) {
+            return error(res, 400, "QR code is invalid!");
+        }
+
+        const user = await this.#cache.get(user_uid.uid);
+        console.log(user);
+
+        res.status(200).send({
+            name: `${user.first_name} ${user.last_name}`,
+            uid: user_uid.uid
+        });
+    }
 
     #db = null;
     #jwt_key = null;
