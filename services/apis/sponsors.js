@@ -99,43 +99,11 @@ module.exports = class SponsorsApiEndpoints {
                 school: `${myMlhUser.school?.name || ""}`,
                 level: `${myMlhUser.level_of_study}`,
                 major: `${myMlhUser.major}`,
+                skills: application.skills
             });
         }
 
         res.status(200).send(results);
-    }
-
-    async get_applications_csv(req, res) {
-        const csv_content = await this.generate_csv_content_from_query("SELECT * FROM applications WHERE `application_status` = 'accepted'")
-
-        res.setHeader("Content-type", "application/octet-stream");
-        res.status(200).send(csv_content);
-    }
-
-    async generate_csv_content_from_query(query) {
-        const fields = ["travel_from", "skills", "job_preference",
-            "achievements", "site", "github", "linkedin", "devpost",
-            "first_hack_hk22"];
-
-
-        const applications = await this.#db.get(query, []);
-
-        //TODO: add yes/no for cv
-        let csv_content = "name,email,birth,major,education,school,country,skills,job,achievements,website,github,linkedin,devpost,hk_first\n";
-
-        for (const application of applications) {
-            const user = await mlhUserData(application.mymlh_uid);
-
-            let line = `"${user.first_name} ${user.last_name}","${user.email}","${user.date_of_birth}","${user.major}","${user.level_of_study}",`;
-            line += `"${user.school?.name || ""}"`;
-
-            for (const field of fields) {
-                line += `,"${application[field]}"`;
-            }
-            csv_content += `${line}\n`;
-        }
-
-        return csv_content;
     }
 
     #cache = null;

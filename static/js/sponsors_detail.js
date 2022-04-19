@@ -50,7 +50,11 @@ window.onload = async () => {
 
         $("name").textContent = application.user["name"];
         $("email").textContent = application.user["email"];
-        $("birth").textContent = application.user["birth"];
+        $("birth").textContent = application.user["birth"]
+            .split("-")
+            .slice(0, 2)
+            .reverse()
+            .join("/");
         $("school").textContent = application.user["school"];
         $("major").textContent = application.user["major"];
         $("grad").textContent = application.user["level"];

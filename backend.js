@@ -84,9 +84,6 @@ const queryInfo  = require('./services/dev/queryInfo');
     router.get("/judge/applications_invited.csv", async (req, res, next) => { judge_api.judge_auth_middleware(req, res, next) },
         async (req, res) => { judge_api.get_invited_applications_csv(req, res) });
 
-    router.get("/sponsors/applications.csv", async (req, res, next) => { sponsors_api.sponsors_auth_middleware(req, res, next) },
-        async (req, res) => { sponsors_api.get_applications_csv(req, res) });
-
     //TODO: probably add auth
     router.post("/api/user-info", async (req, res) => { mlh_auth.get_user_data_endpoint(req, res) });
 
