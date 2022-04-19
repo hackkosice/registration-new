@@ -27,7 +27,7 @@ module.exports = class VotingApiEndpoints {
         try {
             verification = await jwt.verify(req.cookies['voter_verification'], this.#jwt_key);
         } catch (err) {
-            return res.status(401).send("Authentication needed! Error: " + err);
+            return error(res, 401, "Authentication needed! Error: " + err);
         }
 
         req.verification = verification;
