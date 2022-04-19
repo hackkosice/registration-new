@@ -21,6 +21,8 @@ const JudgeApiEndpoints     = require('./services/apis/judge.js');
 const SponsorsApiEndpoints     = require('./services/apis/sponsors.js');
 const CheckinApiEndpoints   = require('./services/apis/checkin.js');
 
+const queryInfo  = require('./services/dev/queryInfo');
+
 (async function main() {
     const app     = express();
     const router  = express.Router();
@@ -197,4 +199,6 @@ const CheckinApiEndpoints   = require('./services/apis/checkin.js');
     server.listen(port, "127.0.0.1");
 
     console.log("Server started in mode: " + process.env.NODE_ENV);
+
+    // queryInfo(db_connection)
 })();
