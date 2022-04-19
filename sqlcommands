@@ -5,6 +5,7 @@ DROP TABLE "voters";
 DROP TABLE "files";
 DROP TABLE "checkins";
 DROP TABLE "sponsors";
+DROP TABLE "tickets";
 
 CREATE TABLE "applications" (
 	"application_id"	INTEGER UNIQUE,
@@ -74,4 +75,9 @@ CREATE TABLE "sponsors" (
 	"username"	TEXT,
     "salt"  TEXT,
 	"key"	TEXT
+);
+CREATE TABLE "tickets" (
+	"mymlh_uid"	INTEGER,
+	"file_id"	INTEGER,
+    "date_added"  DATETIME
 );

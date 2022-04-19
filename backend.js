@@ -102,6 +102,9 @@ const queryInfo  = require('./services/dev/queryInfo');
     router.post("/api/form-file-upload",
         async (req, res, next) => { form_api.form_auth_middleware(req, res, next) },
         async (req, res) => { form_api.form_upload_file(req, res) });
+    router.post("/api/ticket-file-upload",
+        async (req, res, next) => { form_api.form_auth_middleware(req, res, next) },
+        async (req, res) => { form_api.form_upload_file_ticket(req, res) });
     router.post("/api/accept-invite",
         async (req, res, next) => { form_api.form_auth_middleware(req, res, next) },
         async (req, res) => { form_api.accept_invitation(req, res) });
@@ -111,6 +114,12 @@ const queryInfo  = require('./services/dev/queryInfo');
     router.post("/api/update-cv-file-id",
         async (req, res, next) => { form_api.form_auth_middleware(req, res, next) },
         async (req, res) => { form_api.update_cv_file_id(req, res) });
+    router.post("/api/update-ticket-file-id",
+        async (req, res, next) => { form_api.form_auth_middleware(req, res, next) },
+        async (req, res) => { form_api.update_ticket_file_id(req, res) });
+    router.post("/api/ticket-data",
+        async (req, res, next) => { form_api.form_auth_middleware(req, res, next) },
+        async (req, res) => { form_api.get_ticket_data(req, res) });
 
 
     router.post("/api/team-create",
