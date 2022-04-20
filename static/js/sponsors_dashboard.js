@@ -2,6 +2,13 @@ $ = (element) => { return document.getElementById(element); };
 
 const suggestions_datasets = ["/data/skills.json"];
 
+JOB_PREFERENCE = {
+    "none": "Not interested",
+    "part-time": "Part-time",
+    "full-time": "Full-time",
+    "internship": "Internship"
+}
+
 FILTERS = [
     {
         element: $("country_filter"),
@@ -14,7 +21,8 @@ FILTERS = [
         propertySelector: (user) => {
             return user.travel_from
         },
-        blacklistValues: []
+        blacklistValues: [],
+        textTransform: null
     },
     {
         element: $("major_filter"),
@@ -27,7 +35,8 @@ FILTERS = [
         propertySelector: (user) => {
             return user.major
         },
-        blacklistValues: ["none", "", "-", "1", "1st year"]
+        blacklistValues: ["none", "", "-", "1", "1st year"],
+        textTransform: null
     },
     {
         element: $("level_filter"),
@@ -40,7 +49,8 @@ FILTERS = [
         propertySelector: (user) => {
             return user.level
         },
-        blacklistValues: []
+        blacklistValues: [],
+        textTransform: null
     },
     {
         element: $("job_filter"),
@@ -53,7 +63,8 @@ FILTERS = [
         propertySelector: (user) => {
             return user.job_preference
         },
-        blacklistValues: []
+        blacklistValues: [],
+        textTransform: JOB_PREFERENCE
     }
 ]
 
@@ -127,7 +138,17 @@ async function fetch_all_data() {
     let fetches = [];
 
     fetches.push(fetch("/api/sponsors-applications", {method: 'POST', credentials: 'same-origin', cache: 'force-cache'})
-        .then(res => res.json()).then((applications) => {
+        .then(res => {
+            if (res.status === 200) {
+                return res.json()
+            } else {
+                return null
+            }
+        })
+        .then((applications) => {
+            if (applications === null) {
+                window.location.href = "/sponsors-admin"
+            }
 
             if (typeof applications.error !== 'undefined')
                 window.location = "/";
@@ -189,7 +210,7 @@ function build_table() {
         add_table_data(row, user.school);
         add_table_data(row, user.major);
         add_table_data(row, user.level);
-        add_table_data(row, user.job_preference);
+        add_table_data(row, JOB_PREFERENCE[user.job_preference]);
         add_table_data(row, user.team_name);
 
         let detail_link = document.createElement("a");
@@ -267,7 +288,13 @@ function create_filter_options() {
             if (value && !filter.blacklistValues.includes(value.toLowerCase())) {
                 let option = document.createElement("option")
                 option.value = value
-                option.textContent = value
+
+                if (filter.textTransform !== null) {
+                    option.textContent = filter.textTransform[value]
+                } else {
+                    option.textContent = value
+                }
+
                 filter.element.appendChild(option)
             }
         })
