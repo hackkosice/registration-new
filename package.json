@@ -8,7 +8,8 @@
     "css-build": "node-sass --omit-source-map-url sass/mystyles.scss static/css/mystyles.css",
     "start": "NODE_ENV=development nodemon backend.js",
     "start:production": "NODE_ENV=production node backend.js",
-    "useradd": "node add_user.js"
+    "useradd": "node add_user.js",
+    "sponsoradd": "node add_sponsor.js"
   },
   "repository": {
     "type": "git",

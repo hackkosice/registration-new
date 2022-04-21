@@ -7904,6 +7904,11 @@ body::after {
   height: 35vh;
   overflow-y: auto; }
 
+.sponsors_table_height {
+  max-height: 50vh;
+  height: 50vh;
+  overflow-y: auto; }
+
 .table_height-half {
   max-height: 17.5vh;
   height: 17.5vh;
