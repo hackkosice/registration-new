@@ -16,6 +16,7 @@ window.onload = async () => {
 
     $("start-scan").addEventListener("click", start_camera);
     $("stop-scan").addEventListener("click", stop_camera);
+    $("allow-checkin").addEventListener("click", complete_checkin);
 
     $("deny-checkin").addEventListener("click", () => {
         $("person-bar").classList.add("is-hidden");
@@ -25,6 +26,7 @@ window.onload = async () => {
 
 
 async function start_camera() {
+    $("success-bar").classList.add("is-hidden");
     html5QrCode.start(
         cameraId,
         {
@@ -69,6 +71,8 @@ async function on_scan(qr_message) {
 
         const user = await res.json();
 
+        $("error-bar").classList.add("is-hidden");
+
         $("person-uid").textContent = user.uid;
         $("person-name").textContent = user.name;
         $("person-bar").classList.remove("is-hidden");
@@ -78,4 +82,31 @@ async function on_scan(qr_message) {
 async function show_error(error) {
     $("error-bar").classList.remove("is-hidden");
     $("error-text").textContent = error;
+}
+
+async function complete_checkin() {
+
+    fetch("/api/checkin-complete", {method: 'POST', credentials: 'same-origin',
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+        },
+        body: JSON.stringify({
+            uid: Number($("person-uid").textContent),
+            type: "qr"
+        })
+    }).then(async res => {
+
+        if (res.status !== 200) {
+            const err_status = await res.json();
+
+            if (typeof err_status.error === "undefined" || typeof err_status.error.message === "undefined") {
+                console.log(err_status);
+                return show_error("Unknown error occurred. Check console for more details.");
+            }
+            return show_error(`An error occurred: ${err_status.error.message}`);
+        }
+
+        $("error-bar").classList.add("is-hidden");
+        $("success-bar").classList.remove("is-hidden");
+    });
 }
