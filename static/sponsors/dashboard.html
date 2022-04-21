@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang = "en">
+
+<head>
+
+    <title id = "title"> Hack Kosice Sponsors portal </title>
+
+    <link rel = "icon" type = "image/png" sizes = "48x48" href = "/images/favicon/favicon.png">
+    <link rel = "icon" type = "image/png" sizes = "192x192" href = "/images/favicon/favicon-192.png">
+
+    <script async src = "/js/sponsors_dashboard.js"></script>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/css/mystyles.css">
+
+</head>
+
+<body>
+
+<div id = "datasets">
+</div>
+
+<header style="padding: 0% 25%;">
+    <img src = "../images/logo_oneline_purple.svg" alt = "Hack Kosice Logo"/>
+</header>
+
+<div class="container mb-6">
+    <div id="loader" class="loader-wrapper is-active">
+        <div class="loader is-loading"></div>
+    </div>
+    <h2 class="title is-3 mb-5">Welcome to Hack Kosice 2022 Sponsors portal!</h2>
+    <p class="subtitle mt-5 mb-5">Below you can find a list of hackers that are accepted to Hack Kosice. You can view details of each application after clicking on details link. Each participant was given the chance to fill out information about their Skills and Achievements (based on which you can filter), but some of them only mention these in their CVs.</p>
+    <h6 class="subtitle is-6 mt-5">Number of confirmed participants: <span id="applications_number"></span></h6>
+    <div class = "columns">
+
+        <div class = "column is-fullwidth">
+            <div class="is-flex is-flex-direction-row is-justify-content-space-between is-align-items-center">
+            <label class="label">Filters: </label>
+            <button class="button is-link" id="reset_filters">Reset filters</button>
+            </div>
+            <div class="columns">
+                <div class="column is-half-desktop">
+                    <div class="control">
+                        <div class="is-flex is-flex-direction-row is-align-items-center">
+                            <p class="mr-4 is-text">Country:</p>
+                            <div class="select">
+                                <select id = "country_filter">
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="control">
+                        <div class="is-flex is-flex-direction-row is-align-items-center">
+                            <p class="mr-4 is-text">Job preference:</p>
+                            <div class="select">
+                                <select id = "job_filter">
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="columns">
+                <div class="column is-half-desktop">
+                    <div class="control">
+                        <div class="is-flex is-flex-direction-row is-align-items-center">
+                            <p class="mr-4 is-text">Education level:</p>
+                            <div class="select">
+                                <select id = "level_filter">
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="control">
+                        <div class="is-flex is-flex-direction-row is-align-items-center">
+                            <p class="mr-4 is-text">Major:</p>
+                            <div class="select">
+                                <select id = "major_filter">
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="columns">
+                <div class="column is-one-third-desktop">
+                    <div class="field">
+                        <div class="is-flex is-flex-direction-row is-align-items-center">
+                            <p class="mr-4 is-text">Skills:</p>
+                            <div class="control is-fullwidth">
+                                <div style="max-width: 400px;" id = "skills_wrap" class="is-flex is-justify-content-start is-flex-wrap-wrap">
+
+                                </div>
+                                <input class="input" placholder="Start typing skill..." id = "skills" type = "text" list = "skills_data" required>
+                                <p id="skills_error" class="help is-danger hidden"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class = "columns">
+        <div class = "column">
+            <div id = "user_scoreboard" class = "sponsors_table_height">
+                <table class="table is-fullwidth" id="sponsors_applications_table"></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <div class = "footer">
+        <div class = "content has-text-centered">
+            <p class = "has-text-white">Made with ❤️ by Hack Kosice</p>
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>

@@ -15,20 +15,20 @@ const statusData = {
         buttons: []
     },
     "invited": {
-        class: "is-success",
-        title: "Status: Invited",
-        description: "Congratulations! You have been officially invited to join us at Hack Kosice. Please let us know if you are coming as soon as possible:",
+        class: "is-danger",
+        title: "Status: Rejected",
+        description: "We are sorry but we can't offer you place at our hackathon this year. But don't worry, you can have a chance to participate next year.",
         buttons: [
-            {
+           /* {
                 text: "Confirm participation",
                 class: "is-success",
                 callback: acceptInvitation
-            },
-            {
+            },*/
+           /* {
                 text: "Decline invitation",
                 class: "is-danger",
                 callback: declineInvitation
-            }
+            }*/
         ]
     },
     "rejected": {
@@ -186,7 +186,7 @@ window.onload = async function() {
                 $("qrcode").title = "";
             }
         );
-        $("checkin-data").classList.remove("hidden");
+        $("checkin-data").classList.remove("is-hidden");
         $("checkin-save").addEventListener("click", async () => {
             const pdf_data = $("to_pdf");
             const worker = html2pdf(pdf_data)/*.set({
@@ -196,7 +196,7 @@ window.onload = async function() {
         });
 
     }
-  
+
     $("cv-button").addEventListener("click", async() => {
         if ($("cv_file_id").files.length === 0) {
             showError("cv_file_wrapper", "Please choose a file");
@@ -239,6 +239,50 @@ window.onload = async function() {
         } else {
             hideError("cv_file_wrapper")
             $("cv-file-name").textContent = "";
+        }
+    });
+
+    $("ticket-button").addEventListener("click", async() => {
+        if ($("ticket_file").files.length === 0) {
+            showError("ticket_file_wrapper", "Please choose a file");
+            return
+        }
+        const selectedFile = $("ticket_file").files[0];
+        if (selectedFile.size > MAX_CV_SIZE) {
+            showError("ticket_file_wrapper", "File is too big. Max size is 10 MiB.");
+            return
+        }
+        hideError("ticket_file_wrapper")
+        const fileId = await upload_ticket()
+        if (fileId === 0) {
+            showError("ticket_file_wrapper", "Error uploading file to server");
+            return
+        }
+        const body = {
+            ticket_file_id: fileId
+        }
+        await fetch("/api/update-ticket-file-id", {method: 'POST', credentials: 'same-origin',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: JSON.stringify(body)
+        })
+        fetch_all_data();
+    })
+
+    $("ticket_file").addEventListener("change", () => {
+        if ($("ticket_file").files.length > 0) {
+            const selectedFile = $("ticket_file").files[0];
+            if (selectedFile.size > MAX_CV_SIZE) {
+                showError("ticket_file_wrapper", "File is too big. Max size is 10 MiB.");
+            } else {
+                hideError("ticket_file_wrapper")
+                $("ticket-file-name").textContent = "";
+            }
+            $("ticket-file-name").textContent = selectedFile.name;
+        } else {
+            hideError("ticket_file_wrapper")
+            $("ticket-file-name").textContent = "";
         }
     });
 
@@ -296,6 +340,17 @@ async function load_user_data() {
                 $("reimb_description").textContent = reimb.description;
                 $("reimb-card").classList.add(reimb.class);
 
+                $("ticket-document").textContent = ""
+                if (formdata.reimbursement_progress === 'approved') {
+                    $("reimb-card-approved").classList.remove("is-hidden")
+                    $("reimb-card").classList.add("is-hidden")
+                    $("reimb-approved-amount").textContent = calculate_reimb_amount().toString()
+                    load_ticket_file_name()
+                } else {
+                    $("reimb-card-approved").classList.add("is-hidden")
+                    $("reimb-card").classList.remove("is-hidden")
+                }
+
                 if (formdata.application_status === "open") {
                     $("edit-application").classList.remove("hidden");
                     $("close-application").classList.remove("hidden");
@@ -313,6 +368,28 @@ async function load_user_data() {
     } catch (e) {
         console.error(e)
     }
+}
+
+async function load_ticket_file_name() {
+    await fetch("/api/ticket-data", {method: 'POST', credentials: 'same-origin'})
+        .then(res => {
+            if (res.status === 200) {
+                return res.json()
+            } else {
+                return null
+            }
+        })
+        .then((res) => {
+            if (res === null) {
+                window.location.href = "/my-mlh-login"
+            }
+
+            if (res.file_name) {
+                $("ticket-document").textContent = "(uploaded)"
+            }
+
+            $("ticket-file-name").textContent = res.file_name
+        })
 }
 
 
@@ -457,5 +534,45 @@ async function upload_cv() {
     }
     catch (err) {
         window.location = "/404.html";
+    }
+}
+
+async function upload_ticket() {
+    try {
+        const selectedFile = $("ticket_file").files[0];
+        if (selectedFile) {
+            const data = new FormData();
+            data.append("ticket", selectedFile);
+            const res = await fetch("/api/ticket-file-upload", {method: 'POST', credentials: 'same-origin',
+                body: data
+            });
+            const resData = await res.json();
+            return resData.fileId;
+        } else {
+            return 0;
+        }
+    }
+    catch (err) {
+        window.location = "/404.html";
+    }
+}
+
+function calculate_reimb_amount() {
+    const country = window.formdata.travel_from;
+    switch(country) {
+        case "Slovakia":
+            return 0;
+        case "Czechia":
+            return 20;
+        case "Hungary":
+            return 20;
+        case "Poland":
+            return 20;
+        case "Austria":
+            return 20;
+        case "Ukraine":
+            return 20;
+        default:
+            return 50;
     }
 }

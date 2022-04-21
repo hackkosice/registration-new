@@ -160,6 +160,26 @@ module.exports = class FormApiEndpoints {
         })
     }
 
+    async form_upload_file_ticket(req, res) {
+        const verification = req.verification;
+
+        const file = req.files.ticket
+        const fileSplit = file.name.split(".")
+        const fileExtension = fileSplit[fileSplit.length - 1]
+
+        const randomString = Math.random().toString(36).substring(2);
+
+        const fileCode = `${verification.uid}${randomString}.${fileExtension}`
+        file.mv(`./uploads/tickets/${fileCode}`)
+
+        const resdb = await this.#db.insert("INSERT INTO files(`file_name`, `file_code`) VALUES (?, ?);", [file.name, fileCode])
+        const fileId = resdb.lastInsertRowid
+
+        return res.status(200).send({
+            fileId: fileId
+        })
+    }
+
     async accept_invitation(req, res) {
         const verification = req.verification;
 
@@ -212,6 +232,35 @@ module.exports = class FormApiEndpoints {
         return res.status(200).send({
             message: "OK"
         })
+    }
+
+    async update_ticket_file_id(req, res) {
+        const verification = req.verification;
+
+        await this.#db.insert("INSERT INTO tickets(`mymlh_uid`, `file_id`, `date_added`) VALUES(?, ?, CURRENT_TIMESTAMP)", [verification.uid, req.body.ticket_file_id])
+
+        return res.status(200).send({
+            message: "OK"
+        })
+    }
+
+    async get_ticket_data(req, res) {
+        const verification = req.verification;
+
+        const data = await this.#db.get("SELECT F.`file_name` from tickets AS T LEFT JOIN files AS F ON F.`file_id` = T.`file_id` WHERE T.`mymlh_uid` = ? ORDER BY T.`date_added` DESC LIMIT 1;", [verification.uid])
+
+        if (data.length == 0) {
+            return res.status(200).send({
+                file_name: ""
+            })
+        }
+
+        const filename = data[0].file_name
+
+        return res.status(200).send({
+            file_name: filename
+        })
+
     }
 
     #db = null;

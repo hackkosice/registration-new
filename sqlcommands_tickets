@@ -1,0 +1,7 @@
+DROP TABLE "tickets";
+
+CREATE TABLE "tickets" (
+	"mymlh_uid"	INTEGER,
+	"file_id"	INTEGER,
+    "date_added"  DATETIME
+);
