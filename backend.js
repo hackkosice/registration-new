@@ -179,6 +179,10 @@ const queryInfo  = require('./services/dev/queryInfo');
         async (req, res, next) => { checkin_api.judge_auth_middleware(req, res, next) },
         async (req, res) => { checkin_api.check_in_user(req, res) });
 
+    router.post("/api/checkin-table",
+        async (req, res, next) => { checkin_api.judge_auth_middleware(req, res, next) },
+        async (req, res) => { checkin_api.get_manual_checkin_data(req, res) });
+
     router.post("/api/sponsors-applications",
         async (req, res, next) => { sponsors_api.sponsors_auth_middleware(req, res, next) },
         async (req, res) => { sponsors_api.get_applications_endpoint(req, res) });

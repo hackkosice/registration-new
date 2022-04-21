@@ -53,6 +53,14 @@
         <div class = "message-body p-4">
             <p><b class = "mt-5">User ID: </b><span id = "person-uid"></span></p>
             <p><b>Name: </b><span id = "person-name"></span></p>
+
+            <div class = "mt-4">
+                <p><b>Things to check: </b></p>
+                <ul>
+                    <li class = "pl-4">ID document (ID card, Passport)</li>
+                    <li id = "below18" class = " pl-4 is-hidden">Parental permission (attendee is younger than 18) </li>
+                </ul>
+            </div>
         </div>
 
         <div class = "columns is-fullwidth p-4">
@@ -74,6 +82,11 @@
         <div class = "column">
             <button class = "button is-danger is-fullwidth" id = "stop-scan"> Stop Scanning! </button>
         </div>
+    </div>
+
+    <h3 class = "title mt-4">Manual Checkins</h3>
+    <div class = "table_height">
+        <table class="table is-fullwidth" id="manual_checkins"></table>
     </div>
 </div>
 
