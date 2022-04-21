@@ -25,7 +25,7 @@ module.exports = class CheckinApiEndpoints {
         try {
             verification = await jwt.verify(req.cookies['voter_verification'], this.#jwt_key);
         } catch (err) {
-            return res.status(401).send("Authentication needed! Error: " + err);
+            return error(res, 401, "Authentication needed! Error: " + err);
         }
 
         req.verification = verification;
@@ -38,7 +38,7 @@ module.exports = class CheckinApiEndpoints {
         try {
             verification = await jwt.verify(req.cookies['verification'], this.#jwt_key);
         } catch (err) {
-            return res.status(401).send("Authentication needed! Error: " + err);
+            return error(res, 401, "Authentication needed! Error: " + err);
         }
 
         req.verification = verification;
@@ -73,7 +73,52 @@ module.exports = class CheckinApiEndpoints {
     }
 
 
+    async get_checkin_user(req, res) {
+
+        let user_uid;
+        try {
+            user_uid = await jwt.verify(req.body.token, this.#jwt_key);
+            console.log(user_uid);
+        } catch (err) {
+            return error(res, 400, "QR code is invalid!");
+        }
+
+        const user = await this.#cache.get(user_uid.uid);
+
+        res.status(200).send({
+            name: `${user.first_name} ${user.last_name}`,
+            uid: user_uid.uid,
+            below18: false //TODO: Replace
+        });
+    }
+
+    async check_in_user(req, res) {
+
+        let checkin_type = null;
+
+        if (typeof req.body.uid === 'undefined')
+            return error(res, 400, "User UID not provided!");
+
+
+        if (typeof req.body.type === 'undefined')
+            checkin_type = "manual";
+        else checkin_type = req.body.checkin_type;
+
+        try {
+            this.#db.insert("INSERT INTO checkins (`mlh_uid`, `checker_uid`) VALUES (?, ?);", [req.body.uid, req.verification.voter_uid]);
+        } catch (err) {
+            return error(res, 403, "User already checked in!");
+        }
+        this.#log.push({
+           voter_id: req.verification.voter_uid,
+           checkin_type: checkin_type,
+           user_id: req.body.uid
+        });
+        return res.status(200).send({});
+    }
+
     #db = null;
     #jwt_key = null;
     #cache = null;
+    #log = [];
 }

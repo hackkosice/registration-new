@@ -67,9 +67,9 @@ CREATE TABLE "voters" (
 );
 CREATE TABLE "checkins" (
     "mlh_uid"   INTEGER UNIQUE,
-    "checkin_type"  TEXT,
     "checker_uid"   INTEGER
 );
+CREATE TABLE "tables" ();
 CREATE TABLE "sponsors" (
 	"sponsor_uid"	INTEGER UNIQUE,
 	"username"	TEXT,
