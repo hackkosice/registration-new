@@ -22,6 +22,23 @@ window.onload = async () => {
         $("person-bar").classList.add("is-hidden");
         show_error("Checkin canceled by user!");
     });
+
+    //Populate manual checkin table
+    fetch("/api/checkin-table", {method: 'POST', credentials: 'same-origin'}).then(async res => {
+        if (res.status !== 200) {
+            const err_status = await res.json();
+
+            if (typeof err_status.error === "undefined" || typeof err_status.error.message === "undefined") {
+                console.log(err_status);
+                return show_error("Unknown error occurred. Check console for more details.");
+            }
+
+            $("person-bar").classList.add("is-hidden");
+            return show_error(`An error occurred: ${err_status.error.message}`);
+        }
+
+        build_manual_checkin((await res.json()).users);
+    });
 }
 
 
@@ -48,7 +65,7 @@ async function stop_camera() {
 
 async function on_scan(qr_message) {
     //Call to backend
-    console.log(qr_message);
+    $("below18").classList.add("is-hidden");
     fetch("/api/checkin-user", {method: 'POST', credentials: 'same-origin',
         headers: {
             'Content-Type': 'application/json;charset=utf-8'
@@ -71,6 +88,8 @@ async function on_scan(qr_message) {
 
         const user = await res.json();
 
+        if(!isAdult(user.birth))
+            $("below18").classList.remove("is-hidden");
         $("error-bar").classList.add("is-hidden");
 
         $("person-uid").textContent = user.uid;
@@ -103,10 +122,119 @@ async function complete_checkin() {
                 console.log(err_status);
                 return show_error("Unknown error occurred. Check console for more details.");
             }
+
+            $("person-bar").classList.add("is-hidden");
             return show_error(`An error occurred: ${err_status.error.message}`);
         }
 
         $("error-bar").classList.add("is-hidden");
+        $("person-bar").classList.add("is-hidden");
         $("success-bar").classList.remove("is-hidden");
+        $("manual_checkins").removeChild($($("person-uid").textContent));
     });
 }
+
+
+function isAdult(birthday){ //birthday is string YYYY-MM-DD (ISO format)
+    // adult is considered having the 18th birthday today or in the past
+    let d = new Date(birthday);
+    let now = new Date();
+
+    if (now.getFullYear() - d.getFullYear() < 18){
+        return false;
+    } else if (now.getFullYear() - d.getFullYear() > 18){
+        return true;
+    }
+
+    // difference in years is exactly 18
+    if (now.getMonth() < d.getMonth()){
+        return false;
+    } else if (now.getMonth() > d.getMonth()){
+        return true;
+    }
+
+    //months are the same, this is close
+    if (now.getDate() < d.getDate()){
+        return false;
+    } else {
+        return true;
+    }
+}
+
+function build_manual_checkin(users) {
+    //Build up new table
+    let root = $("manual_checkins");
+    root.innerHTML = '';
+
+    let header = document.createElement("tr");
+
+    let name_header = document.createElement("th");
+    name_header.textContent = "Name";
+    header.appendChild(name_header);
+
+    let uid_header = document.createElement("th");
+    uid_header.textContent = "User ID";
+    header.appendChild(uid_header);
+
+    let padding_back = document.createElement("th");
+    header.appendChild(padding_back);
+
+    root.appendChild(header);
+
+    //Apply any filtering
+    for (const user of users) {
+
+        let row = document.createElement("tr");
+        row.id = user.mymlh_uid;
+
+        let name = document.createElement("td");
+        name.textContent = user.name;
+
+        let uid = document.createElement("td");
+        uid.textContent = user.mymlh_uid;
+
+        let checkin_link = document.createElement("a");
+        checkin_link.id = user.mymlh_uid;
+        checkin_link.href = "javascript:void(0)";
+        checkin_link.textContent = "Check in!";
+        checkin_link.addEventListener("click", () => {
+            fetch("/api/checkin-complete", {method: 'POST', credentials: 'same-origin',
+                headers: {
+                    'Content-Type': 'application/json;charset=utf-8'
+                },
+                body: JSON.stringify({
+                    uid: user.mymlh_uid,
+                    type: "manual"
+                })
+            }).then(async res => {
+
+                if (res.status !== 200) {
+                    const err_status = await res.json();
+
+                    if (typeof err_status.error === "undefined" || typeof err_status.error.message === "undefined") {
+                        console.log(err_status);
+                        return show_error("Unknown error occurred. Check console for more details.");
+                    }
+
+                    $("person-bar").classList.add("is-hidden");
+                    return show_error(`An error occurred: ${err_status.error.message}`);
+                }
+
+                $("error-bar").classList.add("is-hidden");
+                $("person-bar").classList.add("is-hidden");
+                $("success-bar").classList.remove("is-hidden");
+
+                root.removeChild($(user.mymlh_uid.toString()));
+            });
+        });
+
+        let checkin_wrapper = document.createElement("td")
+        checkin_wrapper.appendChild(checkin_link);
+
+        row.appendChild(name);
+        row.appendChild(uid);
+        row.appendChild(checkin_wrapper);
+        root.appendChild(row);
+    }
+}
+

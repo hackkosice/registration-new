@@ -78,9 +78,17 @@ module.exports = class CheckinApiEndpoints {
         let user_uid;
         try {
             user_uid = await jwt.verify(req.body.token, this.#jwt_key);
-            console.log(user_uid);
         } catch (err) {
             return error(res, 400, "QR code is invalid!");
+        }
+
+        try {
+            const checked = await this.#db.get("SELECT * FROM checkins WHERE `mlh_uid`=?;", [user_uid.uid]);
+
+            if (typeof checked[0] !== 'undefined')
+                return error(res, 403, "User already checked in!");
+        } catch (err) {
+            return error(res, 500, "Error fetching user data!");
         }
 
         const user = await this.#cache.get(user_uid.uid);
@@ -88,7 +96,7 @@ module.exports = class CheckinApiEndpoints {
         res.status(200).send({
             name: `${user.first_name} ${user.last_name}`,
             uid: user_uid.uid,
-            below18: false //TODO: Replace
+            age: user.date_of_birth
         });
     }
 
@@ -105,7 +113,7 @@ module.exports = class CheckinApiEndpoints {
         else checkin_type = req.body.checkin_type;
 
         try {
-            this.#db.insert("INSERT INTO checkins (`mlh_uid`, `checker_uid`) VALUES (?, ?);", [req.body.uid, req.verification.voter_uid]);
+            await this.#db.insert("INSERT INTO checkins (`mlh_uid`, `checker_uid`) VALUES (?, ?);", [req.body.uid, req.verification.voter_uid]);
         } catch (err) {
             return error(res, 403, "User already checked in!");
         }
@@ -115,6 +123,35 @@ module.exports = class CheckinApiEndpoints {
            user_id: req.body.uid
         });
         return res.status(200).send({});
+    }
+
+    async get_manual_checkin_data(req, res) {
+
+        let all_users;
+        let checked_users;
+        try {
+            all_users = await this.#db.get("SELECT `mymlh_uid` FROM applications WHERE `application_status`=?;", ["accepted"]);
+            checked_users = await this.#db.get("SELECT `mlh_uid` FROM checkins;", []);
+        } catch (err) {
+            return error(res, 500, "Error fetching user data!");
+        }
+
+        for (let i = 0; i < all_users.length; i++) {
+
+            const query = await this.#cache.get(all_users[i].mymlh_uid);
+            all_users[i].name = `${query.first_name} ${query.last_name}`;
+            for (const user of checked_users) {
+                if (all_users[i].mymlh_uid === user.mlh_uid) {
+                    all_users.splice(i, 1);
+                    break;
+                }
+            }
+        }
+
+        return res.status(200).send({
+            status: 'OK',
+            users: all_users
+        });
     }
 
     #db = null;
