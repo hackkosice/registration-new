@@ -1,19 +1,22 @@
 $ = (element) => { return document.getElementById(element); };
 let html5QrCode = null;
-let cameraId = null;
+let cameras = null;
 
 window.onload = async () => {
 
     html5QrCode = new Html5Qrcode("scanner");
 
-    Html5Qrcode.getCameras().then(cameras => {
-        if (cameras && cameras.length) {
-            $("cameras").textContent = `Number  of cameras: ${cameras.length}`;
-            cameraId = cameras[1].id;
+    Html5Qrcode.getCameras().then(all_cameras => {
+        if (all_cameras && all_cameras.length) {
+            $("camera").value = all_cameras.length - 1;
+            $("camera").max = all_cameras.length - 1;
+
+            $("cameras").textContent = `Number  of cameras: ${all_cameras.length}`;
+            cameras = all_cameras;
         }
-    }).catch(err => {
+    })/*.catch(err => {
         console.log(err);
-    });
+    });*/
 
     $("start-scan").addEventListener("click", start_camera);
     $("stop-scan").addEventListener("click", stop_camera);
@@ -45,6 +48,8 @@ window.onload = async () => {
 
 async function start_camera() {
     $("success-bar").classList.add("is-hidden");
+    let cameraId = cameras[Math.max(0, Math.min(cameras.length - 1, $("camera").value))].id;
+
     html5QrCode.start(
         cameraId,
         {
@@ -222,16 +227,16 @@ function build_manual_checkin(users) {
         checkin_link.href = "javascript:void(0)";
         checkin_link.textContent = "Check in!";
         checkin_link.addEventListener("click", () => {
-            fetch("/api/checkin-complete", {method: 'POST', credentials: 'same-origin',
+            $("below18").classList.add("is-hidden");
+            fetch("/api/checkin-data", {method: 'POST', credentials: 'same-origin',
                 headers: {
                     'Content-Type': 'application/json;charset=utf-8'
                 },
                 body: JSON.stringify({
-                    uid: user.mymlh_uid,
-                    type: "manual"
-                })
+                        uid: user.mymlh_uid
+                    }
+                )
             }).then(async res => {
-
                 if (res.status !== 200) {
                     const err_status = await res.json();
 
@@ -239,18 +244,45 @@ function build_manual_checkin(users) {
                         console.log(err_status);
                         return show_error("Unknown error occurred. Check console for more details.");
                     }
-
-                    $("person-bar").classList.add("is-hidden");
                     return show_error(`An error occurred: ${err_status.error.message}`);
                 }
 
-                $("error-bar").classList.add("is-hidden");
-                $("person-bar").classList.add("is-hidden");
-                $("success-bar").classList.remove("is-hidden");
+                const user = await res.json();
 
-                root.removeChild($(user.mymlh_uid.toString()));
+                const table = await fetch("/api/checkin-table-uid", {method: 'POST', credentials: 'same-origin',
+                    headers: {
+                        'Content-Type': 'application/json;charset=utf-8'
+                    },
+                    body: JSON.stringify({
+                            uid: Number($("person-uid").textContent)
+                        }
+                    )
+                });
+                if (table.status !== 200) {
+                    const err_status = await table.json();
+
+                    if (typeof err_status.error === "undefined" || typeof err_status.error.message === "undefined") {
+                        console.log(err_status);
+                        return show_error("Unknown error occurred. Check console for more details.");
+                    }
+                    return show_error(`An error occurred: ${err_status.error.message}`);
+                }
+
+                const table_code = (await table.json()).table;
+
+                if(!isAdult(user.birth))
+                    $("below18").classList.remove("is-hidden");
+                $("error-bar").classList.add("is-hidden");
+
+                $("person-uid").textContent = user.uid;
+                $("person-name").textContent = user.name;
+                $("person-tshirt").textContent = user.tshirt;
+                $("person-table").textContent = table_code;
+                $("person-bar").classList.remove("is-hidden");
             });
+
         });
+
 
         let checkin_wrapper = document.createElement("td")
         checkin_wrapper.appendChild(checkin_link);

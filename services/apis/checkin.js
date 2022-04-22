@@ -111,6 +111,29 @@ module.exports = class CheckinApiEndpoints {
         });
     }
 
+    async get_checkin_data(req, res) {
+
+        if (typeof req.body.uid === 'undefined')
+            return error(res, 400, "No uid provided");
+        const user = await mlhUserData(req.body.uid);
+
+        let size = null;
+        try {
+            size = await this.#db.get("SELECT `tshirt` FROM applications WHERE `mymlh_uid`=?;", [req.body.uid]);
+            if (typeof size[0] === 'undefined')
+                return error(res, 403, "User not found!");
+        } catch(err) {
+            return error(res, 500, "Error fetching user data!");
+        }
+
+        res.status(200).send({
+            name: `${user.first_name} ${user.last_name}`,
+            uid: req.body.uid,
+            age: user.date_of_birth,
+            tshirt: size[0].tshirt
+        });
+    }
+
     async check_in_user(req, res) {
 
         let checkin_type = null;
