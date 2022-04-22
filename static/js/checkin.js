@@ -99,7 +99,7 @@ async function on_scan(qr_message) {
                 'Content-Type': 'application/json;charset=utf-8'
             },
             body: JSON.stringify({
-                    uid: Number($("person-uid").textContent)
+                    uid: user.uid
                 }
             )
         });
