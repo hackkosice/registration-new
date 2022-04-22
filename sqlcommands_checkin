@@ -1,0 +1,8 @@
+DROP TABLE "checkins";
+
+CREATE TABLE "checkins" (
+	"mlh_uid"	INTEGER UNIQUE,
+	"checker_uid"	INTEGER,
+	"checkin_id"	INTEGER NOT NULL UNIQUE,
+	PRIMARY KEY("checkin_id" AUTOINCREMENT)
+);
