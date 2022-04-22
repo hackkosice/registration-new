@@ -76,6 +76,8 @@ window.onload = async function() {
 
     await fetch_all_data()
 
+
+
     //Add callback
     $("join").addEventListener('click', async () => {
         try {
@@ -132,6 +134,8 @@ window.onload = async function() {
 
             $("create").classList.add("is-loading")
 
+
+
             const data = await fetch("/api/team-create", {method: 'POST', credentials: 'same-origin',
                 headers: {
                     'Content-Type': 'application/json;charset=utf-8'
@@ -179,10 +183,25 @@ window.onload = async function() {
                 if (response.status != 200)
                     return;
 
+
                 const content = await response.json();
+                const table = await fetch("/api/checkin-table-uid-user", {method: 'POST', credentials: 'same-origin'});
+                if (table.status !== 200) {
+                    const err_status = await table.json();
+
+                    if (typeof err_status.error === "undefined" || typeof err_status.error.message === "undefined") {
+                        console.log(err_status);
+                    }
+                    console.log(`An error occurred: ${err_status.error.message}`);
+                }
+
+                const table_code = (await table.json()).table;
+
+
                 var qrc = new QRCode($("qrcode"), content.invite_token);
                 $("checkin-uid").textContent = content.uid;
                 $("checkin-name").textContent = content.name;
+                $("checkin-table").textContent = table_code;
                 $("qrcode").title = "";
             }
         );
