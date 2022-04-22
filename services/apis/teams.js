@@ -26,7 +26,7 @@ module.exports = class TeamsApiEndpoints {
         try {
             verification = await jwt.verify(req.cookies['verification'], this.#jwt_key);
         } catch (err) {
-            return res.status(401).send("Authentication needed! Error: " + err);
+            return error(res, 401, "Authentication needed! Error: " + err);
         }
 
         req.verification = verification;

@@ -28,7 +28,7 @@ module.exports = class FormApiEndpoints {
         try {
             verification = await jwt.verify(req.cookies['verification'], this.#jwt_key);
         } catch (err) {
-            return res.status(401).send("Authentication needed! Error: " + err);
+            return error(res, 401, "Authentication needed! Error: " + err);
         }
 
         req.verification = verification;
@@ -56,7 +56,7 @@ module.exports = class FormApiEndpoints {
 
             //Handle application creation
             if (req.body.application_progress === 1) {
-                /*
+
                 const user = await this.#db.get("SELECT `application_id` FROM applications WHERE `mymlh_uid`=?;", [verification.uid]);
 
                 if (typeof user[0] !== 'undefined')
@@ -64,8 +64,9 @@ module.exports = class FormApiEndpoints {
 
                 await this.#db.insert("INSERT INTO applications(`application_progress`, `application_status`, `mymlh_uid`, `reimbursement_progress`) VALUES (?, ?, ?, ?);",
                                                 [1, "open", verification.uid, "none"]);
-                */
-                return error(res, 400, "Application portal no longer accepts any new applications!");
+
+                return res.status(200).send({ status: 'OK' });
+                //return error(res, 400, "Application portal no longer accepts any new applications!");
             }
 
             const user = await this.#db.get("SELECT `application_id`, `application_progress` FROM applications WHERE `mymlh_uid`=?;", [verification.uid]);

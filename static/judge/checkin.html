@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang = "en">
+
+<head>
+
+    <title id = "title"> Hack Kosice registration </title>
+
+    <link rel = "icon" type = "image/png" sizes = "48x48" href = "/images/favicon/favicon.png">
+    <link rel = "icon" type = "image/png" sizes = "192x192" href = "/images/favicon/favicon-192.png">
+
+    <script async src = "/js/html5-qrcode.min.js"></script>
+    <script async src = "/js/checkin.js"></script>
+
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/css/mystyles.css">
+
+</head>
+
+<body>
+
+<header style="padding: 0% 25%;">
+    <img src = "../images/logo_oneline_purple.svg" alt = "Hack Kosice Logo"/>
+</header>
+
+
+
+<div class="container mb-6">
+    <p id = "cameras"></p>
+    <input id = "camera" type="number" min = "0"/>
+    <nav class="message is-hidden is-danger" id = "error-bar">
+        <p class="message-header">
+            Error
+        </p>
+        <div class = "message-body">
+            <p id = "error-text">Uga Buga Me Be Broken!</p>
+        </div>
+    </nav>
+
+    <nav class="message is-hidden is-success" id = "success-bar">
+        <p class="message-header">
+            Success!
+        </p>
+        <div class = "message-body">
+            <p>User checked in successfully!</p>
+        </div>
+    </nav>
+
+    <nav class="message is-info is-hidden" id = "person-bar">
+        <p class="message-header">
+            Attendee:
+        </p>
+        <div class = "message-body p-4">
+            <p><b class = "mt-5">User ID: </b><span id = "person-uid"></span></p>
+            <p><b>Name: </b><span id = "person-name"></span></p>
+            <p><b>T-Shirt size: </b><span id = "person-tshirt"></span></p>
+            <p><b>Table Code: </b><span id = "person-table"></span></p>
+
+            <div class = "mt-4">
+                <p><b>Things to check: </b></p>
+                <ul>
+                    <li class = "pl-4">ID document (ID card, Passport)</li>
+                    <li id = "below18" class = " pl-4 is-hidden">Parental permission (attendee is younger than 18) </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class = "columns is-fullwidth p-4">
+            <div class = "column is-half">
+                <button class = "button is-success is-fullwidth" id = "allow-checkin"> Allow in! </button>
+            </div>
+            <div class = "column">
+                <button class = "button is-danger is-fullwidth" id = "deny-checkin"> Cancel checkin! </button>
+            </div>
+        </div>
+
+    </nav>
+
+    <div id = "scanner"></div>
+    <div class = "columns is-fullwidth mt-4">
+        <div class = "column is-half">
+            <button class = "button is-success is-fullwidth" id = "start-scan"> Start Scanning! </button>
+        </div>
+        <div class = "column">
+            <button class = "button is-danger is-fullwidth" id = "stop-scan"> Stop Scanning! </button>
+        </div>
+    </div>
+
+    <h3 class = "title mt-4">Manual Checkins</h3>
+    <div class = "table_height">
+        <table class="table is-fullwidth" id="manual_checkins"></table>
+    </div>
+
+    <h3 class = "title mt-4">Checked in attendees</h3>
+    <div class = "table_height">
+        <table class="table is-fullwidth" id="checked_in"></table>
+    </div>
+
+
+</div>
+
+<footer>
+    <div class = "footer">
+        <div class = "content has-text-centered">
+            <p class = "has-text-white">Made with ❤️ by Hack Kosice</p>
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>

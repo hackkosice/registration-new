@@ -19,16 +19,16 @@ const statusData = {
         title: "Status: Rejected",
         description: "We are sorry but we can't offer you place at our hackathon this year. But don't worry, you can have a chance to participate next year.",
         buttons: [
-           /* {
+           {
                 text: "Confirm participation",
                 class: "is-success",
                 callback: acceptInvitation
-            },*/
-           /* {
+           },
+           {
                 text: "Decline invitation",
                 class: "is-danger",
                 callback: declineInvitation
-            }*/
+           }
         ]
     },
     "rejected": {
@@ -75,6 +75,8 @@ const reimbData = {
 window.onload = async function() {
 
     await fetch_all_data()
+
+
 
     //Add callback
     $("join").addEventListener('click', async () => {
@@ -132,6 +134,8 @@ window.onload = async function() {
 
             $("create").classList.add("is-loading")
 
+
+
             const data = await fetch("/api/team-create", {method: 'POST', credentials: 'same-origin',
                 headers: {
                     'Content-Type': 'application/json;charset=utf-8'
@@ -179,20 +183,35 @@ window.onload = async function() {
                 if (response.status != 200)
                     return;
 
+
                 const content = await response.json();
+                const table = await fetch("/api/checkin-table-uid-user", {method: 'POST', credentials: 'same-origin'});
+                if (table.status !== 200) {
+                    const err_status = await table.json();
+
+                    if (typeof err_status.error === "undefined" || typeof err_status.error.message === "undefined") {
+                        console.log(err_status);
+                    }
+                    console.log(`An error occurred: ${err_status.error.message}`);
+                }
+
+                const table_code = (await table.json()).table;
+
+
                 var qrc = new QRCode($("qrcode"), content.invite_token);
                 $("checkin-uid").textContent = content.uid;
                 $("checkin-name").textContent = content.name;
+                $("checkin-table").textContent = table_code;
                 $("qrcode").title = "";
             }
         );
         $("checkin-data").classList.remove("is-hidden");
         $("checkin-save").addEventListener("click", async () => {
             const pdf_data = $("to_pdf");
-            const worker = html2pdf(pdf_data).set({
+            const worker = html2pdf(pdf_data)/*.set({
                 filename: 'invitation.pdf',
                 margin: 2
-            });
+            }).from(`<html>${pdf_data.innerHTML}</html>`);*/
         });
 
     }

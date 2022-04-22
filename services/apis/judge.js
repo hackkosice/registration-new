@@ -27,7 +27,7 @@ module.exports = class VotingApiEndpoints {
         try {
             verification = await jwt.verify(req.cookies['voter_verification'], this.#jwt_key);
         } catch (err) {
-            return res.status(401).send("Authentication needed! Error: " + err);
+            return error(res, 401, "Authentication needed! Error: " + err);
         }
 
         req.verification = verification;
@@ -85,6 +85,11 @@ module.exports = class VotingApiEndpoints {
             return error(res, 400, "UID not provided!");
 
         const form = await this.#db.get("SELECT * FROM applications WHERE `mymlh_uid`=?;", [req.body.uid]);
+        const table = await this.#db.get("SELECT table_code FROM user_tables WHERE `mymlh_uid`=?;", [req.body.uid])
+        let table_code = "NONE"
+        if (table.length > 0) {
+            table_code = table[0].table_code
+        }
 
         if (typeof form[0] === 'undefined')
             return error(res, 400, "Requested application not found!");
@@ -97,7 +102,8 @@ module.exports = class VotingApiEndpoints {
                     school: `${user.school?.name || ""}`,
                     level: `${user.level_of_study}`,
                     major: `${user.major}`,
-                    birth: `${user.date_of_birth}`
+                    birth: `${user.date_of_birth}`,
+                    table_code: table_code
                 },
                 form: form[0]
             });
@@ -115,7 +121,8 @@ module.exports = class VotingApiEndpoints {
                 school: `${user.school?.name || ""}`,
                 level: `${user.level_of_study}`,
                 major: `${user.major}`,
-                birth: `${user.date_of_birth}`
+                birth: `${user.date_of_birth}`,
+                table_code: table_code
             },
             form: form[0],
             cv: cv_filename[0].file_code
