@@ -169,11 +169,10 @@ module.exports = class CheckinApiEndpoints {
         if (typeof req.body.team === 'undefined')
             return error(res, 400, 'No teamid provided!');
 
-        try {
-
-        } catch(err) {
-
-        }
+        const table = await this.#db.get("SELECT `table_code` FROM team_tables WHERE `team_id`=?;", [req.body.team]);
+        if (typeof table[0] === 'undefined')
+            return error(res, 403, "Team does not exist!");
+        return res.status(200).send({ status: 'OK', table: table[0].table_code });
 
         return res.status(200).send({ status: 'OK', table: 'A1' });
     }
@@ -190,8 +189,10 @@ module.exports = class CheckinApiEndpoints {
             user_uid = req.body.uid;
         }
 
-
-        return res.status(200).send({ status: 'OK', table: 'A1' });
+        const table = await this.#db.get("SELECT `table_code` FROM user_tables WHERE `mymlh_uid`=?;", [user_uid]);
+        if (typeof table[0] === 'undefined')
+            return error(res, 403, "User does not exist!");
+        return res.status(200).send({ status: 'OK', table: table[0].table_code });
     }
 
     #db = null;
