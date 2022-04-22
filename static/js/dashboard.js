@@ -19,16 +19,16 @@ const statusData = {
         title: "Status: Rejected",
         description: "We are sorry but we can't offer you place at our hackathon this year. But don't worry, you can have a chance to participate next year.",
         buttons: [
-           /* {
+           {
                 text: "Confirm participation",
                 class: "is-success",
                 callback: acceptInvitation
-            },*/
-           /* {
+           },
+           {
                 text: "Decline invitation",
                 class: "is-danger",
                 callback: declineInvitation
-            }*/
+           }
         ]
     },
     "rejected": {
