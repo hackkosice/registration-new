@@ -154,6 +154,32 @@ module.exports = class CheckinApiEndpoints {
         });
     }
 
+    async get_table_code_from_team(req, res) {
+
+        if (typeof req.body.team === 'undefined')
+            return error(res, 400, 'No teamid provided!');
+
+
+
+        return res.status(200).send({ status: 'OK', table: 'A1' });
+    }
+
+    async get_table_code_from_uid(req, res) {
+
+        let user_uid = null;
+        //if user requests it, take it directly from his verification token
+        if (typeof req.verification.uid !== 'undefined')
+            user_uid = req.verification.uid;
+        else {
+            if (typeof req.body.uid === 'undefined')
+                return error(res, 400, 'No userid provided!');
+            user_uid = req.body.uid;
+        }
+
+
+        return res.status(200).send({ status: 'OK', table: 'A1' });
+    }
+
     #db = null;
     #jwt_key = null;
     #cache = null;
