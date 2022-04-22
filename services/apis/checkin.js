@@ -103,11 +103,21 @@ module.exports = class CheckinApiEndpoints {
             return error(res, 500, "Error fetching user data!");
         }
 
+        let team_name = null
+
+        try {
+            const team = await this.#db.get("SELECT t.team_name FROM applications AS a LEFT JOIN teams AS t ON t.team_ID = a.team_id WHERE a.mymlh_uid=?", [user_uid.uid])
+            team_name = team[0].team_name
+        } catch (err) {
+
+        }
+
         res.status(200).send({
             name: `${user.first_name} ${user.last_name}`,
             uid: user_uid.uid,
-            age: user.date_of_birth,
-            tshirt: size[0].tshirt
+            birth: user.date_of_birth,
+            tshirt: size[0].tshirt,
+            team_name: team_name
         });
     }
 
@@ -126,11 +136,22 @@ module.exports = class CheckinApiEndpoints {
             return error(res, 500, "Error fetching user data!");
         }
 
+        let team_name = null
+
+        try {
+            const team = await this.#db.get("SELECT t.team_name FROM applications AS a LEFT JOIN teams AS t ON t.team_ID = a.team_id WHERE a.mymlh_uid=?", [req.body.uid])
+            team_name = team[0].team_name
+        } catch (err) {
+
+        }
+
+
         res.status(200).send({
             name: `${user.first_name} ${user.last_name}`,
             uid: req.body.uid,
-            age: user.date_of_birth,
-            tshirt: size[0].tshirt
+            birth: user.date_of_birth,
+            tshirt: size[0].tshirt,
+            team_name: team_name
         });
     }
 

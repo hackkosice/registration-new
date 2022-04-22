@@ -122,8 +122,13 @@ async function on_scan(qr_message) {
 
         $("person-uid").textContent = user.uid;
         $("person-name").textContent = user.name;
-        $("person-tshirt").textContent = user.tshirt;
+        $("person-tshirt").textContent = user.tshirt.toUpperCase();
         $("person-table").textContent = table_code;
+        if (user.team_name === null) {
+            $("person-team").textContent = "No Team (Please explain!)"
+        } else {
+            $("person-team").textContent = `Team: ${user.team_name}`;
+        }
         $("person-bar").classList.remove("is-hidden");
     });
 }
@@ -168,6 +173,7 @@ async function complete_checkin() {
 
 
 function isAdult(birthday){ //birthday is string YYYY-MM-DD (ISO format)
+    console.log(birthday)
     // adult is considered having the 18th birthday today or in the past
     let d = new Date(birthday);
     let now = new Date();
@@ -279,8 +285,13 @@ function build_manual_checkin(users) {
 
                 $("person-uid").textContent = user.uid;
                 $("person-name").textContent = user.name;
-                $("person-tshirt").textContent = user.tshirt;
+                $("person-tshirt").textContent = user.tshirt.toUpperCase();
                 $("person-table").textContent = table_code;
+                if (user.team_name === null) {
+                    $("person-team").textContent = "No Team (Please explain!)"
+                } else {
+                    $("person-team").textContent = `Team: ${user.team_name}`;
+                }
                 $("person-bar").classList.remove("is-hidden");
             });
 
