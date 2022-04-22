@@ -71,7 +71,6 @@ CREATE TABLE "checkins" (
 	"checkin_id"	INTEGER NOT NULL UNIQUE,
 	PRIMARY KEY("checkin_id" AUTOINCREMENT)
 );
-CREATE TABLE "tables" ();
 CREATE TABLE "sponsors" (
 	"sponsor_uid"	INTEGER UNIQUE,
 	"username"	TEXT,
