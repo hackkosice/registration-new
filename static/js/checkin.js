@@ -8,7 +8,8 @@ window.onload = async () => {
 
     Html5Qrcode.getCameras().then(cameras => {
         if (cameras && cameras.length) {
-            cameraId = cameras[0].id;
+            $("cameras").textContent = `Number  of cameras: ${cameras.length}`;
+            cameraId = cameras[1].id;
         }
     }).catch(err => {
         console.log(err);
