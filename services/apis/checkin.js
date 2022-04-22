@@ -1,4 +1,5 @@
 const jwt           = require("jsonwebtoken");
+const mlhUserData = require("../caching/mlh-user-data")
 
 function error(res, status, msg) {
     return res.status(status).send({
@@ -58,7 +59,7 @@ module.exports = class CheckinApiEndpoints {
             return error(res, 400, "Requested user has not accepted invitation.");
 
 
-        const user = await this.#cache.get(req.verification.uid);
+        const user = await mlhUserData(req.verification.uid);
         const invite_token = jwt.sign({
             uid: req.verification.uid
         }, this.#jwt_key, { expiresIn: 1650751200000}); //Should be unix time for 24/4/2022 - 00:00:00
@@ -91,7 +92,7 @@ module.exports = class CheckinApiEndpoints {
             return error(res, 500, "Error fetching user data!");
         }
 
-        const user = await this.#cache.get(user_uid.uid);
+        const user = await mlhUserData(user_uid.uid);
 
         res.status(200).send({
             name: `${user.first_name} ${user.last_name}`,
@@ -138,7 +139,7 @@ module.exports = class CheckinApiEndpoints {
 
         for (let i = 0; i < all_users.length; i++) {
 
-            const query = await this.#cache.get(all_users[i].mymlh_uid);
+            const query = await mlhUserData(all_users[i].mymlh_uid);
             all_users[i].name = `${query.first_name} ${query.last_name}`;
             for (const user of checked_users) {
                 if (all_users[i].mymlh_uid === user.mlh_uid) {
