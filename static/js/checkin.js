@@ -257,7 +257,7 @@ function build_manual_checkin(users) {
                         'Content-Type': 'application/json;charset=utf-8'
                     },
                     body: JSON.stringify({
-                            uid: Number($("person-uid").textContent)
+                            uid: user.uid
                         }
                     )
                 });
@@ -314,8 +314,10 @@ async function rebuild_checked_in_table() {
     uid_header.textContent = "User ID";
     header.appendChild(uid_header);
 
-    let padding_back = document.createElement("th");
-    header.appendChild(padding_back);
+    let table_header = document.createElement("th");
+    table_header.textContent = "Table";
+    header.appendChild(table_header);
+
 
     root.appendChild(header);
 
@@ -331,10 +333,13 @@ async function rebuild_checked_in_table() {
         let uid = document.createElement("td");
         uid.textContent = user.mymlh_uid;
 
+        let table = document.createElement("td");
+        table.textContent = user.table_code;
+
 
         row.appendChild(name);
         row.appendChild(uid);
-        row.appendChild(checkin_wrapper);
+        row.appendChild(table);
         root.appendChild(row);
     }
 }

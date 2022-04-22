@@ -163,14 +163,21 @@ module.exports = class CheckinApiEndpoints {
 
         let checked_users;
         try {
-            checked_users = await this.#db.get("SELECT `mlh_uid` FROM checkins;", []);
+            checked_users = await this.#db.get("SELECT `mlh_uid` as mymlh_uid FROM checkins;", []);
         } catch (err) {
             return error(res, 500, "Error fetching user data!");
         }
 
+
         for (let i = 0; i < checked_users.length; i++) {
+            const table_code = await this.#db.get("SELECT `table_code` from user_tables where `mymlh_uid`=?",[checked_users[i].mymlh_uid])
             const query = await mlhUserData(checked_users[i].mymlh_uid);
             checked_users[i].name = `${query.first_name} ${query.last_name}`;
+            if (table_code.length > 0) {
+                checked_users[i].table_code = table_code[0].table_code;
+            } else {
+                checked_users[i].table_code = "NONE";
+            }
         }
 
         return res.status(200).send({
@@ -190,21 +197,22 @@ module.exports = class CheckinApiEndpoints {
             return error(res, 500, "Error fetching user data!");
         }
 
+        let result = []
+
         for (let i = 0; i < all_users.length; i++) {
 
             const query = await mlhUserData(all_users[i].mymlh_uid);
             all_users[i].name = `${query.first_name} ${query.last_name}`;
-            for (const user of checked_users) {
-                if (all_users[i].mymlh_uid === user.mlh_uid) {
-                    all_users.splice(i, 1);
-                    break;
-                }
+            if (checked_users.filter(user => user.mlh_uid === all_users[i].mymlh_uid).length > 0) { // Is already checked in
+                continue;
             }
+
+            result.push(all_users[i])
         }
 
         return res.status(200).send({
             status: 'OK',
-            users: all_users
+            users: result
         });
     }
 
