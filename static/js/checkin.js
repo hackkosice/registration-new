@@ -88,12 +88,35 @@ async function on_scan(qr_message) {
 
         const user = await res.json();
 
+        const table = await fetch("/api/checkin-table-uid", {method: 'POST', credentials: 'same-origin',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: JSON.stringify({
+                    uid: Number($("person-uid").textContent)
+                }
+            )
+        });
+        if (table.status !== 200) {
+            const err_status = await table.json();
+
+            if (typeof err_status.error === "undefined" || typeof err_status.error.message === "undefined") {
+                console.log(err_status);
+                return show_error("Unknown error occurred. Check console for more details.");
+            }
+            return show_error(`An error occurred: ${err_status.error.message}`);
+        }
+
+        const table_code = (await table.json()).table;
+
         if(!isAdult(user.birth))
             $("below18").classList.remove("is-hidden");
         $("error-bar").classList.add("is-hidden");
 
         $("person-uid").textContent = user.uid;
         $("person-name").textContent = user.name;
+        $("person-tshirt").textContent = user.tshirt;
+        $("person-table").textContent = table_code;
         $("person-bar").classList.remove("is-hidden");
     });
 }
