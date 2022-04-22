@@ -178,6 +178,19 @@ const queryInfo  = require('./services/dev/queryInfo');
     router.post("/api/checkin-complete",
         async (req, res, next) => { checkin_api.judge_auth_middleware(req, res, next) },
         async (req, res) => { checkin_api.check_in_user(req, res) });
+    router.post("/api/checkin-table-uid",
+        async (req, res, next) => { checkin_api.judge_auth_middleware(req, res, next) },
+        async (req, res) => { checkin_api.get_table_code_from_uid(req, res) });
+    router.post("/api/checkin-table-uid-user",
+        async (req, res, next) => { checkin_api.user_auth_middleware(req, res, next) },
+        async (req, res) => { checkin_api.get_table_code_from_uid(req, res) });
+
+    router.post("/api/checkin-table-team",
+        async (req, res, next) => { checkin_api.judge_auth_middleware(req, res, next) },
+        async (req, res) => { checkin_api.get_table_code_from_team(req, res) });
+    router.post("/api/checkin-table-team-user",
+        async (req, res, next) => { checkin_api.user_auth_middleware(req, res, next) },
+        async (req, res) => { checkin_api.get_table_code_from_team(req, res) });
 
     router.post("/api/checkin-table",
         async (req, res, next) => { checkin_api.judge_auth_middleware(req, res, next) },
