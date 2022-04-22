@@ -159,6 +159,26 @@ module.exports = class CheckinApiEndpoints {
         return res.status(200).send({});
     }
 
+    async get_checked_data(req, res) {
+
+        let checked_users;
+        try {
+            checked_users = await this.#db.get("SELECT `mlh_uid` FROM checkins;", []);
+        } catch (err) {
+            return error(res, 500, "Error fetching user data!");
+        }
+
+        for (let i = 0; i < checked_users.length; i++) {
+            const query = await mlhUserData(checked_users[i].mymlh_uid);
+            checked_users[i].name = `${query.first_name} ${query.last_name}`;
+        }
+
+        return res.status(200).send({
+            status: 'OK',
+            users: checked_users
+        });
+    }
+
     async get_manual_checkin_data(req, res) {
 
         let all_users;

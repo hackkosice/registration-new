@@ -4,6 +4,7 @@ let cameras = null;
 
 window.onload = async () => {
 
+    rebuild_checked_in_table();
     html5QrCode = new Html5Qrcode("scanner");
 
     Html5Qrcode.getCameras().then(all_cameras => {
@@ -14,9 +15,9 @@ window.onload = async () => {
             $("cameras").textContent = `Number  of cameras: ${all_cameras.length}`;
             cameras = all_cameras;
         }
-    })/*.catch(err => {
+    }).catch(err => {
         console.log(err);
-    });*/
+    });
 
     $("start-scan").addEventListener("click", start_camera);
     $("stop-scan").addEventListener("click", stop_camera);
@@ -134,7 +135,8 @@ async function show_error(error) {
 
 async function complete_checkin() {
 
-    fetch("/api/checkin-complete", {method: 'POST', credentials: 'same-origin',
+    fetch("/api/checkin-complete", {
+        method: 'POST', credentials: 'same-origin',
         headers: {
             'Content-Type': 'application/json;charset=utf-8'
         },
@@ -160,6 +162,7 @@ async function complete_checkin() {
         $("person-bar").classList.add("is-hidden");
         $("success-bar").classList.remove("is-hidden");
         $("manual_checkins").removeChild($($("person-uid").textContent));
+        rebuild_checked_in_table();
     });
 }
 
@@ -286,6 +289,48 @@ function build_manual_checkin(users) {
 
         let checkin_wrapper = document.createElement("td")
         checkin_wrapper.appendChild(checkin_link);
+
+        row.appendChild(name);
+        row.appendChild(uid);
+        row.appendChild(checkin_wrapper);
+        root.appendChild(row);
+    }
+}
+
+async function rebuild_checked_in_table() {
+    //Build up new table
+    let root = $("checked_in");
+    root.innerHTML = '';
+
+    const table_data = await fetch("/api/checkin-checked-in", {method: 'POST', credentials: "same-origin"});
+
+    let header = document.createElement("tr");
+
+    let name_header = document.createElement("th");
+    name_header.textContent = "Name";
+    header.appendChild(name_header);
+
+    let uid_header = document.createElement("th");
+    uid_header.textContent = "User ID";
+    header.appendChild(uid_header);
+
+    let padding_back = document.createElement("th");
+    header.appendChild(padding_back);
+
+    root.appendChild(header);
+
+    //Apply any filtering
+    for (const user of (await table_data.json()).users) {
+
+        let row = document.createElement("tr");
+        row.id = user.mymlh_uid;
+
+        let name = document.createElement("td");
+        name.textContent = user.name;
+
+        let uid = document.createElement("td");
+        uid.textContent = user.mymlh_uid;
+
 
         row.appendChild(name);
         row.appendChild(uid);
