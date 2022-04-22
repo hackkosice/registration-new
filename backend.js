@@ -204,6 +204,18 @@ const queryInfo  = require('./services/dev/queryInfo');
         async (req, res, next) => { sponsors_api.sponsors_auth_middleware(req, res, next) },
         async (req, res) => { sponsors_api.get_application_detail_endpoint(req, res) });
 
+    router.post("/api/checkin-info",
+        async (req, res, next) => { checkin_api.user_auth_middleware(req, res, next) },
+        async (req, res) => { checkin_api.create_checkin_info_endpoint(req, res) });
+
+    router.post("/api/sponsors-applications",
+        async (req, res, next) => { sponsors_api.sponsors_auth_middleware(req, res, next) },
+        async (req, res) => { sponsors_api.get_applications_endpoint(req, res) });
+
+    router.post("/api/sponsors-application-detail",
+        async (req, res, next) => { sponsors_api.sponsors_auth_middleware(req, res, next) },
+        async (req, res) => { sponsors_api.get_application_detail_endpoint(req, res) });
+
     //Bind static content
     app.use("/", express.static("./static"));
     app.use("/", router);
