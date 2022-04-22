@@ -93,10 +93,20 @@ module.exports = class CheckinApiEndpoints {
 
         const user = await this.#cache.get(user_uid.uid);
 
+        let size = null;
+        try {
+            size = await this.#db.get("SELECT `tshirt` FROM applications WHERE `mymlh_uid`=?;", [user_uid.uid]);
+            if (typeof size[0] === 'undefined')
+                return error(res, 403, "User not found!");
+        } catch(err) {
+            return error(res, 500, "Error fetching user data!");
+        }
+
         res.status(200).send({
             name: `${user.first_name} ${user.last_name}`,
             uid: user_uid.uid,
-            age: user.date_of_birth
+            age: user.date_of_birth,
+            tshirt: size[0].tshirt
         });
     }
 
@@ -159,7 +169,11 @@ module.exports = class CheckinApiEndpoints {
         if (typeof req.body.team === 'undefined')
             return error(res, 400, 'No teamid provided!');
 
+        try {
 
+        } catch(err) {
+
+        }
 
         return res.status(200).send({ status: 'OK', table: 'A1' });
     }
