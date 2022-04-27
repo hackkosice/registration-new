@@ -269,10 +269,12 @@ module.exports = class FormApiEndpoints {
         if (typeof req.body.iban === 'undefined')
             return error(res, 400, "Iban not provided");
 
-        try {
+        const iban_value = await this.#db.get("SELECT * FROM iban WHERE `mymlh_uid`=?;", [req.verification.uid])
+
+        if (iban_value.length === 0) {
             this.#db.insert("INSERT INTO iban(`mymlh_uid`, `iban`) VALUES (?, ?)", [req.verification.uid, req.body.iban]);
-        } catch (err) {
-            this.#db.insert("UPDATE iban SET `iban`=? WHERE `mymlh_uid`=?;", [req.body.iban, req.verification]);
+        } else {
+            this.#db.insert("UPDATE iban SET `iban`=? WHERE `mymlh_uid`=?;", [req.body.iban, req.verification.uid]);
         }
         return res.status(200).send({
             status: 'OK'

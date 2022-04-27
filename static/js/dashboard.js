@@ -261,7 +261,7 @@ window.onload = async function() {
         }
     });
 
-    $("ticket-button").addEventListener("click", async() => {
+    $("iban-button").addEventListener("click", async() => {
         if ($("iban-input").value.length === 0) {
             showError("iban-input", "IBAN can't be empty!");
             return
@@ -278,7 +278,35 @@ window.onload = async function() {
         fetch_all_data();
     })
 
-    /*$("ticket_file").addEventListener("change", () => {
+    $("ticket-button").addEventListener("click", async() => {
+        if ($("ticket_file").files.length === 0) {
+            showError("ticket_file_wrapper", "Please choose a file");
+            return
+        }
+        const selectedFile = $("ticket_file").files[0];
+        if (selectedFile.size > MAX_CV_SIZE) {
+            showError("ticket_file_wrapper", "File is too big. Max size is 10 MiB.");
+            return
+        }
+        hideError("ticket_file_wrapper")
+        const fileId = await upload_ticket()
+        if (fileId === 0) {
+            showError("ticket_file_wrapper", "Error uploading file to server");
+            return
+        }
+        const body = {
+            ticket_file_id: fileId
+        }
+        await fetch("/api/update-ticket-file-id", {method: 'POST', credentials: 'same-origin',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: JSON.stringify(body)
+        })
+        fetch_all_data();
+    })
+
+    $("ticket_file").addEventListener("change", () => {
         if ($("ticket_file").files.length > 0) {
             const selectedFile = $("ticket_file").files[0];
             if (selectedFile.size > MAX_CV_SIZE) {
@@ -292,7 +320,7 @@ window.onload = async function() {
             hideError("ticket_file_wrapper")
             $("ticket-file-name").textContent = "";
         }
-    });*/
+    });
 
     // Remove loader
 
