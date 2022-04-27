@@ -262,34 +262,23 @@ window.onload = async function() {
     });
 
     $("ticket-button").addEventListener("click", async() => {
-        if ($("ticket_file").files.length === 0) {
-            showError("ticket_file_wrapper", "Please choose a file");
+        if ($("iban-input").value.length === 0) {
+            showError("iban-input", "IBAN can't be empty!");
             return
         }
-        const selectedFile = $("ticket_file").files[0];
-        if (selectedFile.size > MAX_CV_SIZE) {
-            showError("ticket_file_wrapper", "File is too big. Max size is 10 MiB.");
-            return
-        }
-        hideError("ticket_file_wrapper")
-        const fileId = await upload_ticket()
-        if (fileId === 0) {
-            showError("ticket_file_wrapper", "Error uploading file to server");
-            return
-        }
-        const body = {
-            ticket_file_id: fileId
-        }
-        await fetch("/api/update-ticket-file-id", {method: 'POST', credentials: 'same-origin',
+        hideError("iban-input");
+        await fetch("/api/set-iban", {method: 'POST', credentials: 'same-origin',
             headers: {
                 'Content-Type': 'application/json;charset=utf-8'
             },
-            body: JSON.stringify(body)
+            body: JSON.stringify({
+                iban: $("iban-input").value
+            })
         })
         fetch_all_data();
     })
 
-    $("ticket_file").addEventListener("change", () => {
+    /*$("ticket_file").addEventListener("change", () => {
         if ($("ticket_file").files.length > 0) {
             const selectedFile = $("ticket_file").files[0];
             if (selectedFile.size > MAX_CV_SIZE) {
@@ -303,7 +292,7 @@ window.onload = async function() {
             hideError("ticket_file_wrapper")
             $("ticket-file-name").textContent = "";
         }
-    });
+    });*/
 
     // Remove loader
 
@@ -314,6 +303,15 @@ async function fetch_all_data() {
 
     //So we can ease the load on the server at least a bit
     await load_team();
+
+    const result = await fetch("/api/get-iban", {method: 'POST', credentials: 'same-origin'});
+    if(result.status === 200) {
+        const iban = await result.json();
+        $("iban-input").value = iban.iban;
+    }
+
+
+
     $("loader").classList.remove("is-active");
 }
 

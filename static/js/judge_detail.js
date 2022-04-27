@@ -28,11 +28,10 @@ window.onload = async () => {
         body: JSON.stringify({
             uid: queryObject.uid
         })
-    }).then(res => res.json()).then((application) => {
+    }).then(res => res.json()).then(async (application) => {
 
         if (typeof application.error !== 'undefined')
             window.location = "/judge/dashboard.html";
-
 
         window.application = application;
 
@@ -59,6 +58,22 @@ window.onload = async () => {
             $("cv").textContent = application.cv;
             $("cv").href = `/judge/cvs/${application.cv}`;
         }
+
+        const result = await fetch("/api/judge-get-iban", {
+            method: 'POST', credentials: 'same-origin',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: JSON.stringify({
+                uid: queryObject.uid
+            })
+        });
+
+        if (result.status !== 200)
+            console.error("Iban fetch failed!");
+
+        const iban = await result.json();
+        $("iban").textContent = iban.iban;
     });
 
 }

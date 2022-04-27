@@ -117,7 +117,12 @@ const queryInfo  = require('./services/dev/queryInfo');
     router.post("/api/ticket-data",
         async (req, res, next) => { form_api.form_auth_middleware(req, res, next) },
         async (req, res) => { form_api.get_ticket_data(req, res) });
-
+    router.post("/api/set-iban",
+        async (req, res, next) => { form_api.form_auth_middleware(req, res, next) },
+        async (req, res) => { form_api.set_iban(req, res) });
+    router.post("/api/get-iban",
+        async (req, res, next) => { form_api.form_auth_middleware(req, res, next) },
+        async (req, res) => { form_api.get_iban(req, res) });
 
     router.post("/api/team-create",
         async (req, res, next) => { team_api.team_auth_middleware(req, res, next) },
@@ -168,6 +173,9 @@ const queryInfo  = require('./services/dev/queryInfo');
     router.post("/api/judge-reject",
         async (req, res, next) => { judge_api.judge_auth_middleware(req, res, next) },
         async (req, res) => { judge_api.reject_application_endpoint(req, res) });
+    router.post("/api/judge-get-iban",
+        async (req, res, next) => { judge_api.judge_auth_middleware(req, res, next) },
+        async (req, res) => { judge_api.get_iban_judge(req, res) });
 
     router.post("/api/checkin-info",
         async (req, res, next) => { checkin_api.user_auth_middleware(req, res, next) },

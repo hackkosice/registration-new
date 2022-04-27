@@ -1,0 +1,6 @@
+DROP TABLE "iban";
+
+CREATE TABLE "iban" (
+	"mymlh_uid"	INTEGER UNIQUE,
+	"iban"	TEXT
+);

@@ -281,6 +281,22 @@ module.exports = class VotingApiEndpoints {
         return csv_content;
     }
 
+    async get_iban_judge(req, res) {
+
+        if (typeof req.body.uid === 'undefined')
+            return error(res, 400, "No UID provided!");
+
+        const iban = await this.#db.get("SELECT `iban` FROM iban WHERE `mymlh_uid`=?;", [req.body.uid]);
+        if (typeof iban[0] === 'undefined')
+            return res.status(200).send({
+                iban: ""
+            });
+
+        return res.status(200).send({
+            iban: iban[0].iban
+        });
+    }
+
     #cache = null;
     #db = null;
     #jwt_key = null;

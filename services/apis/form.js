@@ -264,6 +264,33 @@ module.exports = class FormApiEndpoints {
 
     }
 
+    async set_iban(req, res) {
+
+        if (typeof req.body.iban === 'undefined')
+            return error(res, 400, "Iban not provided");
+
+        try {
+            this.#db.insert("INSERT INTO iban(`mymlh_uid`, `iban`) VALUES (?, ?)", [req.verification.uid, req.body.iban]);
+        } catch (err) {
+            this.#db.insert("UPDATE iban SET `iban`=? WHERE `mymlh_uid`=?;", [req.body.iban, req.verification]);
+        }
+        return res.status(200).send({
+            status: 'OK'
+        });
+    }
+
+    async get_iban(req, res) {
+        const iban = await this.#db.get("SELECT `iban` FROM iban WHERE `mymlh_uid`=?;", [req.verification.uid]);
+        if (typeof iban[0] === 'undefined')
+            return res.status(200).send({
+               iban: ""
+            });
+
+        return res.status(200).send({
+           iban: iban[0].iban
+        });
+    }
+
     #db = null;
     #jwt_key = null;
     #mailer = null;
