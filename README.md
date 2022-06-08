@@ -1,5 +1,9 @@
 # registration-new
 
+Source code of Hack Kosice application portal, created for Hack Kosice 2022. Backend is written using Javascript and NodeJS, with implemented MySQL and SQLite database providers (deployed portal uses SQLite with weekly backups). Frontend, being mostly static pages, is written in vanilla HTML/CSS with functionality added via Javascript.
+
+The portal itself consists of three sections, one for users (to apply), one for judges (to judge applications and invite participants to hackathon) and one for sponsors (to retrieve user data), each with it's own auth. To run a local instance of the portal, you'll need to suply MyMLH and GSuite api keys.
+
 ### Installation
 
 1. Download this code to the target directory
