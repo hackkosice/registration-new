@@ -18,7 +18,7 @@ const register_token = jwt.sign({
     uid: uid
 }, process.env.JWT_SECRET, { expiresIn: '72h'});
 
-const link = `https://apply.hackkosice.com/sponsors-admin?action=create&token=${register_token}`;
+const link = `https://portal.hackkosice.com/sponsors-admin?action=create&token=${register_token}`;
 
 console.log(` Added sponsor with UID: ${uid}.\n Registration link: ${link}\n Registration link is valid for 72 hours.`);
 process.exit(0);
