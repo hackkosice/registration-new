@@ -11,7 +11,13 @@ module.exports = class MyMLHUserCache {
         //Because MyMLH is hella stupiid... you need to rebuild whole cache! At every miss!
         //But at least i can binary search thru dat shit
         //just so we can get metadata about user count
+
+        // Glad there is binary search without any error handling -_- #priorities
         const metadata = await this.#mymlh.get_users(1, 1);
+
+        if (metadata.status === "error") {
+            return null;
+        }
 
         let requests = [];
 
