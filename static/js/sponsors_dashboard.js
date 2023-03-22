@@ -52,20 +52,20 @@ FILTERS = [
         blacklistValues: [],
         textTransform: null
     },
-    {
-        element: $("job_filter"),
-        evalFunc: (filterValue, user) => {
-            if (filterValue === "no-filter") {
-                return true
-            }
-            return user.job_preference === filterValue
-        },
-        propertySelector: (user) => {
-            return user.job_preference
-        },
-        blacklistValues: [],
-        textTransform: JOB_PREFERENCE
-    }
+    // {
+    //     element: $("job_filter"),
+    //     evalFunc: (filterValue, user) => {
+    //         if (filterValue === "no-filter") {
+    //             return true
+    //         }
+    //         return user.job_preference === filterValue
+    //     },
+    //     propertySelector: (user) => {
+    //         return user.job_preference
+    //     },
+    //     blacklistValues: [],
+    //     textTransform: JOB_PREFERENCE
+    // }
 ]
 
 window.onload = async function () {
@@ -188,7 +188,7 @@ function build_table() {
     add_header(header, "School");
     add_header(header, "Major");
     add_header(header, "Level");
-    add_header(header, "Job preference");
+    //add_header(header, "Job preference");
     add_header(header, "Team");
 
     let padding_back = document.createElement("th");
@@ -210,7 +210,7 @@ function build_table() {
         add_table_data(row, user.school);
         add_table_data(row, user.major);
         add_table_data(row, user.level);
-        add_table_data(row, JOB_PREFERENCE[user.job_preference]);
+        // add_table_data(row, JOB_PREFERENCE[user.job_preference]);
         add_table_data(row, user.team_name);
 
         let detail_link = document.createElement("a");
