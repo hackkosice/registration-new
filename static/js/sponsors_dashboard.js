@@ -260,11 +260,16 @@ function should_show_with_filters(user) {
         return false;
     }
 
-    const user_skills = user.skills.replace(/ /g, "").toLowerCase().split(',')
+    const user_skills_arr = user.skills.replace(/ /g, "").toLowerCase().split(';')
+    const user_skills = {}
+    user_skills_arr.forEach(skill => {
+        const split_skill = skill.split(":")
+        user_skills[split_skill[0]] = Number(split_skill[1])
+    })
 
     for (let i = 0; i < skills_filtered.length; i++) {
         let skill = skills_filtered[i].replace(/ /g, "").toLowerCase()
-        if (!user_skills.includes(skill)) {
+        if (user_skills[skill] < 3) {
             shouldShow = false;
         }
     }
